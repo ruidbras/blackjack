@@ -104,6 +104,8 @@ public class Deck {
 		}
 	}
 	
+	
+
 	public void shuffle(){
 		Collections.shuffle(deck);
 	}
@@ -129,16 +131,20 @@ public class Deck {
 		return null;
 	}
 	
-	
-	
-	public static void main(String[] args){
-		Deck deck = new Deck(7);
-		deck.printDeck();
-		deck.shuffle();
-		deck.shuffle();
-		deck.printDeck();
-		deck.dealCard();
-		deck.dealCard();
+	public void addJunk(Junk j){
+		deck.addAll(j.cards);
+		
 	}
+	
+	public int countCards(){
+		int numCards=0;
+		Iterator<Card> it = deck.iterator();
+		while(it.hasNext()){
+			numCards++;
+			it.equals(it.next());
+		}
+		return numCards;
+	}
+	
 	
 }

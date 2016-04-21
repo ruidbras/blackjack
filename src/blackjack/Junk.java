@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Junk {
 	
-	List<Card> cards;
+	LinkedList<Card> cards;
 
 	Junk(){
 		cards = new LinkedList<Card>();
@@ -13,20 +13,21 @@ public class Junk {
 	
 	/* Methods */
 	/* Envia as cartas de novo para o Deck */
-	public void removeAll(){
-		
-	}
 
+	
 	public List<Card> getCards() {
 		return cards;
+	}
+	public void emptyJunk(){
+		cards.clear();
+	}
+	public void addToJunk(LinkedList<Card> h){
+		cards.addAll(h);
 	}
 
 	@Override
 	public String toString() {
 		return "Junk [cards=" + cards + "]";
 	}
-	
-	
-	
 	
 }

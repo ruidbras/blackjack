@@ -2,11 +2,10 @@ package blackjack;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 public class Hand {
 	/* Fields */
-	List<Card> hand;
+	LinkedList<Card> hand;
 	private int total;
 	private Deck deck;
 	private Junk junk;
@@ -19,16 +18,45 @@ public class Hand {
 		junk = j;
 	}
 	
-	public void drawCard(){
-		if(total<21){
-			hand.add(deck.dealCard());
-			total = gentotal();
-		}else{
-			System.out.println("[!]Não é possível pedir mais cartas");
+	public boolean blackjack(){
+		if (total==21){
+			if (countCards()==2){
+				return true;
+			}
 		}
+			
+		return false;
+	}
+
+	public boolean cardsEqual(){
+		if (countCards()==2){
+			if(hand.get(0)==hand.get(1)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
-	public int gentotal(){
+	public int countCards(){
+		int numCards=0;
+		Iterator<Card> it = hand.iterator();
+		while(it.hasNext()){
+			numCards++;
+			it.equals(it.next());
+		}
+		return numCards;
+	}
+	
+	public Card getFirst(){
+		return hand.get(0);
+	}
+	
+	public void drawCard(){
+		hand.add(deck.dealCard());
+		total = genTotal();
+	}
+	
+	public int genTotal(){
 		int r=0;
 		for(Card card: hand){
 			r+=card.getSoftValue();
@@ -43,19 +71,14 @@ public class Hand {
 	}
 	
 	public void cleanHand(){
-		Iterator<Card> it = hand.iterator();
-		while(it.hasNext()){
-			Card element = it.next();
-			junk.getCards().add(element);
-			it.remove();
-		}
-		total = 0;
+		junk.addToJunk(hand);
+		hand.clear();
 	}
 	
 
 	@Override
 	public String toString() {
-		return "Hand [hand=" + hand + "]" + "   Total:" + total;
+		return hand + "   Total:" + total;
  	}
 	
 	

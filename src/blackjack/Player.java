@@ -4,8 +4,8 @@ public class Player {
 	
 	/* Field */
 	Hand hand;
-	private int balance;
-	private int bet;
+	private double balance;
+	public int bet;
 	
 	/* Constructor */
 	Player(Deck d, Junk j, int i){
@@ -19,7 +19,7 @@ public class Player {
 		return hand;
 	}
 
-	public int getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 	
@@ -32,23 +32,37 @@ public class Player {
 		hand.drawCard();
 	}
 	
+
 	public void doubleDown(){
-		
-	}
-	
-	public void bet(int b){
-		if(balance>=b){
-			balance-=b;
-			bet = b;
-			hand.drawCard();
+		if(balance>=2*bet){
+			balance-=2*bet;
+			bet = 2*bet;
 			hand.drawCard();
 		}else{
 			System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
 		}
 	}
 	
+	public boolean bet(int b){
+		if(balance>=b){
+			balance-=b;
+			bet = b;
+			hand.drawCard();
+			hand.drawCard();
+			return true;
+		}else{
+			System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
+		}
+		return false;
+	}
+	
 	public void addCredit(int i){
 		balance += i;
+	}
+	
+
+	public void setBalance(double d) {
+		this.balance += d;
 	}
 
 
@@ -56,7 +70,5 @@ public class Player {
 	public String toString() {
 		return "Player: " + hand;
 	}
-
-
 
 }
