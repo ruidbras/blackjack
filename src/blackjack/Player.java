@@ -34,8 +34,8 @@ public class Player {
 	
 
 	public void doubleDown(){
-		if(balance>=2*bet){
-			balance-=2*bet;
+		if(balance>=bet){
+			balance-=bet;
 			bet = 2*bet;
 			hand.drawCard();
 		}else{
