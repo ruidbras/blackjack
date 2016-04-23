@@ -51,6 +51,10 @@ public class Hand {
 		return hand.get(0);
 	}
 	
+	public int getTotal(){
+		return total;
+	}
+	
 	public void drawCard(){
 		hand.add(deck.dealCard());
 		total = genTotal();

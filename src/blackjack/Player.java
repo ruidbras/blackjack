@@ -6,6 +6,7 @@ public class Player {
 	Hand hand;
 	private double balance;
 	public int bet;
+	public int oldbet;
 	
 	/* Constructor */
 	Player(Deck d, Junk j, int i){
@@ -34,8 +35,8 @@ public class Player {
 	
 
 	public void doubleDown(){
-		if(balance>=bet){
-			balance-=bet;
+		if(balance>=2*bet){
+			balance-=2*bet;
 			bet = 2*bet;
 			hand.drawCard();
 		}else{
@@ -44,11 +45,26 @@ public class Player {
 	}
 	
 	public boolean bet(int b){
+		int temp;
+		if(bet!=0){
+			temp = bet;
+			balance += bet;
+			bet = 0;
+			if(balance>=b){
+				balance-=b;
+				bet = b;
+				oldbet = b;
+				return true;
+			}else{
+				System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
+				bet = temp;
+				return false;
+			}
+		}		
 		if(balance>=b){
 			balance-=b;
 			bet = b;
-			hand.drawCard();
-			hand.drawCard();
+			oldbet = b;
 			return true;
 		}else{
 			System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
@@ -63,6 +79,11 @@ public class Player {
 
 	public void setBalance(double d) {
 		this.balance += d;
+	}
+	
+	public void cleanPlayerHand(){
+		hand.cleanHand();
+		bet = 0;
 	}
 
 
