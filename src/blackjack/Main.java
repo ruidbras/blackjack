@@ -18,14 +18,14 @@ public class Main {
 		while(true){
 
 			String in = sc.nextLine();
-			
+
 			if(in.equals("b")&&(!game.ingame())){
 				System.out.println("How much you want to bet?");
 				try{
 					game.makeBet(Integer.parseInt(sc.nextLine()));
 				}catch(NumberFormatException name){
 					System.err.print("Not a number. ");
-					System.err.println(name.getMessage());
+					System.err.println(name);
 				}
 			}else if(in.equals("d")&&(!game.ingame())){
 				game.deal();
@@ -71,7 +71,7 @@ public class Main {
 				System.out.println("Player current balance is "+player.getBalance());
 			}
 			else{
-				System.out.println("Invalid Command");
+				System.out.println(in + ": Illegal Command");
 			}
 		}
 	}
