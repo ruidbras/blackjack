@@ -12,7 +12,7 @@ public class Main {
 		Scanner sc=new Scanner(System.in);
 		Game game = new Game(player, dealer);
 		
-		System.out.println("Type what you want to do? (bet/exit)");
+		System.out.println("Type what you want to do? (press b to bet or q to exit)");
 		deck.shuffle();
 		
 		while(true){
@@ -63,7 +63,7 @@ public class Main {
 			
 			
 			
-			else if(in.equals("exit")){
+			else if(in.equals("q")){
 				sc.close();
 				return;
 			}
