@@ -1,7 +1,7 @@
 package blackjack;
 
 import java.util.LinkedList;
-import java.util.List;
+
 
 public class Junk {
 	
@@ -15,7 +15,7 @@ public class Junk {
 	/* Envia as cartas de novo para o Deck */
 
 	
-	public List<Card> getCards() {
+	public LinkedList<Card> getCards() {
 		return cards;
 	}
 	public void emptyJunk(){

@@ -11,12 +11,60 @@ public class Main {
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
 		Game game = new Game(player, dealer);
+<<<<<<< HEAD
+=======
 		int estado=0;
+>>>>>>> 6250346dd7628e9b2458027e8c9c787d819e06d7
 		
 		System.out.println("Type what you want to do? (bet/exit)");
 		deck.shuffle();
 		
 		while(true){
+<<<<<<< HEAD
+
+			String in = sc.nextLine();
+			
+			if(in.equals("b")&&(!game.ingame())){
+				System.out.println("How much you want to bet?");
+				try{
+					game.makeBet(Integer.parseInt(sc.nextLine()));
+				}catch(Exception name){
+					System.out.println("Argumento inválido");
+				}
+				
+			}else if(in.equals("d")&&(!game.ingame())){
+				game.deal();
+			}
+			else if(in.equals("h")&&game.ingame()){
+				game.hit();
+			}
+			else if(in.equals("s")&&game.ingame()){
+				game.stand();
+			}
+			else if(in.equals("2")&&game.ingame()){
+				game.dowbleDown();
+			}
+			
+			
+			else if(in.equals("i")&&game.ingame()&&dealer.canHaveBlackjack()){
+				
+				game.insurance();
+				
+			}
+			
+			
+			//surrender
+			else if(in.equals("u")&&game.ingame()){
+				System.out.println("Not available yet");
+			}
+			
+			
+			//Split
+			else if(in.equals("p")&&player.hand[0].cardsSameValue()){
+				game.split(deck, junk);
+				//preciso ver as bets e o dinheiro ainda
+				
+=======
 			
 			//System.out.println(player.getBalance());
 			
@@ -103,7 +151,11 @@ public class Main {
 				System.out.println("Your hand: "+ player.hand);
 				estado=2;*/
 				System.out.println("Not available yet");
+>>>>>>> 6250346dd7628e9b2458027e8c9c787d819e06d7
 			}
+			
+			
+			
 			else if(in.equals("exit")){
 				sc.close();
 				return;
@@ -114,8 +166,6 @@ public class Main {
 			else{
 				System.out.println("Comando inválido");
 			}
-			
-			
 		}
 	}
 }

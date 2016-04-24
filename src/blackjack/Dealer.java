@@ -15,7 +15,7 @@ public class Dealer {
 	
 	public boolean canHaveBlackjack(){
 		if(hand.countCards()==2){
-			if(hand.hand.get(0).getHardValue()==10){
+			if(hand.hand.get(0).getHardValue()==11){
 				return true;
 			}
 		}
@@ -41,6 +41,9 @@ public class Dealer {
 			hand.drawCard();
 	}
 
+	public void cleanDealerHand(){
+		hand.cleanHand();
+	}
 	@Override
 	public String toString() {
 		return "Dealer: " + hand;

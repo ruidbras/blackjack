@@ -10,6 +10,9 @@ public class Hand {
 	private Deck deck;
 	private Junk junk;
 
+	Hand(){
+		
+	}
 	
 	Hand(Deck d, Junk j){
 		hand = new LinkedList<Card>();
@@ -24,13 +27,12 @@ public class Hand {
 				return true;
 			}
 		}
-			
 		return false;
 	}
 
-	public boolean cardsEqual(){
+	public boolean cardsSameValue(){
 		if (countCards()==2){
-			if(hand.get(0)==hand.get(1)){
+			if(hand.get(0).getSoftValue()==hand.get(1).getSoftValue()){
 				return true;
 			}
 		}
@@ -82,7 +84,7 @@ public class Hand {
 
 	@Override
 	public String toString() {
-		return hand + "   Total:" + total;
+		return hand + " Total:" + total;
  	}
 	
 	
