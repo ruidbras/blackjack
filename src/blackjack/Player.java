@@ -46,8 +46,8 @@ public class Player {
 	}
 
 	public void doubleDown(){
-		if(balance>=2*bet){
-			balance-=2*bet;
+		if(balance>=bet){
+			balance-=bet;
 			bet = 2*bet;
 			hand[0].drawCard();
 		}else{
@@ -71,11 +71,7 @@ public class Player {
 				bet = temp;
 				return false;
 			}
-<<<<<<< HEAD
 		}
-=======
-		}		
->>>>>>> 6250346dd7628e9b2458027e8c9c787d819e06d7
 		if(balance>=b){
 			balance-=b;
 			bet = b;
@@ -97,7 +93,6 @@ public class Player {
 	}
 	
 	public void cleanPlayerHand(){
-<<<<<<< HEAD
 		hand[0].cleanHand();
 		
 		try{
@@ -105,9 +100,6 @@ public class Player {
 			hand[1]=null;
 		}catch(Exception name){}
 		
-=======
-		hand.cleanHand();
->>>>>>> 6250346dd7628e9b2458027e8c9c787d819e06d7
 		bet = 0;
 	}
 
