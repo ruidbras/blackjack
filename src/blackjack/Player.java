@@ -51,7 +51,7 @@ public class Player {
 			bet = 2*bet;
 			hand[0].drawCard();
 		}else{
-			System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
+			System.out.println("[!]Not enough credits to make that bet");
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class Player {
 				oldbet = b;
 				return true;
 			}else{
-				System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
+				System.out.println("[!]Not enough credits to make that bet");
 				bet = temp;
 				return false;
 			}
@@ -78,7 +78,7 @@ public class Player {
 			oldbet = b;
 			return true;
 		}else{
-			System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
+			System.out.println("[!]Not enough credits to make that bet");
 		}
 		return false;
 	}

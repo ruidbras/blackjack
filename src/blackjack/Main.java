@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		Deck deck = new Deck(4);
 		Junk junk = new Junk();
 		Player player = new Player(deck,junk,1000);
@@ -23,10 +23,10 @@ public class Main {
 				System.out.println("How much you want to bet?");
 				try{
 					game.makeBet(Integer.parseInt(sc.nextLine()));
-				}catch(Exception name){
-					System.out.println("Argumento inválido");
+				}catch(NumberFormatException name){
+					System.err.print("Not a number. ");
+					System.err.println(name.getMessage());
 				}
-				
 			}else if(in.equals("d")&&(!game.ingame())){
 				game.deal();
 			}
@@ -71,7 +71,7 @@ public class Main {
 				System.out.println("Player current balance is "+player.getBalance());
 			}
 			else{
-				System.out.println("Comando inválido");
+				System.out.println("Invalid Command");
 			}
 		}
 	}
