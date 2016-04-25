@@ -13,6 +13,7 @@ public class PileOfChips {
 	
 	public PileOfChips(double b, int nw, int nr, int ng, int nb){
 		this.balance = b;
+		this.numberOfChips = nw+nr+ng+nb;
 		this.chip[0].color = "white";
 		this.chip[0].value = 1;
 		this.chip[0].numberOfChips = nw;
@@ -27,15 +28,19 @@ public class PileOfChips {
 		this.chip[3].numberOfChips = nb;
 	}
 	
-	public double getBalance() {
+	public double getBalance(){
 		return balance;
 	}
-
-	public void updatePile(Chip w, Chip r, Chip g, Chip b){
-		this.chip[0].numberOfChips = w.numberOfChips;
-		this.chip[1].numberOfChips = r.numberOfChips;
-		this.chip[2].numberOfChips = g.numberOfChips;
-		this.chip[3].numberOfChips = b.numberOfChips;
+	
+	public int getNumChip(){
+		return numberOfChips;
+	}
+	
+	public void updatePile(int w, int r, int g, int b){
+		this.chip[0].numberOfChips = w;
+		this.chip[1].numberOfChips = r;
+		this.chip[2].numberOfChips = g;
+		this.chip[3].numberOfChips = b;
 	}
 
 
