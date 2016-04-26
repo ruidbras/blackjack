@@ -5,15 +5,14 @@ public class Game {
 	private Dealer dealer;
 	private Strategy strategy;
 	private boolean ingame;
-	public boolean inHandTwo;
-	
+	private boolean wasASplit;
 	
 	
 	Game(Player p, Dealer d, Strategy s){
 		player = p;
 		dealer = d;
 		strategy = s;
-		inHandTwo=false;
+		wasASplit=false;
 	}
 	
 	public boolean makeBet(int b){
@@ -27,23 +26,23 @@ public class Game {
 				return;
 			}
 		strategy.addPlays();
-		player.hand[0].drawCard();
-		player.hand[0].drawCard();
+		player.getHand().drawCard();
+		player.getHand().drawCard();
 		dealer.drawHand();
 		dealer.printDealersFirstTwo();
 		System.out.println(player);
 		ingame = true;
-		if(player.hand[0].blackjack()){
+		if(player.getHand().blackjack()){
 			System.out.println("BlackJack!");
 			finalizeDealer();
 		}
 	}
 	
 	public void split(Deck d, Junk j){
+		wasASplit=true;
 		System.out.println("Player makes split");
-		player.newHand(d, j);
+		player.newHand(d, j, player.getCurrentHand());
 		System.out.println(player);
-		inHandTwo=true;
 	}
 	
 	
@@ -59,30 +58,34 @@ public class Game {
 	
 	public void hit(){
 		System.out.println("Player hits");
-		if(inHandTwo){
-			player.hand[1].drawCard();
-			dealer.printDealersFirstTwo();
-			System.out.println(player);
-			if(player.hand[1].getTotal()>21){
-				System.out.println("first hand busts");
-				player.hand[1].cleanHand();
-				player.hand[1].equals(null);
-				inHandTwo=false;
-			}
+		player.hit();
+		dealer.printDealersFirstTwo();
+		System.out.println(player);
+		if(player.getHand().getTotal()>21 && player.getCurrentHand()>0){
+			System.out.println(player.getCurrentHand() + "th hand busts");
+			player.getHand().cleanHand();
+			player.hands.remove(player.getCurrentHand());
+			player.setNumbHands();
+			player.setCurrentHand(player.getCurrentHand()-1);
 		}else{
-			player.hand[0].drawCard();
-			System.out.println(player);
-			if(player.hand[0].getTotal()>21){
+			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");
+				System.out.println("Dealers Hand: "+dealer.hand);
+				cleanTable();
+			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
+				System.out.println(player.getCurrentHand() + "th hand busts");
+				player.getHand().cleanHand();
+				player.hands.remove(player.getCurrentHand());
+				player.setNumbHands();
 				finalizeDealer();
 			}
 		}
 	}
 	
 	public void stand(){
-		if(inHandTwo){
-			inHandTwo=false;
-			System.out.println("Player stands in first hand");
+		if(player.getCurrentHand()>0){
+			System.out.println("Player stands in "+player.getCurrentHand()+ " hand");
+			player.setCurrentHand(player.getCurrentHand()-1);
 			dealer.printDealersFirstTwo();
 			System.out.println(player);
 		}
@@ -93,28 +96,30 @@ public class Game {
 		
 	}
 	
-	public void finalizeDealer(){
-		System.out.println("Dealers Hand: "+dealer.hand);
-		
-		int n = 0;
-		boolean splitMode=false;
-		//choose best hand
-		try{
-		if(!player.hand[1].equals(null)){
-			splitMode=true;
-			if(player.hand[1].getTotal()>=player.hand[0].getTotal()){
-				n=1;
-				if(player.hand[1].getTotal()>21){
-					n=0;
-				}
+	public boolean dealerFinalizeCards(){
+		while(dealer.hand.getTotal()<17){
+			dealer.hand.drawCard();
+			System.out.println("Dealer hits");
+			System.out.println("Dealers Hand: "+dealer.hand);
+			if(dealer.hand.getTotal()>21){
+				/* When the dealer busts */
+				System.out.println("Dealer busts");
+				player.setBalance((player.bet)*2);
+				System.out.println("Player wins and his current balance is "+player.getBalance());
+				cleanTable();
+				return false;
 			}
 		}
-		}catch(Exception name){}
+		return true;
+	}
+	
+	
+	public void finalizeDealer(){
 		
+		System.out.println("Dealers Hand: "+dealer.hand);
 		
 		/* Check if the player has blackjack */
-		//atencao, depois de um split nao ha blackjacks!!!
-		if(player.hand[0].blackjack() && !splitMode){
+		if(player.getHand().blackjack() && !wasASplit){
 			if(dealer.hand.blackjack()){
 				System.out.println("BlackJack!");
 				player.setBalance(player.bet);
@@ -127,7 +132,7 @@ public class Game {
 			}else{
 				player.setBalance((player.bet)*2);//Should pay 2.5
 				System.out.println("Player wins and his current balance is "+player.getBalance());
-				strategy.addPlayerbj();
+				strategy.addDealerbj();
 				strategy.addWins();
 				cleanTable();
 				return;
@@ -142,67 +147,72 @@ public class Game {
 			cleanTable();
 			return;
 		}
-		/* Checks if the player have busted */
-		if((player.hand[n].getTotal())<=21){
-			while(dealer.hand.getTotal()<17){
-				dealer.hand.drawCard();
-				System.out.println("Dealer hits");
-				System.out.println("Dealers Hand: "+dealer.hand);
-				if(dealer.hand.getTotal()>21){
-					/* When the dealer busts */
-					System.out.println("Dealer busts");
-					player.setBalance((player.bet)*2);
-					System.out.println("Player wins and his current balance is "+player.getBalance());
-					strategy.addWins();
+		
+		int n = player.getNumHands()-1;
+		player.setCurrentHand(n);
+		boolean alreadyFinalized=false;
+		
+		while((player.getCurrentHand())>=0){
+			
+			if(player.getHand().getTotal()>=dealer.hand.getTotal()){
+				if (dealerFinalizeCards()&&!alreadyFinalized){
+					alreadyFinalized=true;
+				}
+				else{
+					ingame=false;
 					cleanTable();
 					return;
 				}
 			}
-		}else{
-			/* When the player busts */
-			System.out.println("Player loses and his current balance is "+player.getBalance());
-			strategy.addLoses();
-			cleanTable();
-			return;
+			else{
+				System.out.println("Hand "+player.getCurrentHand()+" loses");
+				n=n-1;
+				player.setCurrentHand(n);
+				continue;
+			}
+			if (alreadyFinalized){
+				/* If no one busts the game checks who is the winner */
+				if(player.getHand().getTotal()>dealer.hand.getTotal()){
+					player.setBalance((player.bet)*2);
+					strategy.addWins();
+					System.out.println("Player wins and his current balance is "+player.getBalance());
+				}else if(player.getHand().getTotal()==dealer.hand.getTotal()){
+					player.setBalance(player.bet);
+					strategy.addPushes();
+					System.out.println("Player pushes and his current balance is "+player.getBalance());
+				}
+				else{
+					strategy.addLoses();
+					System.out.println("Player loses and his current balance is "+player.getBalance());
+				}
+			}
+			n=n-1;
+			player.setCurrentHand(n);
 		}
-		
-		/* If no one busts the game checks who is the winner */
-		if(player.hand[n].getTotal()>dealer.hand.getTotal()){
-			player.setBalance((player.bet)*2);
-			System.out.println("Player wins and his current balance is "+player.getBalance());
-			strategy.addWins();
-			cleanTable();
-		}else if(player.hand[n].getTotal()==dealer.hand.getTotal()){
-			player.setBalance(player.bet);
-			System.out.println("Player pushes and his current balance is "+player.getBalance());
-			strategy.addPushes();
-			cleanTable();
-		}
-		else{
-			System.out.println("Player loses and his current balance is "+player.getBalance());
-			strategy.addLoses();
-			cleanTable();
-		}
+		wasASplit=false;
+		alreadyFinalized=false;
+		ingame=false;
 		cleanTable();
 	}
 	
+		
 	public boolean ingame(){
 		return ingame;
 	}
 	
 	public void dowbleDown(){
 		System.out.println("Player dowbles down");
-		player.doubleDown();//preciso ver as bets, porque nao percebi bem aquilo da oldbet
+		player.doubleDown(player.getCurrentHand());//preciso ver as bets, porque nao percebi bem aquilo da oldbet
 		System.out.println(player);
 		
-		if(inHandTwo){
+		/*if(inHandTwo){
 			inHandTwo=false;
 			System.out.println("Player doubles in first hand");
 			dealer.printDealersFirstTwo();
 			System.out.println(player);
-		}
+		}*/
 		
-		if(player.hand[0].getTotal()>21){
+		if(player.getHand().getTotal()>21){
 			System.out.println("Player busts");
 			finalizeDealer();
 		}
@@ -210,7 +220,9 @@ public class Game {
 	public void cleanTable(){
 		dealer.cleanDealerHand();
 		player.cleanPlayerHand();
+		wasASplit=false;
 		ingame = false;
 	}
+	
 
 }

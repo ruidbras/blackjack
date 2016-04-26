@@ -4,29 +4,30 @@ import java.util.Scanner;
 
 public class Main {
 	
-	public static void main(String[] args){
-		Deck deck = new Deck(4);
+	public static void main(String[] args) {
+		Deck deck = new Deck(8);
 		Junk junk = new Junk();
 		Player player = new Player(deck,junk,1000);
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
 		Strategy strategy = new Strategy(player.getBalance());
 		Game game = new Game(player, dealer, strategy);
-		System.out.println("Type what you want to do? (press b to bet or q to exit)");
+		
+		System.out.println("Type what you want to do? (bet/exit)");
 		deck.shuffle();
 		
 		while(true){
 
 			String in = sc.nextLine();
-
+			System.out.println("deck "+deck.deck.size()+" junk"+junk.cards.size());
 			if(in.equals("b")&&(!game.ingame())){
 				System.out.println("How much you want to bet?");
 				try{
 					game.makeBet(Integer.parseInt(sc.nextLine()));
-				}catch(NumberFormatException name){
-					System.err.print("Not a number. ");
-					System.err.println(name);
+				}catch(Exception name){
+					System.out.println("Argumento inválido");
 				}
+				
 			}else if(in.equals("d")&&(!game.ingame())){
 				game.deal();
 			}
@@ -58,7 +59,7 @@ public class Main {
 			
 			
 			//Split
-			else if(in.equals("p")&&player.hand[0].cardsSameValue()){
+			else if(in.equals("p")&&player.hands.get(0).cardsSameValue()){
 				game.split(deck, junk);
 				//preciso ver as bets e o dinheiro ainda
 				
@@ -74,7 +75,7 @@ public class Main {
 				System.out.println("Player current balance is "+player.getBalance());
 			}
 			else{
-				System.out.println(in + ": Illegal Command");
+				System.out.println("Illegal command");
 			}
 		}
 	}
