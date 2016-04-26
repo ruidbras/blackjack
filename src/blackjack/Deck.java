@@ -10,19 +10,7 @@ public class Deck {
 	int shoe;
 	Iterator<Card> it = deck.iterator();
 	Card temp; 
-	
-	
-	
-	
-	public Deck(){
-		for (int t = 0; t<50; t++){
-			deck.add(new Card("7","D"));
-		}
-	}
-	
-	
-	
-	
+		
 	/*inicializa o deck com cartas de shoe baralhos*/
 	public Deck(int shoe){
 		this.shoe=shoe;

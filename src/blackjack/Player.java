@@ -7,10 +7,11 @@ public class Player {
 	/* Field */
 	LinkedList<Hand> hands= new LinkedList<Hand>();
 	private double balance;
-	public int bet;//meter vector de bets
-	public int oldbet;
+	public double[] bet;//meter vector de bets
+	public double oldbet;
 	public int numbHands; //number of hands in the list
 	public int currentHand;//current hand in play
+	public double insuranceBet;
 	
 	/* Constructor */
 	Player(Deck d, Junk j, int i){
@@ -18,9 +19,16 @@ public class Player {
 		balance = i; 
 		numbHands=hands.size();
 		currentHand=0;
+		bet = new double[20];
+		insuranceBet=0;
 	}
 	
 	/* Get's */
+	
+	public double getInsuranceBet(){
+		return insuranceBet;
+	}
+	
 	public int getNumHands(){
 		return numbHands;
 	}
@@ -37,8 +45,8 @@ public class Player {
 		return balance;
 	}
 	
-	public int getBet() {
-		return bet;
+	public double getBet() {
+		return bet[getCurrentHand()];
 	}
 	
 	public void setBalance(double d) {
@@ -47,6 +55,11 @@ public class Player {
 	
 	public void setNumbHands(){
 		numbHands=hands.size();
+	}
+	
+	public void setInsuranceBet(){
+		insuranceBet=getBet();
+		setBalance(-insuranceBet);
 	}
 	
 	public void setCurrentHand(int n){
@@ -62,7 +75,7 @@ public class Player {
 		try{
 			hands.add(index+1, new Hand(d,j));
 			setNumbHands();
-			bet(bet);//preciso ver melhor
+			bet(getBet());//preciso ver melhor
 			hands.get(index+1).hand.add(hands.get(index).hand.get(1));
 			hands.get(index).hand.remove(1);
 			hands.get(index+1).drawCard();
@@ -71,36 +84,37 @@ public class Player {
 		}catch(Exception name){}
 	}
 
-	public void doubleDown(int index){
-		if(balance>=bet){
-			balance-=bet;
-			bet = 2*bet;
-			hands.get(index).drawCard();
+	public void doubleDown(){
+		if(balance>=getBet()){
+			balance-=getBet();
+			bet(getBet());
+			hands.get(getCurrentHand()).drawCard();
 		}else{
 			System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
 		}
 	}
 	
-	public boolean bet(int b){
-		int temp;
-		if(bet!=0){
-			temp = bet;
-			balance += bet;
-			bet = 0;
+	public boolean bet(double b){
+		double temp;
+		int n = getCurrentHand();
+		if(bet[n]!=0){
+			temp = bet[n];
+			balance += bet[n];
+			bet[n] = 0;
 			if(balance>=b){
 				balance-=b;
-				bet = b;
+				bet[n] = b;
 				oldbet = b;
 				return true;
 			}else{
 				System.out.println("[!]Não tem créditos suficientes para efectuar a aposta");
-				bet = temp;
+				bet[n] = temp;
 				return false;
 			}
 		}
 		if(balance>=b){
 			balance-=b;
-			bet = b;
+			bet[n] = b;
 			oldbet = b;
 			return true;
 		}else{
@@ -115,13 +129,12 @@ public class Player {
 		
 	public void cleanPlayerHand(){
 		
-		for(int i=1; i<numbHands; i++){
+		for(int i=1; i<getNumHands(); i++){
 			hands.get(i).cleanHand();
 			hands.remove(i);
-			bet = 0;
 		}
 		hands.get(0).cleanHand();
-		bet=0;
+		bet[0]=0;
 		setNumbHands();
 		setCurrentHand(0);
 	}

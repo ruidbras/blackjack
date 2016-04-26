@@ -19,13 +19,13 @@ public class Main {
 		while(true){
 
 			String in = sc.nextLine();
-			System.out.println("deck "+deck.deck.size()+" junk"+junk.cards.size());
+			//System.out.println("deck "+deck.deck.size()+" junk"+junk.cards.size());
 			if(in.equals("b")&&(!game.ingame())){
 				System.out.println("How much you want to bet?");
 				try{
-					game.makeBet(Integer.parseInt(sc.nextLine()));
+					game.makeBet(Double.parseDouble(sc.nextLine()));
 				}catch(Exception name){
-					System.out.println("Argumento inválido");
+					System.out.println("Invalid argument");
 				}
 				
 			}else if(in.equals("d")&&(!game.ingame())){
@@ -43,12 +43,8 @@ public class Main {
 			else if(in.equals("st")){
 				strategy.printStats(player.getBalance());
 			}
-			
-			
 			else if(in.equals("i")&&game.ingame()&&dealer.canHaveBlackjack()){
-				
 				game.insurance();
-				
 			}
 			
 			
