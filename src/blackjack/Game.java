@@ -3,13 +3,16 @@ package blackjack;
 public class Game {
 	private Player player;
 	private Dealer dealer;
+	private Strategy strategy;
 	private boolean ingame;
 	public boolean inHandTwo;
 	
 	
-	Game(Player p, Dealer d){
+	
+	Game(Player p, Dealer d, Strategy s){
 		player = p;
 		dealer = d;
+		strategy = s;
 		inHandTwo=false;
 	}
 	
@@ -23,7 +26,7 @@ public class Game {
 			if(!(player.bet(player.oldbet))){
 				return;
 			}
-		
+		strategy.addPlays();
 		player.hand[0].drawCard();
 		player.hand[0].drawCard();
 		dealer.drawHand();
@@ -116,11 +119,16 @@ public class Game {
 				System.out.println("BlackJack!");
 				player.setBalance(player.bet);
 				System.out.println("Player pushes and his current balance is "+player.getBalance());
+				strategy.addDealerbj();
+				strategy.addPlayerbj();
+				strategy.addPushes();
 				cleanTable();
 				return;
 			}else{
 				player.setBalance((player.bet)*2);//Should pay 2.5
 				System.out.println("Player wins and his current balance is "+player.getBalance());
+				strategy.addPlayerbj();
+				strategy.addWins();
 				cleanTable();
 				return;
 			}
@@ -129,6 +137,8 @@ public class Game {
 		if(dealer.hand.blackjack()){
 			System.out.println("BlackJack!");
 			System.out.println("Player loses and his current balance is "+player.getBalance());
+			strategy.addLoses();
+			strategy.addDealerbj();
 			cleanTable();
 			return;
 		}
@@ -143,6 +153,7 @@ public class Game {
 					System.out.println("Dealer busts");
 					player.setBalance((player.bet)*2);
 					System.out.println("Player wins and his current balance is "+player.getBalance());
+					strategy.addWins();
 					cleanTable();
 					return;
 				}
@@ -150,6 +161,7 @@ public class Game {
 		}else{
 			/* When the player busts */
 			System.out.println("Player loses and his current balance is "+player.getBalance());
+			strategy.addLoses();
 			cleanTable();
 			return;
 		}
@@ -158,14 +170,17 @@ public class Game {
 		if(player.hand[n].getTotal()>dealer.hand.getTotal()){
 			player.setBalance((player.bet)*2);
 			System.out.println("Player wins and his current balance is "+player.getBalance());
+			strategy.addWins();
 			cleanTable();
 		}else if(player.hand[n].getTotal()==dealer.hand.getTotal()){
 			player.setBalance(player.bet);
 			System.out.println("Player pushes and his current balance is "+player.getBalance());
+			strategy.addPushes();
 			cleanTable();
 		}
 		else{
 			System.out.println("Player loses and his current balance is "+player.getBalance());
+			strategy.addLoses();
 			cleanTable();
 		}
 		cleanTable();

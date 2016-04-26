@@ -10,8 +10,8 @@ public class Main {
 		Player player = new Player(deck,junk,1000);
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
-		Game game = new Game(player, dealer);
-		
+		Strategy strategy = new Strategy(player.getBalance());
+		Game game = new Game(player, dealer, strategy);
 		System.out.println("Type what you want to do? (press b to bet or q to exit)");
 		deck.shuffle();
 		
@@ -38,6 +38,9 @@ public class Main {
 			}
 			else if(in.equals("2")&&game.ingame()){
 				game.dowbleDown();
+			}
+			else if(in.equals("st")){
+				strategy.printStats(player.getBalance());
 			}
 			
 			
