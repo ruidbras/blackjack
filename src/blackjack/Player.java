@@ -144,7 +144,6 @@ public class Player {
 		setCurrentHand(0);
 	}
 
-
 	@Override
 	public String toString() {
 		if (numbHands!=1){

@@ -25,6 +25,10 @@ public class Junk {
 		cards.addAll(h);
 	}
 
+	public double countCards(){
+		return cards.size();
+	}
+	
 	@Override
 	public String toString() {
 		return "Junk [cards=" + cards + "]";

@@ -9,16 +9,20 @@ public class Hand {
 	private int total;
 	private Deck deck;
 	private Junk junk;
-
-	Hand(){
-		
-	}
 	
 	Hand(Deck d, Junk j){
 		hand = new LinkedList<Card>();
 		total = 0;
 		deck = d;
 		junk = j;
+	}
+	
+	public Card getFirst(){
+		return hand.get(0);
+	}
+	
+	public int getTotal(){
+		return total;
 	}
 	
 	public boolean blackjack(){
@@ -49,14 +53,6 @@ public class Hand {
 		return numCards;
 	}
 	
-	public Card getFirst(){
-		return hand.get(0);
-	}
-	
-	public int getTotal(){
-		return total;
-	}
-	
 	public void drawCard(){
 		hand.add(deck.dealCard());
 		total = genTotal();
@@ -81,7 +77,6 @@ public class Hand {
 		hand.clear();
 	}
 	
-
 	@Override
 	public String toString() {
 		return hand + " Total:" + total;

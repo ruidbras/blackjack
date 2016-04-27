@@ -115,11 +115,6 @@ public class Deck {
 	}
 	
 	public Card dealCard(){
-		/*if(it.hasNext()){
-			temp = it.next();
-			System.out.println(temp);
-			
-		}*/
 		if(deck.size()>0){
 			temp = deck.get(0);
 			deck.remove(0);
@@ -130,16 +125,9 @@ public class Deck {
 	
 	public void addJunk(Junk j){
 		deck.addAll(j.cards);
-		
 	}
 	
-	public int countCards(){
-		int numCards=0;
-		Iterator<Card> it = deck.iterator();
-		while(it.hasNext()){
-			numCards++;
-			it.equals(it.next());
-		}
-		return numCards;
+	public double countCards(){
+		return deck.size();
 	}
 }

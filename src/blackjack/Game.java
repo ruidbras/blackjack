@@ -3,20 +3,27 @@ package blackjack;
 public class Game {
 	private Player player;
 	private Dealer dealer;
+	Deck deck;
+	Junk junk;
 	private Strategy strategy;
 	private boolean ingame;
 	private boolean wasASplit;
 	private boolean insuranceMode;
 	
-	Game(Player p, Dealer d, Strategy s){
+	Game(Deck deck, Junk junk, Player p, Dealer d, Strategy s){
 		player = p;
 		dealer = d;
 		strategy = s;
+		this.deck = deck;
+		this.junk=junk;
 		wasASplit=false;
 		ingame=false;
 		insuranceMode=false;
 	}
 	
+	public boolean ingame(){
+		return ingame;
+	}
 	
 	public boolean makeBet(double b){
 		return player.bet(b);
@@ -37,13 +44,12 @@ public class Game {
 		ingame = true;
 	}
 	
-	public void split(Deck d, Junk j){
+	public void split(){
 		wasASplit=true;
 		System.out.println("Player makes split");
-		player.newHand(d, j, player.getCurrentHand());
+		player.newHand(deck, junk, player.getCurrentHand());
 		System.out.println(player);
 	}
-	
 	
 	public void insurance(){
 		System.out.println("Player makes insurance");
@@ -111,7 +117,6 @@ public class Game {
 		}
 		return true;
 	}
-	
 	
 	public void finalizeDealer(){
 		
@@ -211,9 +216,8 @@ public class Game {
 	}
 	
 		
-	public boolean ingame(){
-		return ingame;
-	}
+	
+	
 	
 	public void dowbleDown(){
 		System.out.println("Player dowbles down");
@@ -247,10 +251,15 @@ public class Game {
 			finalizeDealer();
 		}
 	}
+	
 	public void cleanTable(){
 		dealer.cleanDealerHand();
 		player.cleanPlayerHand();
 		wasASplit=false;
 		ingame = false;
+	}
+	
+	public double getPercentageDeck(){
+		return deck.countCards()/junk.countCards()*100;
 	}
 }

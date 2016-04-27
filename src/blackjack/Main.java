@@ -5,13 +5,14 @@ import java.util.Scanner;
 public class Main {
 	
 	public static void main(String[] args) {
-		Deck deck = new Deck(8);
+		Deck deck = new Deck(1);
+		deck.printDeck();
 		Junk junk = new Junk();
 		Player player = new Player(deck,junk,1000);
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
 		Strategy strategy = new Strategy(player.getBalance());
-		Game game = new Game(player, dealer, strategy);
+		Game game = new Game(deck, junk, player, dealer, strategy);
 		
 		System.out.println("Type what you want to do? (bet/exit)");
 		deck.shuffle();
@@ -19,7 +20,14 @@ public class Main {
 		while(true){
 
 			String in = sc.nextLine();
-			//System.out.println("deck "+deck.deck.size()+" junk"+junk.cards.size());
+			
+			//Add junk to deck when deck is at ?%
+			if(!game.ingame()&&game.getPercentageDeck()<90){
+				deck.printDeck();
+				deck.addJunk(junk);
+				junk.emptyJunk();
+				deck.shuffle();
+			}
 			if(in.equals("b")&&(!game.ingame())){
 				System.out.println("How much you want to bet?");
 				try{
@@ -56,13 +64,11 @@ public class Main {
 			
 			//Split
 			else if(in.equals("p")&&game.ingame()&&player.getHand().cardsSameValue()){
-				game.split(deck, junk);
+				game.split();
 				//preciso ver as bets e o dinheiro ainda
 				
 			}
-			
-			
-			
+
 			else if(in.equals("q")){
 				sc.close();
 				return;
