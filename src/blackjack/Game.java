@@ -168,49 +168,34 @@ public class Game {
 			}
 		}
 		
+		if(dealerFinalizeCards()==false){
+			wasASplit=false;
+			ingame=false;
+			return;
+		}
+		
 		int n = player.getNumHands()-1;
 		player.setCurrentHand(n);
-		boolean alreadyFinalized=false;
 		
 		while((player.getCurrentHand())>=0){
-			
-			if(player.getHand().getTotal()>=dealer.hand.getTotal()){
-				if (!alreadyFinalized){
-					if(dealerFinalizeCards()==false){
-						wasASplit=false;
-						ingame=false;
-						return;
-					}
-					alreadyFinalized=true;
-				}
+			/* If no one busts the game checks who is the winner */
+			if(player.getHand().getTotal()>dealer.hand.getTotal()){
+				player.setBalance((player.getBet())*2);
+				strategy.addWins();
+				System.out.println("Hand "+player.getCurrentHand()+" wins");
+			}else if(player.getHand().getTotal()==dealer.hand.getTotal()){
+				player.setBalance(player.getBet());
+				strategy.addPushes();
+				System.out.println("Hand "+player.getCurrentHand()+" pushes");
 			}
 			else{
-				System.out.println("Hand "+player.getCurrentHand()+" loses");
-				n=n-1;
-				player.setCurrentHand(n);
-				continue;
-			}
-			if (alreadyFinalized){
-				/* If no one busts the game checks who is the winner */
-				if(player.getHand().getTotal()>dealer.hand.getTotal()){
-					player.setBalance((player.getBet())*2);
-					strategy.addWins();
-					System.out.println("Hand "+player.getCurrentHand()+" wins");
-				}else if(player.getHand().getTotal()==dealer.hand.getTotal()){
-					player.setBalance(player.getBet());
-					strategy.addPushes();
-					System.out.println("Hand "+player.getCurrentHand()+" pushes");
-				}
-				else{
-					strategy.addLoses();
-					System.out.println("Hand "+player.getCurrentHand()+ " loses");
-				}
+				strategy.addLoses();
+				System.out.println("Hand "+player.getCurrentHand()+ " loses");
 			}
 			n=n-1;
 			player.setCurrentHand(n);
 		}
 		wasASplit=false;
-		alreadyFinalized=false;
 		ingame=false;
 		cleanTable();
 	}
