@@ -62,6 +62,10 @@ public class Player {
 		setBalance(-insuranceBet);
 	}
 	
+	public void setBetZero(){
+		bet[getCurrentHand()]=0;
+	}
+	
 	public void setCurrentHand(int n){
 		currentHand=n;
 	}
@@ -75,12 +79,13 @@ public class Player {
 		try{
 			hands.add(index+1, new Hand(d,j));
 			setNumbHands();
-			bet(getBet());//preciso ver melhor
+			
 			hands.get(index+1).hand.add(hands.get(index).hand.get(1));
 			hands.get(index).hand.remove(1);
 			hands.get(index+1).drawCard();
 			hands.get(index).drawCard();
 			setCurrentHand(index+1);
+			bet(getBet());
 		}catch(Exception name){}
 	}
 
@@ -128,10 +133,10 @@ public class Player {
 	}
 		
 	public void cleanPlayerHand(){
-		
 		for(int i=1; i<getNumHands(); i++){
 			hands.get(i).cleanHand();
 			hands.remove(i);
+			setNumbHands();
 		}
 		hands.get(0).cleanHand();
 		bet[0]=0;

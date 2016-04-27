@@ -55,7 +55,7 @@ public class Main {
 			
 			
 			//Split
-			else if(in.equals("p")&&player.hands.get(0).cardsSameValue()){
+			else if(in.equals("p")&&game.ingame()&&player.getHand().cardsSameValue()){
 				game.split(deck, junk);
 				//preciso ver as bets e o dinheiro ainda
 				

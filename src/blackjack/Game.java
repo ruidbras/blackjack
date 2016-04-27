@@ -61,6 +61,7 @@ public class Game {
 			System.out.println(player.getCurrentHand() + "th hand busts");
 			player.getHand().cleanHand();
 			player.hands.remove(player.getCurrentHand());
+			player.setBetZero();
 			player.setNumbHands();
 			player.setCurrentHand(player.getCurrentHand()-1);
 		}else{
@@ -73,6 +74,7 @@ public class Game {
 				System.out.println(player.getCurrentHand() + "th hand busts");
 				player.getHand().cleanHand();
 				player.hands.remove(player.getCurrentHand());
+				player.setBetZero();
 				player.setNumbHands();
 				finalizeDealer();
 			}
@@ -168,13 +170,13 @@ public class Game {
 		while((player.getCurrentHand())>=0){
 			
 			if(player.getHand().getTotal()>=dealer.hand.getTotal()){
-				if (dealerFinalizeCards()&&!alreadyFinalized){
+				if (!alreadyFinalized){
+					if(dealerFinalizeCards()==false){
+						wasASplit=false;
+						ingame=false;
+						return;
+					}
 					alreadyFinalized=true;
-				}
-				else{
-					ingame=false;
-					cleanTable();
-					return;
 				}
 			}
 			else{
@@ -188,15 +190,15 @@ public class Game {
 				if(player.getHand().getTotal()>dealer.hand.getTotal()){
 					player.setBalance((player.getBet())*2);
 					strategy.addWins();
-					System.out.println("Player wins");
+					System.out.println("Hand "+player.getCurrentHand()+" wins");
 				}else if(player.getHand().getTotal()==dealer.hand.getTotal()){
 					player.setBalance(player.getBet());
 					strategy.addPushes();
-					System.out.println("Player pushes");
+					System.out.println("Hand "+player.getCurrentHand()+" pushes");
 				}
 				else{
 					strategy.addLoses();
-					System.out.println("Player loses");
+					System.out.println("Hand "+player.getCurrentHand()+ " loses");
 				}
 			}
 			n=n-1;
