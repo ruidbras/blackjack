@@ -117,6 +117,10 @@ public class Player {
 				return false;
 			}
 		}
+		if(bet[n]==0){
+			System.out.println("[!]You must specify how much you want to bet");
+			return false;
+		}
 		if(balance>=b){
 			balance-=b;
 			bet[n] = b;

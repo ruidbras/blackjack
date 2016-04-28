@@ -247,4 +247,39 @@ public class Game {
 	public double getPercentageDeck(){
 		return deck.countCards()/junk.countCards()*100;
 	}
+	
+	public void checkInputs(double min_bet, double max_bet, double balance, int shoe, double shuffle){
+		if(min_bet < 1){
+			System.out.println("Minimum Bet must be greater or equal to 1");
+			System.exit(0);
+		}
+		if(max_bet<10*min_bet || max_bet>20*min_bet){
+			System.out.println("Max Bet must be greater than 10 times the Min Bet and lesser than 20 times the Min Bet");
+			System.exit(0);
+		}
+		if(balance<50*min_bet){
+			System.out.println("Balance must be greater than 50 times the Min Bet");
+			System.exit(0);
+		}
+		if(shoe<4 || shoe>8){
+			System.out.println("Shoe must be greater than 4 and lesser than 8");
+			System.exit(0);
+		}
+		if(shuffle<10 || shuffle>100){
+			System.out.println("Shuffle must be greater than 10 and lesser than 100");
+			System.exit(0);
+		}
+		System.out.println("Inputs are ok");
+	}
+	
+	public boolean betLimit(double b, double min_bet, double max_bet){
+		if(b>=min_bet && b<=max_bet){
+			return true;
+		}
+		else{
+			return false;
+		}
+			
+	}
+	
 }
