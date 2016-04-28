@@ -31,10 +31,12 @@ public class Game {
 	}
 	
 	public void deal(){
-		if(player.getBet()==0)
-			if(!(player.bet(player.oldbet))){
-				return;
-			}
+		if(player.getBet()==0){
+			System.out.println("You must specify a bet value");
+			return;
+			//if(!(player.bet(player.oldbet))){
+				//return;
+		}
 		strategy.addPlays();
 		player.hit();
 		player.hit();
