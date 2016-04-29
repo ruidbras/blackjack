@@ -77,6 +77,22 @@ public class Hand {
 		hand.clear();
 	}
 	
+	public boolean isSoft(){
+		int r = 0;
+		for(Card card: hand){
+			r+=card.getSoftValue();
+		}
+		if(r == this.total)
+			return false;
+		return true;
+	}
+	
+	public boolean isPair(){
+		if((hand.size())== 2 && this.cardsSameValue() )
+			return true;
+		return false;
+	}
+	
 	@Override
 	public String toString() {
 		return hand + " Total:" + total;

@@ -1,17 +1,19 @@
 package blackjack;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args)  throws IOException {
 		
 		double min_bet=1;
 		double max_bet=20;
 		double balance=500;
 		int shoe = 4;
 		double shuffle=90;
-		Deck deck = new Deck(shoe);
+		BS bs = new BS(3);
+		Deck deck = new Deck(shoe, bs);
 		deck.printDeck();
 		Junk junk = new Junk();
 		Player player = new Player(deck,junk,1000);
@@ -61,6 +63,9 @@ public class Main {
 			}
 			else if(in.equals("st")){
 				strategy.printStats(player.getBalance());
+			}
+			else if(in.equals("ad")){
+				System.out.println(bs.HL(player.getHand().getTotal(), dealer.getHand().getFirst().getSoftValue(), player.getHand().isSoft(), player.getHand().isPair()));
 			}
 			else if(in.equals("i")&&game.ingame()&&dealer.canHaveBlackjack()){
 				game.insurance();

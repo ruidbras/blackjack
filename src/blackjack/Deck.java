@@ -10,10 +10,12 @@ public class Deck {
 	int shoe;
 	Iterator<Card> it = deck.iterator();
 	Card temp; 
+	BS bs;
 		
 	/*inicializa o deck com cartas de shoe baralhos*/
-	public Deck(int shoe){
+	public Deck(int shoe, BS bs){
 		this.shoe=shoe;
+		this.bs = bs;
 		int j=1,w=0;
 		for(int i=0;i<shoe*52;i++){
 			if(i==52+52*w){
@@ -116,8 +118,15 @@ public class Deck {
 	
 	public Card dealCard(){
 		if(deck.size()>0){
+			int t;
 			temp = deck.get(0);
 			deck.remove(0);
+			t=temp.getHardValue();
+			if(t<7){
+				bs.countcards(1);
+			}else if(t>9){
+				bs.countcards(-1);
+			}
 			return temp;
 		}
 		return null;

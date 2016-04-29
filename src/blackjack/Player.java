@@ -117,7 +117,6 @@ public class Player {
 				return false;
 			}
 		}
-		
 		if(balance>=b){
 			balance-=b;
 			bet[n] = b;
