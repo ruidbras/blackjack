@@ -82,6 +82,14 @@ public class Game {
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");
 				System.out.println("Dealers Hand: "+dealer.hand);
+				if(insuranceMode){
+					if(dealer.hand.blackjack()){
+						System.out.println("Player wins insurance");
+						player.setBalance(2*player.getInsuranceBet());
+					}else{
+						System.out.println("Player loses insurance");
+					}
+				}
 				System.out.println("Current balance: "+player.getBalance());
 				cleanTable();
 				return;
@@ -255,6 +263,14 @@ public class Game {
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");
 				System.out.println("Dealers Hand: "+dealer.hand);
+				if(insuranceMode){
+					if(dealer.hand.blackjack()){
+						System.out.println("Player wins insurance");
+						player.setBalance(2*player.getInsuranceBet());
+					}else{
+						System.out.println("Player loses insurance");
+					}
+				}
 				System.out.println("Current balance: "+player.getBalance());
 				cleanTable();
 				return;
