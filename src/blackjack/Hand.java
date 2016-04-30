@@ -18,7 +18,10 @@ public class Hand {
 		junk = j;
 		handCanBeHit=true;
 	}
-	
+
+
+
+
 	public void setHandCanBeHit(boolean c){
 		handCanBeHit=c;
 	}

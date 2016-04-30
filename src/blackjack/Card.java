@@ -22,7 +22,7 @@ public class Card {
 			hardValue=Integer.valueOf(num);
 		}
 	}
-
+	
 	public String toString() {
 		return num + suit /*+","+softValue+","+hardValue*/;
 	}

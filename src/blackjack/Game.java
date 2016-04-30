@@ -90,8 +90,13 @@ public class Game {
 						System.out.println("Player loses insurance");
 					}
 				}
+				//////////////////////////////////////////////////////////////////////
+				player.setBetZero();
+				if(dealerFinalizeCards()){
+					cleanTable();
+				}
 				System.out.println("Current balance: "+player.getBalance());
-				cleanTable();
+				//////////////////////////////////////////////////////////////////////
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");
@@ -131,8 +136,7 @@ public class Game {
 					player.setBalance(player.getBet()*2);
 					i=i+1;
 					player.setCurrentHand(i);
-				}
-				System.out.println("Player wins");
+				}/////////////////////////////////////////////////////////////////////////////
 				cleanTable();
 				return false;
 			}
@@ -203,6 +207,7 @@ public class Game {
 		}
 		
 		if(dealerFinalizeCards()==false){
+			System.out.println("Player wins");//////////////////////////////////////////////////
 			System.out.println("Current balance: "+player.getBalance());
 			return;
 		}
@@ -271,8 +276,13 @@ public class Game {
 						System.out.println("Player loses insurance");
 					}
 				}
+				//////////////////////////////////////////////
+				player.setBetZero();
+				if(dealerFinalizeCards()){
+					cleanTable();
+				}
 				System.out.println("Current balance: "+player.getBalance());
-				cleanTable();
+				///////////////////////////////////////////////
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");
@@ -283,10 +293,6 @@ public class Game {
 				finalizeDealer();
 			}
 		}
-		/*if(player.getHand().getTotal()>21){
-			System.out.println("Player busts");
-			finalizeDealer();
-		}*/
 	}
 	
 	public void cleanTable(){
