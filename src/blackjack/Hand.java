@@ -9,12 +9,30 @@ public class Hand {
 	private int total;
 	private Deck deck;
 	private Junk junk;
+	private boolean handCanBeHit;
 	
 	Hand(Deck d, Junk j){
 		hand = new LinkedList<Card>();
 		total = 0;
 		deck = d;
 		junk = j;
+		handCanBeHit=true;
+	}
+	
+	public void setHandCanBeHit(boolean c){
+		handCanBeHit=c;
+	}
+	public boolean getHandCanBeHit(){
+		return handCanBeHit;
+	}
+	
+	public boolean twoAces(){
+		if(countCards()==2){
+			if(hand.get(0).getHardValue()==11&&hand.get(1).getHardValue()==11){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Card getFirst(){
@@ -33,7 +51,7 @@ public class Hand {
 		}
 		return false;
 	}
-
+	
 	public boolean cardsSameValue(){
 		if (countCards()==2){
 			if(hand.get(0).getSoftValue()==hand.get(1).getSoftValue()){

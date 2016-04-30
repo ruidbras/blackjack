@@ -12,6 +12,15 @@ public class Deck {
 	Card temp; 
 	BS bs;
 		
+	/*public Deck(){
+		for(int i = 0; i<50; i++){
+			deck.add(new Card("A","D"));
+			deck.add(new Card("3","D"));
+			deck.add(new Card("A","D"));
+			deck.add(new Card("9","D"));
+		}
+	}*/
+	
 	/*inicializa o deck com cartas de shoe baralhos*/
 	public Deck(int shoe, BS bs){
 		this.shoe=shoe;

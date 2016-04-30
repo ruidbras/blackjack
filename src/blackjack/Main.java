@@ -16,7 +16,7 @@ public class Main {
 		Deck deck = new Deck(shoe, bs);
 		deck.printDeck();
 		Junk junk = new Junk();
-		Player player = new Player(deck,junk,1000);
+		Player player = new Player(deck,junk, balance);
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
 		Strategy strategy = new Strategy(player.getBalance());
@@ -32,8 +32,9 @@ public class Main {
 			
 			//Add junk to deck when deck is at ?%
 			if(!game.ingame()&&game.getPercentageDeck()<shuffle){
-				deck.printDeck();
+				//deck.printDeck();
 				deck.addJunk(junk);
+				System.out.println(deck.countCards());
 				junk.emptyJunk();
 				deck.shuffle();
 			}
@@ -50,7 +51,7 @@ public class Main {
 					System.out.println("Invalid argument");
 				}
 			}else if(in.equals("d")&&(!game.ingame())){
-				game.deal();
+				game.deal(min_bet);
 			}
 			else if(in.equals("h")&&game.ingame()){
 				game.hit();
@@ -71,7 +72,6 @@ public class Main {
 				game.insurance();
 			}
 			
-			
 			//surrender
 			else if(in.equals("u")&&game.ingame()){
 				System.out.println("Not available yet");
@@ -81,8 +81,6 @@ public class Main {
 			//Split
 			else if(in.equals("p")&&game.ingame()&&player.getHand().cardsSameValue()){
 				game.split();
-				//preciso ver as bets e o dinheiro ainda
-				
 			}
 
 			else if(in.equals("q")){
