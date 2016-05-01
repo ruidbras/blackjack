@@ -23,7 +23,8 @@ public class Main {
 		Player player = new Player(deck,junk, balance);
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
-		Strategy strategy = new Strategy(player.getBalance());
+		/* os inputs de srategy é suposto terem a aposta min e max */
+		Strategy strategy = new Strategy(player.getBalance(), 1, 20);
 		Game game = new Game(deck, junk, player, dealer, strategy);
 		game.checkInputs(min_bet, max_bet, balance, shoe, shuffle);
 		
@@ -70,9 +71,25 @@ public class Main {
 				strategy.printStats(player.getBalance());
 			}
 			else if(in.equals("ad")){
+				boolean af = true; //if true use af if not use basic strategy
 				boolean strat;
 				strat = true; // true for basic strategy and false for Hi-lo strategy
-				System.out.println(bs.advice(player.getHand().getTotal(), dealer.getHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().isPair(), game.firstplay(), strat));
+				if(game.ingame()){
+					/* Give advice on the next play */
+					System.out.println(bs.advice(player.getHand().getTotal(), dealer.getHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().isPair(), game.firstplay(), strat));
+				}else{
+					/* Give advice on the next bet */
+					if(af){
+						System.out.println("ON PROGRESS");
+						/*if(bs.getAfcount()>=2){
+							System.out.println("b "+);
+						}else{
+							
+						}*/
+					}else{
+						System.out.println(strategy.getBet());
+					}
+				}
 			}
 			else if(in.equals("i")&&game.ingame()&&dealer.canHaveBlackjack()&&game.firstplay()&&(!game.insuranceMode())&&(!game.wasASplit())){
 				game.insurance();

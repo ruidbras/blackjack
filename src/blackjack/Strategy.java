@@ -8,8 +8,11 @@ public class Strategy {
 	private double loses;
 	private double pushes;
 	private final double balanceinit;
+	private int bet;
+	private int minbet;
+	private int maxbet;
 	
-	Strategy(double i){
+	Strategy(double i, int min, int max){
 		balanceinit = i;
 		plays = 0;
 		playerbj = 0;
@@ -17,6 +20,13 @@ public class Strategy {
 		wins = 0;
 		loses = 0;
 		pushes = 0;
+		minbet = min;
+		maxbet = max;
+		bet = min;
+	}
+	
+	public int getBet(){
+		return bet;
 	}
 	
 	public void addPlays(){
@@ -33,10 +43,14 @@ public class Strategy {
 	
 	public void addWins(){
 		wins+=1;
+		if((bet+minbet)<=maxbet)
+			bet += minbet;
 	}
 	
 	public void addLoses(){
 		loses+=1;
+		if((bet-minbet)>=minbet)
+			bet -= minbet;
 	}
 	
 	public void addPushes(){

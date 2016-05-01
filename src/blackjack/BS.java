@@ -14,6 +14,7 @@ public class BS {
 	char[][] soft;
 	int count;
 	int shoe;
+	int afcount;
 	
 	public BS(int shoe) throws IOException {
 		int c, i = 0 , j = 0;
@@ -84,6 +85,14 @@ public class BS {
 	
 	public void countcards(int c){
 		count+=c;
+	}
+	
+	public void afcount(int c){
+		afcount+=c;
+	}
+	
+	public int getAfcount(){
+		return afcount;
 	}
 	
 	public char getadvice(int l, int c, boolean s, boolean p){

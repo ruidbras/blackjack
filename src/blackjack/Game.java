@@ -20,6 +20,7 @@ public class Game {
 		wasASplit=false;
 		ingame=false;
 		insuranceMode=false;
+		firstplay = true;
 	}
 	
 	public boolean ingame(){
@@ -281,6 +282,7 @@ public class Game {
 			player.setBetZero();
 			player.setNumbHands();
 			player.setCurrentHand(player.getCurrentHand()-1);
+			return;
 		}else{
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");

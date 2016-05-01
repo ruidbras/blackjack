@@ -136,6 +136,11 @@ public class Deck {
 			}else if(t>9){
 				bs.countcards(-1);
 			}
+			if(temp.getHardValue()==5){
+				bs.afcount(1);
+			}else if(temp.getHardValue()==11){
+				bs.afcount(-1);
+			}
 			return temp;
 		}
 		return null;
