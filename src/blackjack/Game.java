@@ -9,6 +9,7 @@ public class Game {
 	private boolean ingame;
 	private boolean wasASplit;
 	private boolean insuranceMode;
+	private boolean firstplay;
 	
 	Game(Deck deck, Junk junk, Player p, Dealer d, Strategy s){
 		player = p;
@@ -25,8 +26,20 @@ public class Game {
 		return ingame;
 	}
 	
+	public boolean wasASplit(){
+		return wasASplit;
+	}
+	
 	public boolean makeBet(double b){
 		return player.bet(b);	
+	}
+	
+	public boolean firstplay(){
+		return firstplay;
+	}
+	
+	public boolean insuranceMode(){
+		return insuranceMode;
 	}
 	
 	public void deal(double min_bet){
@@ -68,6 +81,7 @@ public class Game {
 			return;
 		}
 		System.out.println("Player hits");
+		firstplay = false;
 		player.hit();
 		dealer.printDealersFirstTwo();
 		System.out.println(player);
@@ -89,6 +103,7 @@ public class Game {
 					}else{
 						System.out.println("Player loses insurance");
 					}
+					insuranceMode = false;
 				}
 				//////////////////////////////////////////////////////////////////////
 				player.setBetZero();
@@ -110,6 +125,7 @@ public class Game {
 	}
 	
 	public void stand(){
+		firstplay = true;
 		if(player.getCurrentHand()>0){
 			System.out.println("Player stands in "+player.getCurrentHand()+ " hand");
 			player.setCurrentHand(player.getCurrentHand()-1);
@@ -145,7 +161,7 @@ public class Game {
 	}
 	
 	public void finalizeDealer(){
-		
+		firstplay = true;
 		System.out.println("Dealers Hand: "+dealer.hand);
 		
 		/* Check if the player has blackjack */
@@ -196,6 +212,7 @@ public class Game {
 				System.out.println("Current balance: "+player.getBalance());
 				strategy.addLoses();
 				strategy.addDealerbj();
+				insuranceMode = false;
 				cleanTable();
 				return;
 			}
@@ -275,6 +292,7 @@ public class Game {
 					}else{
 						System.out.println("Player loses insurance");
 					}
+					insuranceMode = false;
 				}
 				//////////////////////////////////////////////
 				player.setBetZero();
@@ -293,6 +311,7 @@ public class Game {
 				finalizeDealer();
 			}
 		}
+		stand();
 	}
 	
 	public void cleanTable(){

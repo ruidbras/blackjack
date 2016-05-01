@@ -63,21 +63,23 @@ public class Main {
 			else if(in.equals("s")&&game.ingame()){
 				game.stand();
 			}
-			else if(in.equals("2")&&game.ingame()){
+			else if(in.equals("2")&&game.ingame()&&game.firstplay()){
 				game.dowbleDown();
 			}
 			else if(in.equals("st")){
 				strategy.printStats(player.getBalance());
 			}
 			else if(in.equals("ad")){
-				System.out.println(bs.HL(player.getHand().getTotal(), dealer.getHand().getFirst().getSoftValue(), player.getHand().isSoft(), player.getHand().isPair()));
+				boolean strat;
+				strat = true; // true for basic strategy and false for Hi-lo strategy
+				System.out.println(bs.advice(player.getHand().getTotal(), dealer.getHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().isPair(), game.firstplay(), strat));
 			}
-			else if(in.equals("i")&&game.ingame()&&dealer.canHaveBlackjack()){
+			else if(in.equals("i")&&game.ingame()&&dealer.canHaveBlackjack()&&game.firstplay()&&(!game.insuranceMode())&&(!game.wasASplit())){
 				game.insurance();
 			}
 			
 			//surrender
-			else if(in.equals("u")&&game.ingame()){
+			else if(in.equals("u")&&game.ingame()&&game.firstplay()){
 				System.out.println("Not available yet");
 			}
 			

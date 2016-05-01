@@ -89,13 +89,13 @@ public class BS {
 	public char getadvice(int l, int c, boolean s, boolean p){
 		//l is the total of the Player's hand and c is the total of the first card of the Dealer's hand
 		if(p){
-			System.out.println("pair" + (l/2-2) + (c-2));
+			//System.out.println("pair" + (l/2-2) + (c-2));
 			return pair[l/2-2][c-2];
 		}else if(s){
-			System.out.println("soft" + (l-13) + (c-2));
+			//System.out.println("soft" + (l-13) + (c-2));
 			return soft[l-13][c-2];
 		}else{
-			System.out.println("hard" + (l-5) + (c-2));
+			//System.out.println("hard" + (l-5) + (c-2));
 			return hard[l-5][c-2];
 		}
 		
@@ -296,6 +296,41 @@ public class BS {
 		
 	}
 	
+	public char advice(int l, int c, boolean s, boolean p, boolean firstplay, boolean bs ){
+		char r;
+		if(bs){
+			/* Using the basic strategy  */
+			r = getadvice(l,c,s,p);
+			/* If it's not the first play and the advice is a special command
+			 * the advice must adapt */
+			if(!firstplay){
+				/* Adaptation for the double command */
+				if(r == 'd'){
+					if(s){
+						if(l>=17){
+							r = 'h';
+						}else{
+							r = 's';
+						}
+					}else{
+						r = 'h';
+					}
+				}
+				/* Adaptation for the surrender command */
+				if(r == 'u'){
+					r = 'h';
+				}
+			}
+		}else{
+			/* Using the Hi-lo strategy */
+			r = HL(l,c,s,p);
+			/* Every adaptation in this case it's to hit */
+			if(!firstplay){
+				r = 'h';
+			}
+		}
+		return r;
+	}
 	
 	
 	public static void main(String[] args) throws IOException{
