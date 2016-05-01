@@ -10,6 +10,7 @@ public class Game {
 	private boolean wasASplit;
 	private boolean insuranceMode;
 	private boolean firstplay;
+	private double oldbet;
 	
 	Game(Deck deck, Junk junk, Player p, Dealer d, Strategy s){
 		player = p;
@@ -21,6 +22,7 @@ public class Game {
 		ingame=false;
 		insuranceMode=false;
 		firstplay = true;
+		oldbet=0;
 	}
 	
 	public boolean ingame(){
@@ -31,8 +33,11 @@ public class Game {
 		return wasASplit;
 	}
 	
-	public boolean makeBet(double b){
-		return player.bet(b);	
+	public void makeBet(double b){
+		//if player has enough credits to make bet
+		if(player.bet(b)){
+			oldbet=b;
+		}
 	}
 	
 	public boolean firstplay(){
@@ -44,12 +49,19 @@ public class Game {
 	}
 	
 	public void deal(double min_bet){
+		//if player hits deal without specify the bet value
 		if(player.getBet()==0){
-			player.bet(min_bet);
+			/* If it is the first deal of the game and the player didn't specify the value of the bet
+			 * it's given the min_bet value to the bet, otherwise it's given the value of the previous bet
+			 */
+			if(oldbet==0){
+				player.bet(min_bet);
+			}else{
+				player.bet(oldbet);
+			}
 		}
 		strategy.addPlays();
-		player.hit();
-		player.hit();
+		player.drawHand();
 		dealer.drawHand();
 		dealer.printDealersFirstTwo();
 		System.out.println(player);
@@ -64,6 +76,7 @@ public class Game {
 	}
 	
 	public void insurance(){
+		//if it was already a split, insurance can't be made
 		if(wasASplit){
 			System.out.println("Can't make insurance after spliting");
 			return;
@@ -106,13 +119,11 @@ public class Game {
 					}
 					insuranceMode = false;
 				}
-				//////////////////////////////////////////////////////////////////////
 				player.setBetZero();
 				if(dealerFinalizeCards()){
 					cleanTable();
 				}
 				System.out.println("Current balance: "+player.getBalance());
-				//////////////////////////////////////////////////////////////////////
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");
@@ -153,7 +164,7 @@ public class Game {
 					player.setBalance(player.getBet()*2);
 					i=i+1;
 					player.setCurrentHand(i);
-				}/////////////////////////////////////////////////////////////////////////////
+				}
 				cleanTable();
 				return false;
 			}
@@ -225,7 +236,7 @@ public class Game {
 		}
 		
 		if(dealerFinalizeCards()==false){
-			System.out.println("Player wins");//////////////////////////////////////////////////
+			System.out.println("Player wins");
 			System.out.println("Current balance: "+player.getBalance());
 			return;
 		}
@@ -296,13 +307,11 @@ public class Game {
 					}
 					insuranceMode = false;
 				}
-				//////////////////////////////////////////////
 				player.setBetZero();
 				if(dealerFinalizeCards()){
 					cleanTable();
 				}
 				System.out.println("Current balance: "+player.getBalance());
-				///////////////////////////////////////////////
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");

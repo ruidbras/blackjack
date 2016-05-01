@@ -65,7 +65,7 @@ public class Player {
 		setBalance(-insuranceBet);
 		return true;
 	}
-	////////////////////////////////////////////////////////////////
+	
 	public void setBetZero(){
 		if(getNumHands()==1){
 			bet.set(0, (double)0);
@@ -73,13 +73,18 @@ public class Player {
 		}
 		bet.remove(getCurrentHand());
 	}
-	///////////////////////////////////////////////////////////////
+
 	public void setCurrentHand(int n){
 		currentHand=n;
 	}
 	
 	/* Methods */
 	public void hit(){
+		getHand().drawCard();
+	}
+	
+	public void drawHand(){
+		getHand().drawCard();
 		getHand().drawCard();
 	}
 	
@@ -140,7 +145,7 @@ public class Player {
 			i=getNumHands()-1;
 		}
 		hands.get(0).cleanHand();
-		hands.get(0).setHandCanBeHit(true);/////////////////////////////////////////////////////////////////////////
+		hands.get(0).setHandCanBeHit(true);
 		bet.set(0, (double) 0);
 		setNumbHands();
 		setCurrentHand(0);
