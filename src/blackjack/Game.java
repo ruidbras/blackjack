@@ -10,7 +10,7 @@ public class Game {
 	private boolean wasASplit;
 	private boolean insuranceMode;
 	private boolean firstplay;
-	private double oldbet;
+	private double oldbet;// double ?
 	
 	Game(Deck deck, Junk junk, Player p, Dealer d, Strategy s){
 		player = p;
@@ -23,6 +23,10 @@ public class Game {
 		insuranceMode=false;
 		firstplay = true;
 		oldbet=0;
+	}
+	
+	public double getOldbet(){
+		return oldbet;
 	}
 	
 	public boolean ingame(){
@@ -56,6 +60,7 @@ public class Game {
 			 */
 			if(oldbet==0){
 				player.bet(min_bet);
+				oldbet = min_bet;
 			}else{
 				player.bet(oldbet);
 			}
@@ -238,6 +243,7 @@ public class Game {
 		if(dealerFinalizeCards()==false){
 			System.out.println("Player wins");
 			System.out.println("Current balance: "+player.getBalance());
+			strategy.addWins();
 			return;
 		}
 		
@@ -326,6 +332,7 @@ public class Game {
 	}
 	
 	public void cleanTable(){
+		firstplay=true;
 		dealer.cleanDealerHand();
 		player.cleanPlayerHands();
 		wasASplit=false;

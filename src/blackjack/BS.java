@@ -112,6 +112,7 @@ public class BS {
 	
 	public char HL(int l, int c, boolean s, boolean p){
 		int truecount = Math.round(count/shoe);
+		System.out.println("count: "+count+"    truecount: "+truecount+"   XvsY: "+l+"vs"+c);
 		switch(l){
 			case 20:
 				if(c==5 && p){
@@ -334,8 +335,13 @@ public class BS {
 			/* Using the Hi-lo strategy */
 			r = HL(l,c,s,p);
 			/* Every adaptation in this case it's to hit */
+			System.out.println(firstplay);
 			if(!firstplay){
-				r = 'h';
+				if(r=='p'){
+					r = 's';
+				}else if(r=='d' || r =='u'){
+					r = 'h';
+				}
 			}
 		}
 		return r;

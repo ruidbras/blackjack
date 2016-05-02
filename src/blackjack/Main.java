@@ -11,11 +11,43 @@ public class Main {
 	
 	public static void main(String[] args)  throws IOException {
 		
-		double min_bet=1;
-		double max_bet=20;
-		double balance=500;
-		int shoe = 4;
-		double shuffle=90;
+		
+		int min_bet=0;
+		int max_bet=0;
+		double balance=0;
+		int shoe=0;
+		int shuffle=0;
+		int s_number=0;
+		boolean interactivemode=false;
+		String mode = args[0];
+		
+		/* Read arguments */
+		if(mode.equals("-i")){
+				min_bet = Integer.parseInt(args[1]);
+				max_bet = Integer.parseInt(args[2]);
+				balance = Integer.parseInt(args[3]);
+				shoe = Integer.parseInt(args[4]);
+				shuffle = Integer.parseInt(args[5]);
+				interactivemode = true;
+		}else if(mode.equals("-d")){
+				min_bet = Integer.parseInt(args[1]);
+				max_bet = Integer.parseInt(args[2]);
+				balance = Integer.parseInt(args[3]);
+				//shoe = Integer.parseInt(args[4]);
+				//shuffle = Integer.parseInt(args[5]);
+		}else if(mode.equals("-s")){	
+				min_bet = Integer.parseInt(args[1]);
+				max_bet = Integer.parseInt(args[2]);
+				balance = Integer.parseInt(args[3]);
+				shoe = Integer.parseInt(args[4]);
+				shuffle = Integer.parseInt(args[5]);
+				s_number = Integer.parseInt(args[6]);
+		}else{
+				System.out.println("Error in arguments");
+				return;
+		}
+		
+		
 		BS bs = new BS(3);
 		Deck deck = new Deck(shoe, bs);
 		deck.printDeck();
@@ -24,16 +56,30 @@ public class Main {
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
 		/* os inputs de srategy é suposto terem a aposta min e max */
-		Strategy strategy = new Strategy(player.getBalance(), 1, 20);
+		Strategy strategy = new Strategy(player.getBalance(), min_bet, max_bet);
 		Game game = new Game(deck, junk, player, dealer, strategy);
 		game.checkInputs(min_bet, max_bet, balance, shoe, shuffle);
 		
 		System.out.println("Type what you want to do? (bet/exit)");
-		deck.shuffle();
+		deck.shuffle(); // Há necessidade ?
+		
+		
+		
 		
 		while(true){
-
-			String in = sc.nextLine();
+			String in = null;
+			/* Funcionamento */
+			if(mode.equals("-i")){
+				in = sc.nextLine();
+			}else if(mode.equals("-d")){
+				
+			}else if(mode.equals("-s")){	
+				
+			}else{
+				sc.close();
+				return;
+			}
+			
 			
 			//Add junk to deck when deck is at ?%
 			if(!game.ingame()&&game.getPercentageDeck()<shuffle){
@@ -43,10 +89,9 @@ public class Main {
 				junk.emptyJunk();
 				deck.shuffle();
 			}
-			if(in.equals("b")&&(!game.ingame())){
-				System.out.println("How much you want to bet?");
+			if(in.charAt(0)=='b'&&(!game.ingame())){
 				try{
-					double b = Double.parseDouble(sc.nextLine());				
+					double b = Double.parseDouble(in.substring(in.indexOf(" ")));
 					if(game.betLimit(b, min_bet, max_bet)){	
 						game.makeBet(b);
 					}else{
@@ -73,21 +118,21 @@ public class Main {
 			else if(in.equals("ad")){
 				boolean af = true; //if true use af if not use basic strategy
 				boolean strat;
-				strat = true; // true for basic strategy and false for Hi-lo strategy
+				strat = false; // true for basic strategy and false for Hi-lo strategy
 				if(game.ingame()){
 					/* Give advice on the next play */
 					System.out.println(bs.advice(player.getHand().getTotal(), dealer.getHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().isPair(), game.firstplay(), strat));
 				}else{
 					/* Give advice on the next bet */
+					System.out.println("Ilustrativo.. oldbet = "+game.getOldbet());
 					if(af){
-						System.out.println("ON PROGRESS");
-						/*if(bs.getAfcount()>=2){
-							System.out.println("b "+);
+						if(bs.getAfcount()>=2){
+							System.out.println("b "+game.getOldbet()*2);
 						}else{
-							
-						}*/
+							System.out.println("b "+min_bet);
+						}
 					}else{
-						System.out.println(strategy.getBet());
+						System.out.println("b " +strategy.getBet());
 					}
 				}
 			}
