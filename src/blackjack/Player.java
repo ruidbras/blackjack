@@ -6,7 +6,7 @@ public class Player {
 	
 	/* Field */
 	LinkedList<Hand> hands;
-	private double balance;
+	private PileOfChips pile;
 	public LinkedList<Double> bet;//bets vector
 	public int numbHands; //number of hands in the list
 	public int currentHand;//current hand in play
@@ -19,7 +19,7 @@ public class Player {
 		bet = new LinkedList<Double>();
 		bet.add((double)0);
 		hands.add(new Hand());
-		balance = i; 
+		pile = new PileOfChips(i);
 		numbHands=1;
 		currentHand=0;
 		insuranceBet=0;
@@ -49,7 +49,7 @@ public class Player {
 	}
 
 	public double getBalance() {
-		return balance;
+		return pile.getBalance();
 	}
 	
 	public double getBet() {
@@ -57,7 +57,7 @@ public class Player {
 	}
 	
 	public void setBalance(double d) {
-		this.balance += d;
+		pile.updatePile(d);
 	}
 	
 	public void setNumbHands(){
@@ -87,7 +87,7 @@ public class Player {
 	}
 	
 	public void addCredit(double i){ //nunca usada ainda
-		balance += i;
+		pile.updatePile(i);
 	}
 	
 	/* Methods */
@@ -119,30 +119,30 @@ public class Player {
 	
 	public boolean doubleDown(Card c){
 		double b=bet.get(getCurrentHand());
-		if(balance>=b){
+		if(pile.getBalance()>=b){
 			setBalance(-b);
 			bet.set(getCurrentHand(), 2*b);
 			hands.get(getCurrentHand()).addCard(c);
 			return true;
 		}
-		System.out.println("[!]Não tem créditos suficientes para efectuar o double");
+		System.out.println("[!]Nao tem creditos suficientes para efectuar o double");
 		return false;
 	}
 	
 	public boolean bet(double b){
-		if(balance>=b){
+		if(pile.getBalance()>=b){
 			setBalance(-b);
 			bet.set(getCurrentHand(), b);
 			oldbet=b;
 			return true;
 		}else{
-			System.out.println("[!]Não tem créditos suficientes para efectuar o bet");
+			System.out.println("[!]Nao tem creditos suficientes para efectuar o bet");
 		}
 		return false;
 	}
 	
 	public void split(Card a, Card b){
-		if(balance<getBet()){
+		if(pile.getBalance()<getBet()){
 			return;
 		}
 		int index=getCurrentHand();
