@@ -89,8 +89,8 @@ public class Main {
 		Game game = new Game(deck, junk, player, dealer, strategy);
 		game.checkInputs(min_bet, max_bet, balance, shoe, shuffle);
 		
-		System.out.println("Type what you want to do? (bet/exit)");
 		deck.shuffle();
+		System.out.println("Type what you want to do? (bet/exit)");
 		
 		while(true){
 			String in = null;

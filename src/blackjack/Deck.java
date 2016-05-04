@@ -103,6 +103,7 @@ public class Deck extends CollectionOfCards{
 	}
 	
 	public void shuffle(){
+		System.out.println("Shuffling the shoe...");
 		Collections.shuffle(cards);
 	}
 	

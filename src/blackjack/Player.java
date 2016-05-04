@@ -20,7 +20,7 @@ public class Player {
 		bet.add((double)0);
 		hands.add(new Hand());
 		balance = i; 
-		numbHands=0;
+		numbHands=1;
 		currentHand=0;
 		insuranceBet=0;
 		oldbet=0;
@@ -99,6 +99,7 @@ public class Player {
 	
 	public void hit(Card c){
 		getHand().addCard(c);
+		
 	}
 	
 	public boolean deal(double min_bet,Card a, Card b){
