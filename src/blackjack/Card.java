@@ -23,13 +23,13 @@ public class Card {
 		}
 	}
 	
-	public String toString() {
-		return num + suit /*+","+softValue+","+hardValue*/;
-	}
 	public int getSoftValue() {
 		return softValue;
 	}
 	public int getHardValue() {
 		return hardValue;
+	}
+	public String toString() {
+		return num + suit;
 	}
 }

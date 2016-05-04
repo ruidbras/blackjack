@@ -95,6 +95,15 @@ public class BS {
 		return afcount;
 	}
 	
+	public int getCount(){
+		return Math.round(count/shoe);
+	}
+	
+	public void resetCounts(){
+		afcount=0;
+		count=0;
+	}
+	
 	public char getadvice(int l, int c, boolean s, boolean p){
 		//l is the total of the Player's hand and c is the total of the first card of the Dealer's hand
 		if(p){

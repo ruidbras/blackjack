@@ -2,32 +2,28 @@ package blackjack;
 
 public class Dealer {
 	Hand hand;
+	Deck deck;
+	Junk junk;
 
 	/* Constructor */
 	Dealer(Deck d, Junk j){
-		hand = new Hand(d,j);
+		hand = new Hand();
+		deck=d;
+		junk=j;
 	}
 	
 	/* Method */
-	public Hand getHand() {
+	public Hand getDealerHand() {
 		return hand;
 	}
 	
 	public boolean canHaveBlackjack(){
 		if(hand.countCards()==2){
-			if(hand.hand.get(0).getHardValue()==11){
+			if(hand.cards.get(0).getHardValue()==11){
 				return true;
 			}
 		}
 		return false;
-	}
-	
-	public void drawHand(){
-		if(hand.countCards()!=0){
-			return;
-		}
-		hand.drawCard();
-		hand.drawCard();
 	}
 	
 	public void printDealersFirstTwo(){
@@ -36,14 +32,53 @@ public class Dealer {
 		}
 	}
 	
+	public Card dealCard(){
+		return deck.dealCard();
+	}
+	
+	public void drawCardToDealer(){
+		hand.addCard(dealCard());
+	}
+	
+	
+	public void drawHandToDealer(){
+		if(hand.countCards()!=0){
+			return;
+		}
+		hand.addCard(dealCard());
+		hand.addCard(dealCard());
+	}
+	
 	public void finalize(){
 		while(hand.genTotal()<17)
-			hand.drawCard();
+			hand.addCard(dealCard());
 	}
 
 	public void cleanDealerHand(){
-		hand.cleanHand();
+		junk.addCards(hand.cards);
+		hand.emptyCards();
 	}
+	
+	public void cleanPlayerHands(Player p){
+		p.setNumbHands();
+		int i = p.getNumHands()-1;
+		while(i>0){
+			junk.addCards(p.hands.get(i).cards);
+			p.hands.get(i).emptyCards();
+			p.hands.remove(i);
+			p.bet.remove(i);
+			p.setNumbHands();
+			i=p.getNumHands()-1;
+		}
+		junk.addCards(p.hands.get(i).cards);
+		p.hands.get(0).emptyCards();
+		p.hands.get(0).setHandCanBeHit(true);
+		p.bet.set(0, (double) 0);
+		p.setNumbHands();
+		p.setCurrentHand(0);
+	
+}
+	
 	@Override
 	public String toString() {
 		return "Dealer: " + hand;

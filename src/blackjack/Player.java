@@ -5,24 +5,32 @@ import java.util.LinkedList;
 public class Player {
 	
 	/* Field */
-	LinkedList<Hand> hands= new LinkedList<Hand>();
+	LinkedList<Hand> hands;
 	private double balance;
-	public LinkedList<Double> bet = new LinkedList<Double>();//meter vector de bets
+	public LinkedList<Double> bet;//bets vector
 	public int numbHands; //number of hands in the list
 	public int currentHand;//current hand in play
 	public double insuranceBet;
+	public double oldbet;
 	
 	/* Constructor */
-	Player(Deck d, Junk j, double i){
-		hands.add(new Hand(d,j));
+	Player(double i){
+		hands= new LinkedList<Hand>();
+		bet = new LinkedList<Double>();
+		bet.add((double)0);
+		hands.add(new Hand());
 		balance = i; 
-		numbHands=hands.size();
+		numbHands=0;
 		currentHand=0;
 		insuranceBet=0;
-		bet.add((double)0);
+		oldbet=0;
 	}
 	
 	/* Get's */
+	
+	public double getOldbet(){
+		return oldbet;
+	}
 	
 	public double getInsuranceBet(){
 		return insuranceBet;
@@ -78,41 +86,42 @@ public class Player {
 		currentHand=n;
 	}
 	
+	public void addCredit(double i){ //nunca usada ainda
+		balance += i;
+	}
+	
 	/* Methods */
-	public void hit(){
-		getHand().drawCard();
+	
+	public void drawHand(Card a, Card b){
+		getHand().addCard(a);
+		getHand().addCard(b);
 	}
 	
-	public void drawHand(){
-		getHand().drawCard();
-		getHand().drawCard();
+	public void hit(Card c){
+		getHand().addCard(c);
 	}
 	
-	public void newHand(Deck d, Junk j){
-		int index=getCurrentHand();
-		hands.add(index+1, new Hand(d,j));
-		setNumbHands();
-		if (hands.get(index).twoAces()){
-			hands.get(index).setHandCanBeHit(false);
-			hands.get(index+1).setHandCanBeHit(false);
-			System.out.println("entrou");
+	public boolean deal(double min_bet,Card a, Card b){
+		//if player hits deal without specify the bet value
+		if(getBet()==0){
+		/* If it is the first deal of the game and the player didn't specify the value of the bet
+		* it's given the min_bet value to the bet, otherwise it's given the value of the previous bet
+		*/
+			if(oldbet==0){
+				oldbet = min_bet;
+				if(!bet(min_bet))return false;
+			}else if(!bet(oldbet)) return false;
 		}
-		hands.get(index+1).hand.add(hands.get(index).hand.get(1));
-		bet.add(index+1, getBet());
-		hands.get(index).hand.remove(1);
-		hands.get(index+1).drawCard();
-		hands.get(index).drawCard();
-		setCurrentHand(index+1);
-		bet(getBet());
-		return;
+		drawHand(a,b);
+		return true;
 	}
-
-	public boolean doubleDown(){
+	
+	public boolean doubleDown(Card c){
 		double b=bet.get(getCurrentHand());
 		if(balance>=b){
-			balance-=b;
+			setBalance(-b);
 			bet.set(getCurrentHand(), 2*b);
-			hands.get(getCurrentHand()).drawCard();
+			hands.get(getCurrentHand()).addCard(c);
 			return true;
 		}
 		System.out.println("[!]Não tem créditos suficientes para efectuar o double");
@@ -123,6 +132,7 @@ public class Player {
 		if(balance>=b){
 			setBalance(-b);
 			bet.set(getCurrentHand(), b);
+			oldbet=b;
 			return true;
 		}else{
 			System.out.println("[!]Não tem créditos suficientes para efectuar o bet");
@@ -130,25 +140,26 @@ public class Player {
 		return false;
 	}
 	
-	public void addCredit(int i){
-		balance += i;
-	}
-		
-	public void cleanPlayerHands(){
-		setNumbHands();
-		int i = getNumHands()-1;
-		while(i>0){
-			hands.get(i).cleanHand();
-			hands.remove(i);
-			bet.remove(i);
-			setNumbHands();
-			i=getNumHands()-1;
+	public void split(Card a, Card b){
+		if(balance<getBet()){
+			return;
 		}
-		hands.get(0).cleanHand();
-		hands.get(0).setHandCanBeHit(true);
-		bet.set(0, (double) 0);
+		int index=getCurrentHand();
+		hands.add(index+1, new Hand());
 		setNumbHands();
-		setCurrentHand(0);
+		if (hands.get(index).twoAces()){
+			hands.get(index).setHandCanBeHit(false);
+			hands.get(index+1).setHandCanBeHit(false);
+		}
+		hands.get(index+1).cards.add(hands.get(index).cards.get(1));
+		bet.add(index+1, getBet());
+		hands.get(index).cards.remove(1);
+		hands.get(index+1).addCard(a);
+		hands.get(index).addCard(b);
+		setCurrentHand(index+1);
+		bet(getBet());
+		System.out.println("player makes split");
+		return;
 	}
 
 	@Override

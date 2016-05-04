@@ -2,25 +2,13 @@ package blackjack;
 
 import java.util.LinkedList;
 import java.util.Collections;
-import java.util.Iterator;
 
-public class Deck {
+public class Deck extends CollectionOfCards{
 	
-	LinkedList<Card> deck = new LinkedList<Card>();
 	int shoe;
-	Iterator<Card> it = deck.iterator();
 	Card temp; 
 	BS bs;
 		
-	/*public Deck(){
-		for(int i = 0; i<50; i++){
-			deck.add(new Card("A","D"));
-			deck.add(new Card("3","D"));
-			deck.add(new Card("A","D"));
-			deck.add(new Card("9","D"));
-		}
-	}*/
-	
 	/*inicializa o deck com cartas de shoe baralhos*/
 	public Deck(int shoe, BS bs){
 		this.shoe=shoe;
@@ -36,19 +24,19 @@ public class Deck {
 			}
 			if(i<13+52*w){
 				if(i==52*w){
-					deck.add(new Card("A","D"));
+					cards.add(new Card("A","D"));
 					j++;
 				}else if(i==10+52*w){
-					deck.add(new Card("J","D"));
+					cards.add(new Card("J","D"));
 					j++;
 				}else if(i==11+52*w){
-					deck.add(new Card("Q","D"));
+					cards.add(new Card("Q","D"));
 					j++;
 				}else if(i==12+52*w){
-					deck.add(new Card("K","D"));
+					cards.add(new Card("K","D"));
 					j++;
 				}else{
-					deck.add(new Card(String.valueOf(j++),"D"));
+					cards.add(new Card(String.valueOf(j++),"D"));
 				}
 			}
 			if(i==13+52*w){
@@ -56,19 +44,19 @@ public class Deck {
 			}
 			if(i>=13+52*w && i< 26+52*w){
 				if(i==13+52*w){
-					deck.add(new Card("A","S"));
+					cards.add(new Card("A","S"));
 					j++;
 				}else if(i==23+52*w){
-					deck.add(new Card("J","S"));
+					cards.add(new Card("J","S"));
 					j++;
 				}else if(i==24+52*w){
-					deck.add(new Card("Q","S"));
+					cards.add(new Card("Q","S"));
 					j++;
 				}else if(i==25+52*w){
-					deck.add(new Card("K","S"));
+					cards.add(new Card("K","S"));
 					j++;
 				}else{
-					deck.add(new Card(String.valueOf(j++),"S"));
+					cards.add(new Card(String.valueOf(j++),"S"));
 				}
 			}
 			if(i==26+52*w){
@@ -76,19 +64,19 @@ public class Deck {
 			}
 			if(i>=26+52*w && i< 39+52*w){
 				if(i==26+52*w){
-					deck.add(new Card("A","C"));
+					cards.add(new Card("A","C"));
 					j++;
 				}else if(i==36+52*w){
-					deck.add(new Card("J","C"));
+					cards.add(new Card("J","C"));
 					j++;
 				}else if(i==37+52*w){
-					deck.add(new Card("Q","C"));
+					cards.add(new Card("Q","C"));
 					j++;
 				}else if(i==38+52*w){
-					deck.add(new Card("K","C"));
+					cards.add(new Card("K","C"));
 					j++;
 				}else{
-					deck.add(new Card(String.valueOf(j++),"C"));
+					cards.add(new Card(String.valueOf(j++),"C"));
 				}
 			}
 			if(i==39+52*w){
@@ -96,40 +84,33 @@ public class Deck {
 			}
 			if(i>=39+52*w && i< 52+52*w){
 				if(i==39+52*w){
-					deck.add(new Card("A","H"));
+					cards.add(new Card("A","H"));
 					j++;
 				}else if(i==49+52*w){
-					deck.add(new Card("J","H"));
+					cards.add(new Card("J","H"));
 					j++;
 				}else if(i==50+52*w){
-					deck.add(new Card("Q","H"));
+					cards.add(new Card("Q","H"));
 					j++;
 				}else if(i==51+52*w){
-					deck.add(new Card("K","H"));
+					cards.add(new Card("K","H"));
 					j++;
 				}else{
-					deck.add(new Card(String.valueOf(j++),"H"));
+					cards.add(new Card(String.valueOf(j++),"H"));
 				}
 			}
 		}
 	}
 	
 	public void shuffle(){
-		Collections.shuffle(deck);
-	}
-	
-	public void printDeck(){
-		for(Card aux:deck){
-			System.out.print(aux+" ");
-		}
-		System.out.println();
+		Collections.shuffle(cards);
 	}
 	
 	public Card dealCard(){
-		if(deck.size()>0){
+		if(cards.size()>0){
 			int t;
-			temp = deck.get(0);
-			deck.remove(0);
+			temp = cards.get(0);
+			cards.remove(0);
 			t=temp.getHardValue();
 			if(t<7){
 				bs.countcards(1);
@@ -144,13 +125,5 @@ public class Deck {
 			return temp;
 		}
 		return null;
-	}
-	
-	public void addJunk(Junk j){
-		deck.addAll(j.cards);
-	}
-	
-	public double countCards(){
-		return deck.size();
 	}
 }

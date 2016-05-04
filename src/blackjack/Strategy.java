@@ -64,5 +64,9 @@ public class Strategy {
 		System.out.println("Push		:	"+pushes/plays);
 		System.out.println("Balance		:	"+balance+"("+(balance-balanceinit)*100/balanceinit+"%)");
 	}
+	
+	public void resetBet(){
+		bet = minbet;
+	}
 
 }
