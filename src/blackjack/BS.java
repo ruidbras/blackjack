@@ -83,7 +83,21 @@ public class BS {
 		}
 	}
 	
-	public void countcards(int c){
+	public void countCard(Card card){
+		int t = card.getHardValue();
+		if(t<7){
+			count(1);
+		}else if(t>9){
+			count(-1);
+		}
+		if(t==5){
+			afcount(1);
+		}else if(t==11){
+			afcount(-1);
+		}
+	}
+	
+	public void count(int c){
 		count+=c;
 	}
 	

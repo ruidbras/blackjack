@@ -1,18 +1,16 @@
 package blackjack;
 
-import java.util.LinkedList;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Collections;
 
 public class Deck extends CollectionOfCards{
 	
-	int shoe;
+	
 	Card temp; 
-	BS bs;
-		
-	/*inicializa o deck com cartas de shoe baralhos*/
-	public Deck(int shoe, BS bs){
-		this.shoe=shoe;
-		this.bs = bs;
+	
+	Deck(int shoe){
 		int j=1,w=0;
 		for(int i=0;i<shoe*52;i++){
 			if(i==52+52*w){
@@ -100,7 +98,47 @@ public class Deck extends CollectionOfCards{
 				}
 			}
 		}
+		
 	}
+	
+	Deck(String path) throws IOException{
+		int c=0;
+		String value;
+		String suit;
+		File shoereader = new File(path);
+		FileReader rShoereader = new FileReader(shoereader);
+		while((c=rShoereader.read())!=-1){
+			if((char)c != ' ' && c != 13 && (char)c != '\n'){
+				if(Character.isDigit((char)c)){
+					value = "" + (char)c;
+					if((c=rShoereader.read())!=-1){
+						if(Character.isDigit((char)c)){
+							value += (char)c;
+							if((c=rShoereader.read())!=-1){
+								suit = "" + (char)c;
+								//System.out.println(value + " " + suit);
+								cards.add(new Card(value, suit));
+							}
+						}else{
+							suit = "" + (char)c;
+							//System.out.println(value + " " + suit);
+							cards.add(new Card(value, suit));
+						}
+					}
+				}else{
+					value = "" + (char)c;
+					if((c=rShoereader.read())!=-1){
+						suit = "" + (char)c;
+						cards.add(new Card(value, suit));
+					}
+				}
+			}
+		}
+		rShoereader.close();
+	}
+	
+	
+	
 	
 	public void shuffle(){
 		System.out.println("Shuffling the shoe...");
@@ -109,20 +147,8 @@ public class Deck extends CollectionOfCards{
 	
 	public Card dealCard(){
 		if(cards.size()>0){
-			int t;
 			temp = cards.get(0);
 			cards.remove(0);
-			t=temp.getHardValue();
-			if(t<7){
-				bs.countcards(1);
-			}else if(t>9){
-				bs.countcards(-1);
-			}
-			if(temp.getHardValue()==5){
-				bs.afcount(1);
-			}else if(temp.getHardValue()==11){
-				bs.afcount(-1);
-			}
 			return temp;
 		}
 		return null;

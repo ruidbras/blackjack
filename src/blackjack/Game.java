@@ -3,6 +3,7 @@ package blackjack;
 public class Game {
 	private Player player;
 	private Dealer dealer;
+	private BS bs;
 	Deck deck;
 	Junk junk;
 	private Strategy strategy;
@@ -11,7 +12,7 @@ public class Game {
 	private boolean insuranceMode;
 	private boolean firstplay;
 	
-	Game(Deck deck, Junk junk, Player p, Dealer d, Strategy s){
+	Game(Deck deck, Junk junk, Player p, Dealer d, Strategy s, BS bss){
 		player = p;
 		dealer = d;
 		strategy = s;
@@ -21,6 +22,7 @@ public class Game {
 		ingame=false;
 		insuranceMode=false;
 		firstplay = true;
+		bs = bss;
 	}
 	
 	public boolean ingame(){
@@ -48,14 +50,20 @@ public class Game {
 		}
 		strategy.addPlays();
 		dealer.drawHandToDealer();
-		dealer.printDealersFirstTwo();
+		dealer.printDealersFirstTwo();		
+		bs.countCard(player.getHand().getCards().getFirst());
+		bs.countCard(player.getHand().getCards().getLast());
+		bs.countCard(dealer.getDealerHand().getCards().getFirst());
 		System.out.println(player);
 		ingame = true;
 	}
 	
 	public void split(){
 		player.split(dealer.dealCard(),dealer.dealCard());
+		bs.countCard(player.hands.get(player.getCurrentHand()).cards.get(1));
+		bs.countCard(player.hands.get(player.getCurrentHand()-1).cards.get(1));
 		wasASplit=true;
+		firstplay = false;
 		System.out.println(player);
 	}
 	
@@ -75,12 +83,18 @@ public class Game {
 	public void hit(){
 		//If it results from a split of a pair of Aces
 		if(!player.getHand().getHandCanBeHit()){
-			System.out.println("Can't hit this hand, you only can stand or split if possible");
-			return;
+			if(player.getHand().twoAces()){
+				System.out.println("You can only split or stand");
+				return;
+			}else{
+				stand();
+				return;
+			}
 		}
 		System.out.println("Player hits");
 		firstplay = false;
 		player.hit(dealer.dealCard());
+		bs.countCard(player.getHand().cards.getLast());
 		dealer.printDealersFirstTwo();
 		System.out.println(player);
 		if(player.getHand().getTotal()>21 && player.getCurrentHand()>0){
@@ -94,6 +108,7 @@ public class Game {
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");
 				System.out.println("Dealers Hand: "+dealer.hand);
+				bs.countCard(dealer.getDealerHand().cards.get(1));
 				if(insuranceMode){
 					if(dealer.hand.blackjack()){
 						System.out.println("Player wins insurance");
@@ -137,6 +152,7 @@ public class Game {
 	public boolean dealerFinalizeCards(){
 		while(dealer.hand.getTotal()<17){
 			dealer.drawCardToDealer();
+			bs.countCard(dealer.getDealerHand().cards.getLast());
 			System.out.println("Dealer hits");
 			System.out.println("Dealers Hand: "+dealer.hand);
 			if(dealer.hand.getTotal()>21){
@@ -159,7 +175,7 @@ public class Game {
 	public void finalizeDealer(){
 		firstplay = true;
 		System.out.println("Dealers Hand: "+dealer.hand);
-		
+		bs.countCard(dealer.getDealerHand().cards.get(1));
 		/* Check if the player has blackjack */
 		if(player.getHand().blackjack() && !wasASplit){
 			System.out.println("Player got a BlackJack!");
@@ -262,8 +278,12 @@ public class Game {
 	public void doubleDown(){
 		//If it results from a split of a pair of Aces
 		if(!player.getHand().getHandCanBeHit()){
-			System.out.println("Can't double this hand, you only can stand or split if possible");
-			return;
+			if(player.getHand().twoAces()){
+				System.out.println("You can only split or stand");
+			}else{
+				stand();
+				return;
+			}
 		}
 		System.out.println("Player doubles down");
 		if(!player.doubleDown(dealer.dealCard())){
@@ -322,7 +342,7 @@ public class Game {
 		return junk.countCards()/(junk.countCards()+deck.countCards())*100; //modificar para deck.total
 	}
 	
-	public void checkInputs(double min_bet, double max_bet, double balance, int shoe, double shuffle){
+	public void checkInputs(double min_bet, double max_bet, double balance, int shoe, double shuffle, boolean readshoe){
 		if(min_bet < 1){
 			System.out.println("Minimum Bet must be greater or equal to 1");
 			System.exit(0);
@@ -335,11 +355,11 @@ public class Game {
 			System.out.println("Balance must be greater than 50 times the Min Bet");
 			System.exit(0);
 		}
-		if(shoe<4 || shoe>8){
+		if((shoe<4 || shoe>8) && !readshoe){
 			System.out.println("Shoe must be greater than 4 and lesser than 8");
 			System.exit(0);
 		}
-		if(shuffle<10 || shuffle>100){
+		if((shuffle<10 || shuffle>100) && !readshoe){
 			System.out.println("Shuffle must be greater than 10 and lesser than 100");
 			System.exit(0);
 		}

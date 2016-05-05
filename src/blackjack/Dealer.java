@@ -33,6 +33,13 @@ public class Dealer {
 	}
 	
 	public Card dealCard(){
+		if(deck.dealCard()==null){
+			System.out.println(junk);
+			deck.addCards(junk.cards);
+			junk.emptyCards();
+			deck.shuffle();
+			System.out.println(deck);
+		}
 		return deck.dealCard();
 	}
 	

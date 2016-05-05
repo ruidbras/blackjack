@@ -1,5 +1,7 @@
 package blackjack;
 
+import java.util.LinkedList;
+
 public class Hand extends CollectionOfCards{
 
 	private int total;
@@ -12,6 +14,10 @@ public class Hand extends CollectionOfCards{
 
 	public boolean getHandCanBeHit(){
 		return handCanBeHit;
+	}
+	
+	public LinkedList<Card> getCards(){
+		return cards;
 	}
 	
 	public int getTotal(){

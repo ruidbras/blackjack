@@ -1,7 +1,6 @@
 package blackjack;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -25,8 +24,9 @@ public class Main {
 		File cmd = null;
 		FileReader rCmd = null;
 		boolean af = false; //if true use af if not use basic strategy
-		boolean strat;
-		strat = false; // true for basic strategy and false for Hi-lo strategy
+		boolean strat = false; // true for basic strategy and false for Hi-lo strategy
+		boolean readshoe=false;
+		String readshoepath = null;
 		/* Read arguments */
 		if(mode.equals("-i")){
 				min_bet = Integer.parseInt(args[1]);
@@ -36,13 +36,14 @@ public class Main {
 				shuffle = Integer.parseInt(args[5]);
 				//interactivemode = true;
 		}else if(mode.equals("-d")){
+				shuffle = 100;
+				String current = System.getProperty("user.dir");
+				readshoe = true;
 				min_bet = Integer.parseInt(args[1]);
 				max_bet = Integer.parseInt(args[2]);
 				balance = Integer.parseInt(args[3]);
-				shoe = Integer.parseInt(args[4]);
-				shuffle = Integer.parseInt(args[5]);
-				String current = System.getProperty("user.dir");
-				cmd = new File(current + "/src/teste.txt");
+				readshoepath = current + args[4];
+				cmd = new File(current + args[5]);
 				rCmd =  new FileReader(cmd);
 		}else if(mode.equals("-s")){
 				String st;
@@ -77,19 +78,24 @@ public class Main {
 				return;
 		}
 		
-		
-		BS bs = new BS(3);
-		Deck deck = new Deck(shoe, bs);
+		Deck deck ;
+		if(readshoe){
+			deck = new Deck(readshoepath);
+			shoe =(int) (Math.round(deck.countCards()/52));
+		}else{
+			deck = new Deck(shoe);
+		}
+		BS bs = new BS(shoe);
 		Junk junk = new Junk();
 		Player player = new Player(balance);
 		Dealer dealer = new Dealer(deck, junk);
 		Scanner sc=new Scanner(System.in);
 		/* os inputs de srategy é suposto terem a aposta min e max */
 		Strategy strategy = new Strategy(player.getBalance(), min_bet, max_bet);
-		Game game = new Game(deck, junk, player, dealer, strategy);
-		game.checkInputs(min_bet, max_bet, balance, shoe, shuffle);
+		Game game = new Game(deck, junk, player, dealer, strategy, bs);
+		game.checkInputs(min_bet, max_bet, balance, shoe, shuffle, readshoe);
 		
-		deck.shuffle();
+		if(!readshoe)deck.shuffle();
 		System.out.println("Type what you want to do? (bet/exit)");
 		
 		while(true){
