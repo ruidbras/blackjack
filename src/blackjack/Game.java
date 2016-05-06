@@ -45,12 +45,10 @@ public class Game {
 	}
 	
 	public void deal(double min_bet){
-		if(!player.deal(min_bet,dealer.dealCard(),dealer.dealCard())){
-			return;
-		}
+		if(!player.deal(min_bet)) return;
+		dealer.drawFirstFour(player);
 		strategy.addPlays();
-		dealer.drawHandToDealer();
-		dealer.printDealersFirstTwo();		
+		dealer.printDealersFirstTwo();
 		bs.countCard(player.getHand().getCards().getFirst());
 		bs.countCard(player.getHand().getCards().getLast());
 		bs.countCard(dealer.getDealerHand().getCards().getFirst());
@@ -59,11 +57,16 @@ public class Game {
 	}
 	
 	public void split(){
+		if(player.getBalance()<player.getBet()){
+			System.out.println("Not enough money");
+			return;
+		}
 		player.split(dealer.dealCard(),dealer.dealCard());
 		bs.countCard(player.hands.get(player.getCurrentHand()).cards.get(1));
 		bs.countCard(player.hands.get(player.getCurrentHand()-1).cards.get(1));
 		wasASplit=true;
-		firstplay = false;
+		firstplay = true;//tava false era suposto?<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		player.runHands();
 		System.out.println(player);
 	}
 	
@@ -82,14 +85,9 @@ public class Game {
 	
 	public void hit(){
 		//If it results from a split of a pair of Aces
-		if(!player.getHand().getHandCanBeHit()){
-			if(player.getHand().twoAces()){
-				System.out.println("You can only split or stand");
-				return;
-			}else{
-				stand();
-				return;
-			}
+		if(player.runHands()==false){
+			stand();
+			return;
 		}
 		System.out.println("Player hits");
 		firstplay = false;
@@ -99,11 +97,8 @@ public class Game {
 		System.out.println(player);
 		if(player.getHand().getTotal()>21 && player.getCurrentHand()>0){
 			System.out.println(player.getCurrentHand() + "th hand busts");
-			player.getHand().emptyCards();
-			player.hands.remove(player.getCurrentHand());
-			player.setBetZero();
-			player.setNumbHands();
-			player.setCurrentHand(player.getCurrentHand()-1);
+			dealer.cleanPlayerBustedHand(player);
+			firstplay = true;
 		}else{
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");
@@ -126,10 +121,7 @@ public class Game {
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");
-				player.getHand().emptyCards();
-				player.hands.remove(player.getCurrentHand());
-				player.setBetZero();
-				player.setNumbHands();
+				dealer.cleanPlayerBustedHand(player);
 				finalizeDealer();
 			}
 		}
@@ -142,6 +134,8 @@ public class Game {
 			player.setCurrentHand(player.getCurrentHand()-1);
 			dealer.printDealersFirstTwo();
 			System.out.println(player);
+			player.runHands();
+			return;
 		}
 		else{
 			System.out.println("Player stands");
@@ -277,27 +271,22 @@ public class Game {
 	
 	public void doubleDown(){
 		//If it results from a split of a pair of Aces
-		if(!player.getHand().getHandCanBeHit()){
-			if(player.getHand().twoAces()){
-				System.out.println("You can only split or stand");
-			}else{
-				stand();
-				return;
-			}
+		if(player.runHands()==false){
+			System.out.println("You can only split or stand");
+			stand();
+			return;
 		}
 		System.out.println("Player doubles down");
 		if(!player.doubleDown(dealer.dealCard())){
 			return;
 		}
+		firstplay = false;
 		dealer.printDealersFirstTwo();
 		System.out.println(player);
 		if(player.getHand().getTotal()>21 && player.getCurrentHand()>0){
 			System.out.println(player.getCurrentHand() + "th hand busts");
-			player.getHand().emptyCards();
-			player.hands.remove(player.getCurrentHand());
-			player.setBetZero();
-			player.setNumbHands();
-			player.setCurrentHand(player.getCurrentHand()-1);
+			dealer.cleanPlayerBustedHand(player);
+			firstplay = true;
 			return;
 		}else{
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
@@ -320,10 +309,7 @@ public class Game {
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");
-				player.getHand().emptyCards();
-				player.hands.remove(player.getCurrentHand());
-				player.setBetZero();
-				player.setNumbHands();
+				dealer.cleanPlayerBustedHand(player);
 				finalizeDealer();
 			}
 		}

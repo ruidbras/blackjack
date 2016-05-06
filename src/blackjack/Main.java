@@ -12,7 +12,6 @@ public class Main {
 	
 	public static void main(String[] args)  throws IOException {
 		
-		int shufflecount = 0;
 		int min_bet=0;
 		int max_bet=0;
 		double balance=0;
@@ -100,18 +99,16 @@ public class Main {
 		
 		while(true){
 			String in = null;
-			
 			//Add junk to deck when deck is at ?%
 			if((!game.ingame())&&game.getPercentageDeck()>shuffle){
 				//deck.printDeck();
 				deck.addCards(junk.cards);
-				System.out.println(deck.countCards());
 				junk.emptyCards();
 				deck.shuffle();
-				++shufflecount;
 				strategy.printStats(player.getBalance());//mudar para final exclusivo ao modo -s
 				strategy.resetBet();
 				bs.resetCounts();
+				if(deck.shufflecount==s_number) return;
 			}
 			
 			/* Funcionamento */
@@ -148,7 +145,7 @@ public class Main {
 					rCmd.close();
 				}
 			}else if(mode.equals("-s")){	
-				if(shufflecount<s_number&&player.getBalance()>0){
+				if(deck.shufflecount<s_number&&player.getBalance()>0){
 					//System.out.println("BS:"+strat+"  HL:"+(!strat)+"  AF:"+af);
 					if(game.ingame()){
 						/* Give advice on the next play */

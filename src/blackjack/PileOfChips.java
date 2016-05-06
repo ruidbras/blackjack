@@ -27,11 +27,11 @@ public class PileOfChips {
 		balance +=wonBet;
 		divideBalance();
 
-		System.out.println("Your pile has now: ");
+		/*System.out.println("Your pile has now: ");
 		System.out.println(whiteStack.numberOfChips +" white chips");
 		System.out.println(redStack.numberOfChips +" red chips");
 		System.out.println(greenStack.numberOfChips +" green chips");
-		System.out.println(blackStack.numberOfChips +" black chips");
+		System.out.println(blackStack.numberOfChips +" black chips");*/
 	}
 	
 	public void divideBalance(){

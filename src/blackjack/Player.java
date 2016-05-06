@@ -90,19 +90,13 @@ public class Player {
 		pile.updatePile(i);
 	}
 	
-	/* Methods */
-	
-	public void drawHand(Card a, Card b){
-		getHand().addCard(a);
-		getHand().addCard(b);
-	}
-	
+
 	public void hit(Card c){
 		getHand().addCard(c);
 		
 	}
 	
-	public boolean deal(double min_bet,Card a, Card b){
+	public boolean deal(double min_bet){
 		//if player hits deal without specify the bet value
 		if(getBet()==0){
 		/* If it is the first deal of the game and the player didn't specify the value of the bet
@@ -113,7 +107,6 @@ public class Player {
 				if(!bet(min_bet))return false;
 			}else if(!bet(oldbet)) return false;
 		}
-		drawHand(a,b);
 		return true;
 	}
 	
@@ -162,6 +155,24 @@ public class Player {
 		System.out.println("player makes split");
 		return;
 	}
+	
+	/*After a split runs all hands to check if there are hands of two aces, than the boolean result says if hand can or can not
+	be hit or doubled*/
+		public boolean runHands(){
+			//se não for false é porque não foi um split de AAs
+			if(getHand().getHandCanBeHit()){
+				return true;
+			}
+			while(getCurrentHand()>=0){
+				if(getHand().twoAces()){
+					setCurrentHand(getCurrentHand());
+					return false;
+				}
+				setCurrentHand(getCurrentHand()-1);
+			}
+			setCurrentHand(0);
+			return false;
+		}
 
 	@Override
 	public String toString() {

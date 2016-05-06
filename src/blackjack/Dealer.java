@@ -33,14 +33,14 @@ public class Dealer {
 	}
 	
 	public Card dealCard(){
-		if(deck.dealCard()==null){
-			System.out.println(junk);
+		Card temp=deck.dealCard();
+		if(temp==null){
 			deck.addCards(junk.cards);
 			junk.emptyCards();
 			deck.shuffle();
-			System.out.println(deck);
+			return deck.dealCard();
 		}
-		return deck.dealCard();
+		return temp;
 	}
 	
 	public void drawCardToDealer(){
@@ -48,12 +48,15 @@ public class Dealer {
 	}
 	
 	
-	public void drawHandToDealer(){
-		if(hand.countCards()!=0){
+	public void drawFirstFour(Player p){
+		//Apenas verificacoes de erros se chamarmos a função quando nao devemos
+		if(hand.countCards()!=0&&p.getHand().countCards()!=0&&p.getNumHands()==1){
 			return;
 		}
 		hand.addCard(dealCard());
 		hand.addCard(dealCard());
+		p.getHand().addCard(dealCard());
+		p.getHand().addCard(dealCard());
 	}
 	
 	public void finalize(){
@@ -64,6 +67,17 @@ public class Dealer {
 	public void cleanDealerHand(){
 		junk.addCards(hand.cards);
 		hand.emptyCards();
+	}
+	
+	public void cleanPlayerBustedHand(Player p){
+		junk.addCards(p.getHand().cards);
+		p.getHand().emptyCards();
+		p.hands.remove(p.getCurrentHand());
+		p.setBetZero();
+		p.setNumbHands();
+		if(p.getCurrentHand()!=0){
+			p.setCurrentHand(p.getCurrentHand()-1);
+		}
 	}
 	
 	public void cleanPlayerHands(Player p){

@@ -9,6 +9,7 @@ public class Deck extends CollectionOfCards{
 	
 	
 	Card temp; 
+	int shufflecount = 0;
 	
 	Deck(int shoe){
 		int j=1,w=0;
@@ -137,12 +138,10 @@ public class Deck extends CollectionOfCards{
 		rShoereader.close();
 	}
 	
-	
-	
-	
 	public void shuffle(){
 		System.out.println("Shuffling the shoe...");
 		Collections.shuffle(cards);
+		++shufflecount;
 	}
 	
 	public Card dealCard(){

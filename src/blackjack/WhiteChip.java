@@ -5,7 +5,4 @@ public class WhiteChip extends Chip{
 		super(1, "white", n);
 	}
 
-	
-	
-	
 }
