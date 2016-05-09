@@ -171,8 +171,8 @@ public class Main {
 									in="b "+min_bet;
 								}
 							}else{
-								System.out.println("b " +strategy.getBet());
-								in="b "+strategy.getBet();
+								System.out.println("b " +strategy.getBet(player.getOldbet()));
+								in="b "+strategy.getBet(player.getOldbet());
 							}
 					}
 				}else{
@@ -233,7 +233,7 @@ public class Main {
 							System.out.println("b "+min_bet);
 						}
 					}else{
-						System.out.println("b " +strategy.getBet());
+						System.out.println("b " +strategy.getBet(player.getOldbet()));
 					}
 				}
 			}

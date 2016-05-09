@@ -25,8 +25,16 @@ public class Strategy {
 		bet = min;
 	}
 	
-	public int getBet(){
-		return bet;
+	public int getBet(double current){
+		int b;
+		b = (int)current + bet;
+		if(b<minbet){
+			return minbet;
+		}else if(b>maxbet){
+			return maxbet;
+		}else{
+			return b;
+		}
 	}
 	
 	public void addPlays(){
@@ -43,18 +51,17 @@ public class Strategy {
 	
 	public void addWins(){
 		wins+=1;
-		if((bet+minbet)<=maxbet)
-			bet += minbet;
+		bet = minbet;
 	}
 	
 	public void addLoses(){
 		loses+=1;
-		if((bet-minbet)>=minbet)
-			bet -= minbet;
+		bet = -minbet;
 	}
 	
 	public void addPushes(){
 		pushes+=1;
+		bet = 0;
 	}
 	
 	public void printStats(double balance){

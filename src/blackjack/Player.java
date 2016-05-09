@@ -107,6 +107,7 @@ public class Player {
 				if(!bet(min_bet))return false;
 			}else if(!bet(oldbet)) return false;
 		}
+		oldbet = bet.get(getCurrentHand());
 		return true;
 	}
 	
@@ -123,10 +124,12 @@ public class Player {
 	}
 	
 	public boolean bet(double b){
-		if(pile.getBalance()>=b){
+		if((pile.getBalance()+bet.get(getCurrentHand()))>=b){
+			pile.updatePile(bet.get(getCurrentHand()));
+			bet.set(getCurrentHand(),(double) 0);
 			setBalance(-b);
 			bet.set(getCurrentHand(), b);
-			oldbet=b;
+			//oldbet=b; mudar para o deal
 			return true;
 		}else{
 			System.out.println("[!]Nao tem creditos suficientes para efectuar o bet");

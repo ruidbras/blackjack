@@ -9,7 +9,7 @@ public class Deck extends CollectionOfCards{
 	
 	
 	Card temp; 
-	int shufflecount = 0;
+	int shufflecount = -1;
 	
 	Deck(int shoe){
 		int j=1,w=0;
