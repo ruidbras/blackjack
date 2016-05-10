@@ -11,6 +11,8 @@ public class Game {
 	private boolean wasASplit;
 	private boolean insuranceMode;
 	private boolean firstplay;
+	private boolean alreadyBet;
+	private boolean alreadyDeal;
 	
 	Game(Deck deck, Junk junk, Player p, Dealer d, Strategy s, BS bss){
 		player = p;
@@ -22,6 +24,8 @@ public class Game {
 		ingame=false;
 		insuranceMode=false;
 		firstplay = true;
+		alreadyBet=false;
+		alreadyDeal=false;
 		bs = bss;
 	}
 	
@@ -41,10 +45,17 @@ public class Game {
 	}
 	
 	public void makeBet(double b){
+		if(alreadyBet) {
+			player.reBet(b);
+			return;
+		}
+		alreadyBet=true;
 		player.bet(b);
 	}
 	
 	public void deal(double min_bet){
+		if(alreadyDeal) return;
+		alreadyDeal=true;;
 		if(!player.deal(min_bet)) return;
 		dealer.drawFirstFour(player);
 		strategy.addPlays();
@@ -53,6 +64,10 @@ public class Game {
 		bs.countCard(player.getHand().getCards().getLast());
 		bs.countCard(dealer.getDealerHand().getCards().getFirst());
 		System.out.println(player);
+		if(player.getHand().blackjack()){
+			finalizeDealer();
+			return;
+		}
 		ingame = true;
 	}
 	
@@ -64,8 +79,9 @@ public class Game {
 		player.split(dealer.dealCard(),dealer.dealCard());
 		bs.countCard(player.hands.get(player.getCurrentHand()).cards.get(1));
 		bs.countCard(player.hands.get(player.getCurrentHand()-1).cards.get(1));
+		strategy.addPlays();
 		wasASplit=true;
-		firstplay = true;//tava false era suposto?<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		firstplay = true;
 		player.runHands();
 		System.out.println(player);
 	}
@@ -97,11 +113,13 @@ public class Game {
 		System.out.println(player);
 		if(player.getHand().getTotal()>21 && player.getCurrentHand()>0){
 			System.out.println(player.getCurrentHand() + "th hand busts");
+			strategy.addLoses();
 			dealer.cleanPlayerBustedHand(player);
 			firstplay = true;
 		}else{
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");
+				strategy.addLoses();
 				System.out.println("Dealers Hand: "+dealer.hand);
 				bs.countCard(dealer.getDealerHand().cards.get(1));
 				if(insuranceMode){
@@ -121,6 +139,7 @@ public class Game {
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");
+				strategy.addLoses();
 				dealer.cleanPlayerBustedHand(player);
 				finalizeDealer();
 			}
@@ -156,6 +175,7 @@ public class Game {
 				player.setCurrentHand(i);
 				while(player.getCurrentHand()<player.getNumHands()){
 					player.setBalance(player.getBet()*2);
+					strategy.addWins();
 					i=i+1;
 					player.setCurrentHand(i);
 				}
@@ -285,12 +305,14 @@ public class Game {
 		System.out.println(player);
 		if(player.getHand().getTotal()>21 && player.getCurrentHand()>0){
 			System.out.println(player.getCurrentHand() + "th hand busts");
+			strategy.addLoses();
 			dealer.cleanPlayerBustedHand(player);
 			firstplay = true;
 			return;
 		}else{
 			if(player.getHand().getTotal()>21 && player.getNumHands()==1){
 				System.out.println("Player busts");
+				strategy.addLoses();
 				System.out.println("Dealers Hand: "+dealer.hand);
 				if(insuranceMode){
 					if(dealer.hand.blackjack()){
@@ -309,6 +331,7 @@ public class Game {
 				return;
 			}if(player.getHand().getTotal()>21 && player.getNumHands()>1){
 				System.out.println(player.getCurrentHand() + "th hand busts");
+				strategy.addLoses();
 				dealer.cleanPlayerBustedHand(player);
 				finalizeDealer();
 			}
@@ -322,6 +345,8 @@ public class Game {
 		dealer.cleanPlayerHands(player);
 		wasASplit=false;
 		ingame = false;
+		alreadyDeal=false;
+		alreadyBet=false;
 	}
 	
 	public double getPercentageDeck(){

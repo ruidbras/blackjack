@@ -60,10 +60,15 @@ public class Player {
 		pile.updatePile(d);
 	}
 	
+	
+	//Returns the number of hands in game.
 	public void setNumbHands(){
 		numbHands=hands.size();
 	}
 	
+	/*When player hits insurance, it's set insuranceBet to the current bet value, than it's verified
+	 * if balance is enough to do this play before updating balance.
+	 */
 	public boolean setInsuranceBet(){
 		insuranceBet=getBet();
 		if(getBalance()<insuranceBet){
@@ -74,6 +79,9 @@ public class Player {
 		return true;
 	}
 	
+	/*When we have only one hand, this function set's its associated bet to zero, if we
+	 * have more than one hand it just removes the bets.
+	 */
 	public void setBetZero(){
 		if(getNumHands()==1){
 			bet.set(0, (double)0);
@@ -82,6 +90,8 @@ public class Player {
 		bet.remove(getCurrentHand());
 	}
 
+	
+	//Updates current hand
 	public void setCurrentHand(int n){
 		currentHand=n;
 	}
@@ -90,11 +100,12 @@ public class Player {
 		pile.updatePile(i);
 	}
 	
-
+	//Delivers a new card to the current hand
 	public void hit(Card c){
 		getHand().addCard(c);
 		
 	}
+	
 	
 	public boolean deal(double min_bet){
 		//if player hits deal without specify the bet value
@@ -111,6 +122,9 @@ public class Player {
 		return true;
 	}
 	
+	/* Checks current bet, than checks if the balance is enough to double the bet.
+	 * If it's verified than updates the value of the new bet and receives a card.
+	 */
 	public boolean doubleDown(Card c){
 		double b=bet.get(getCurrentHand());
 		if(pile.getBalance()>=b){
@@ -123,10 +137,9 @@ public class Player {
 		return false;
 	}
 	
-	public boolean bet(double b){
+	public boolean reBet(double b){
 		if((pile.getBalance()+bet.get(getCurrentHand()))>=b){
-			pile.updatePile(bet.get(getCurrentHand()));
-			bet.set(getCurrentHand(),(double) 0);
+			setBalance(bet.get(getCurrentHand()));
 			setBalance(-b);
 			bet.set(getCurrentHand(), b);
 			//oldbet=b; mudar para o deal
@@ -136,6 +149,19 @@ public class Player {
 		}
 		return false;
 	}
+	
+	public boolean bet(double b){
+		if(pile.getBalance()>=b){
+			setBalance(-b);
+			bet.set(getCurrentHand(), b);
+			oldbet=b;
+			return true;
+		}else{
+			System.out.println("[!]Nao tem creditos suficientes para efectuar o bet");
+		}
+		return false;
+	}
+	
 	
 	public void split(Card a, Card b){
 		if(pile.getBalance()<getBet()){
