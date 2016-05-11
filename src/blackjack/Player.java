@@ -72,7 +72,6 @@ public class Player {
 	public boolean setInsuranceBet(){
 		insuranceBet=getBet();
 		if(getBalance()<insuranceBet){
-			System.out.println("Not enough money to make this play");
 			return false;
 		}
 		setBalance(-insuranceBet);
@@ -100,7 +99,6 @@ public class Player {
 		
 	}
 	
-	
 	public boolean deal(){
 		if(getBet()==0){
 			return false;
@@ -110,6 +108,9 @@ public class Player {
 	}
 	
 	public boolean doubleDown(Card c){
+		if(!getHand().worthForDouble()){
+			return false;
+		}
 		double b=bet.get(getCurrentHand());
 		if(pile.getBalance()>=b){
 			setBalance(-b);
@@ -117,7 +118,6 @@ public class Player {
 			hands.get(getCurrentHand()).addCard(c);
 			return true;
 		}
-		System.out.println("[!]Not enough credits");
 		return false;
 	}
 	
@@ -147,8 +147,6 @@ public class Player {
 			setBalance(-b);
 			bet.set(getCurrentHand(), b);
 			return true;
-		}else{
-			System.out.println("[!]Not enough credits");
 		}
 		return false;
 	}
@@ -206,26 +204,36 @@ public class Player {
 	
 	/*After a split runs all hands to check if there are hands of two aces, than the boolean result says if hand can or can not
 	be hit or doubled*/
-		public boolean runHands(){
-			//se não for false é porque não foi um split de AAs
-			if(getHand().getHandCanBeHit()){
-				return true;
-			}
-			while(getCurrentHand()<getNumHands()){
-				if(getHand().twoAces()){
-					setCurrentHand(getCurrentHand());
-					return false;
-				}
-				setCurrentHand(getCurrentHand()+1);
-			}
-			setCurrentHand(getNumHands()-1);
-			return false;
+		
+	public boolean runHands(){
+		//se não for false é porque não foi um split de AAs
+		if(getHand().getHandCanBeHit()){
+			return true;			
 		}
-
+		while(getCurrentHand()<getNumHands()){
+			if(getHand().twoAces()){
+				setCurrentHand(getCurrentHand());
+				return false;
+			}
+			setCurrentHand(getCurrentHand()+1);
+		}
+		setCurrentHand(getNumHands()-1);
+		return false;
+	}
+		
+	public boolean allHandsBusted(){
+		for(Double d: bet){
+			if(d!=0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public String toString() {
 		if (numbHands!=1){
-			return "player's hands "+"["+(getCurrentHand()+1)+"] "+getHand().toString();
+			return "player's hand "+"["+(getCurrentHand()+1)+"] "+getHand().toString();
 		}
 		return "player's hand " + getHand().toString();
 	}

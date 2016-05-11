@@ -2,13 +2,13 @@ package blackjack;
 
 public class Dealer {
 	Hand hand;
-	Deck deck;
+	Shoe shoe;
 	Junk junk;
 
 	/* Constructor */
-	Dealer(Deck d, Junk j){
+	Dealer(Shoe d, Junk j){
 		hand = new Hand();
-		deck=d;
+		shoe=d;
 		junk=j;
 	}
 	
@@ -33,12 +33,12 @@ public class Dealer {
 	}
 	
 	public Card dealCard(){
-		Card temp=deck.dealCard();
+		Card temp=shoe.dealCard();
 		if(temp==null){
-			deck.addCards(junk.cards);
+			shoe.addCards(junk.cards);
 			junk.emptyCards();
-			deck.shuffle();
-			return deck.dealCard();
+			shoe.shuffle();
+			return shoe.dealCard();
 		}
 		return temp;
 	}

@@ -12,7 +12,7 @@ public class Main2 {
 		boolean simulation = false;
 		String mode_type = args[0];
 		Mode mode;
-		Deck deck ;
+		Shoe shoe ;
 		BS bs;
 		Junk junk;
 		Player player;
@@ -24,19 +24,19 @@ public class Main2 {
 		if(mode_type.equals("-i")){
 				mode = new Interactive(args);
 				bs = new BS(((Interactive) mode).getShoe());
-				deck = new Deck(((Interactive) mode).getShoe());
-				deck.shuffle();
+				shoe = new Shoe(((Interactive) mode).getShoe());
+				shoe.shuffle();
 				interactive = true;
 		}else if(mode_type.equals("-d")){
 				mode = new Debug(args);
-				deck = new Deck(((Debug) mode).getReadshoepath());
-				bs = new BS((int) (Math.round(deck.countCards()/52)));
+				shoe = new Shoe(((Debug) mode).getReadshoepath());
+				bs = new BS((int) (Math.round(shoe.countCards()/52)));
 				debug = true;
 		}else if(mode_type.equals("-s")){
 				mode = new Simulation(args);
 				bs = new BS(((Simulation) mode).getShoe());
-				deck = new Deck(((Simulation) mode).getShoe());
-				deck.shuffle();
+				shoe = new Shoe(((Simulation) mode).getShoe());
+				shoe.shuffle();
 				simulation = true;
 		}else{
 				System.out.println("Error in arguments");
@@ -45,47 +45,45 @@ public class Main2 {
 		
 		junk = new Junk();
 		player = new Player(mode.getBalance());
-		dealer = new Dealer(deck, junk);
+		dealer = new Dealer(shoe, junk);
 		strategy = new Strategy(mode.getBalance(), mode.getMin_bet(), mode.getMax_bet());
-		game = new Game(deck, junk, player, dealer, strategy, bs);
+		game = new Game(shoe, junk, player, dealer, strategy, bs,simulation);
 		
 		if(interactive){
 			game.checkInputs(mode.getMin_bet(), mode.getMax_bet(), mode.getBalance(), ((Interactive) mode).getShoe(), ((Interactive) mode).getShuffle(), false);
 		}else if(debug){
 			game.checkInputs(mode.getMin_bet(), mode.getMax_bet(), mode.getBalance(), 0, 0, true);
 		}else{
-			((Simulation) mode).setObj(bs, deck, game, player, dealer, strategy);
+			((Simulation) mode).setObj(bs, shoe, game, player, dealer, strategy);
 			game.checkInputs(mode.getMin_bet(), mode.getMax_bet(), mode.getBalance(), ((Simulation) mode).getShoe(), ((Simulation) mode).getShuffle(), false);	
 		}
 		 
 		
-		
-	
-		System.out.println("Type what you want to do? (bet/exit)");
+		if(!simulation) System.out.println("Type what you want to do? (bet/exit)");
 		
 		while(true){
-			System.out.println("");
+			
+			if(!simulation)System.out.println("");
 			
 			//Add junk to deck when deck is at ?%
 			if(simulation){
 				if((!game.ingame())&&game.getPercentageDeck()>((Simulation) mode).getShuffle()&&(!debug)){
-					//deck.printDeck();
-					deck.addCards(junk.cards);
+					shoe.addCards(junk.cards);
 					junk.emptyCards();
-					deck.shuffle();
+					shoe.shuffle();
 					strategy.resetBet();
 					bs.resetCounts();
 				}
-				if((!game.ingame())&&deck.shufflecount==((Simulation) mode).getS_number()){
-					System.out.println("Termina aqui");
+				if((!game.ingame())&&shoe.shufflecount==((Simulation) mode).getS_number()){
 					strategy.printStats(player.getBalance());
-					return; //Add final prints ?
+					return;
 				}
 			}else if(interactive){
 				if((!game.ingame())&&game.getPercentageDeck()>((Interactive) mode).getShuffle()&&(!debug)){
-					deck.addCards(junk.cards);
+					shoe.addCards(junk.cards);
 					junk.emptyCards();
-					deck.shuffle();
+					shoe.shuffle();
+					System.out.println("Shuffling the shoe...");
 					strategy.resetBet();
 					bs.resetCounts();
 				}

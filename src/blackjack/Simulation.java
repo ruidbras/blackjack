@@ -5,13 +5,13 @@ import java.util.regex.Pattern;
 
 public class Simulation extends Mode{
 	
-	int shoe;
+	int n_decks;
 	int shuffle;
 	int s_number;
 	boolean strat = false;
 	boolean af = false;
 	BS bs;
-	Deck deck;
+	Shoe shoe;
 	Game game;
 	Player player;
 	Dealer dealer;
@@ -22,7 +22,7 @@ public class Simulation extends Mode{
 	public Simulation(String[] args) {
 		super(args);
 		
-		shoe = Integer.parseInt(args[4]);
+		n_decks = Integer.parseInt(args[4]);
 		shuffle = Integer.parseInt(args[5]);
 		s_number = Integer.parseInt(args[6]);
 		
@@ -50,9 +50,9 @@ public class Simulation extends Mode{
 		
 	}
 	
-	public void setObj(BS bsa, Deck decka, Game gamea, Player playera, Dealer dealera, Strategy strategya){
+	public void setObj(BS bsa, Shoe shoea, Game gamea, Player playera, Dealer dealera, Strategy strategya){
 		bs = bsa;
-		deck = decka;
+		shoe = shoea;
 		game = gamea;
 		player = playera;
 		dealer = dealera;
@@ -60,15 +60,15 @@ public class Simulation extends Mode{
 	}
 	
 	public String getInstruction(){
-		if(deck.shufflecount<s_number&&player.getBalance()>=min_bet){
+		if(shoe.shufflecount<s_number&&player.getBalance()>=min_bet){
 			//System.out.println("BS:"+strat+"  HL:"+(!strat)+"  AF:"+af);
 			if(game.ingame()){
 				/* Give advice on the next play */
-				System.out.println(bs.advice(player.getHand().getTotal(), dealer.getDealerHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().cardsSameValue(), game.firstplay(), strat));
+				//System.out.println(bs.advice(player.getHand().getTotal(), dealer.getDealerHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().cardsSameValue(), game.firstplay(), strat));
 				in =Character.toString(bs.advice(player.getHand().getTotal(), dealer.getDealerHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().cardsSameValue(), game.firstplay(), strat));
 				if((bs.advice(player.getHand().getTotal(), dealer.getDealerHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().cardsSameValue(), game.firstplay(), strat))=='d'){
 					in="2";
-					System.out.println("advice 2");
+					//System.out.println("advice 2");
 				}
 				if(!strat){
 					if(bs.getCount()>=3&&game.ingame()&&dealer.canHaveBlackjack()&&game.firstplay()&&(!game.insuranceMode())&&(!game.wasASplit()))
@@ -79,14 +79,14 @@ public class Simulation extends Mode{
 				//System.out.println("Ilustrativo.. oldbet = "+game.getOldbet());
 					if(af){
 						if(bs.getAfcount()>=2){
-							System.out.println("b "+player.getOldbet()*2);
+							//System.out.println("b "+player.getOldbet()*2);
 							in="b "+player.getOldbet()*2;
 						}else{
-							System.out.println("b "+min_bet);
+							//System.out.println("b "+min_bet);
 							in="b "+min_bet;
 						}
 					}else{
-						System.out.println("b " +strategy.getBet(player.getOldbet()));
+						//System.out.println("b " +strategy.getBet(player.getOldbet()));
 						in="b "+strategy.getBet(player.getOldbet());
 					}
 			}
@@ -97,7 +97,7 @@ public class Simulation extends Mode{
 	}
 	
 	public int getShoe(){
-		return shoe;
+		return n_decks;
 	}
 	
 	public int getShuffle(){

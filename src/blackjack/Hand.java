@@ -58,6 +58,14 @@ public class Hand extends CollectionOfCards{
 		}
 		return false;
 	}
+	public boolean worthForDouble(){
+		if(cards.size()==2){
+			if(genTotal()==9||genTotal()==10||genTotal()==11){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public boolean isSoft(){
 		int r = 0;
