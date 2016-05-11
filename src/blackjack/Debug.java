@@ -1,14 +1,14 @@
 package blackjack;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class Debug  extends Mode{
 	
-	File cmd = null;
-	FileReader rCmd = null;
+	FileReader cmd = null;
+	BufferedReader rCmd = null;
 	String readshoepath = null;
 	String in;
 	
@@ -16,12 +16,13 @@ public class Debug  extends Mode{
 		super(args);
 		String current = System.getProperty("user.dir");
 		readshoepath = current + args[4];
-		cmd = new File(current + args[5]);
 		try {
-			rCmd =  new FileReader(cmd);
+			cmd = new FileReader(current + args[5]);
 		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		rCmd =  new BufferedReader(cmd);
 	}
 	
 	public String getReadshoepath(){
@@ -35,7 +36,15 @@ public class Debug  extends Mode{
 			if((char)c != ' ' && c != 13 && (char)c != '\n'){
 				if((char)c == 'b'){
 					if((char)(c = rCmd.read())==' '){
+						
+						rCmd.mark(1);
 						while((char)(c = rCmd.read())!=' '){
+							
+							if(!Character.isDigit((char)c)){
+								rCmd.reset();
+								return in="b";
+							} //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+							
 							bet+=(char)c;
 						}
 						System.out.print("b "+bet+" ");

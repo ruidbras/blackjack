@@ -28,7 +28,7 @@ public class Dealer {
 	
 	public void printDealersFirstTwo(){
 		if (hand.countCards()==2){
-			System.out.println("Dealers hand: ["+ hand.getFirst() + ", ?]");
+			System.out.println("dealer's hand "+ hand.getFirst().toString() + " X");
 		}
 	}
 	
@@ -69,17 +69,6 @@ public class Dealer {
 		hand.emptyCards();
 	}
 	
-	public void cleanPlayerBustedHand(Player p){
-		junk.addCards(p.getHand().cards);
-		p.getHand().emptyCards();
-		p.hands.remove(p.getCurrentHand());
-		p.setBetZero();
-		p.setNumbHands();
-		if(p.getCurrentHand()!=0){
-			p.setCurrentHand(p.getCurrentHand()-1);
-		}
-	}
-	
 	public void cleanPlayerHands(Player p){
 		p.setNumbHands();
 		int i = p.getNumHands()-1;
@@ -102,7 +91,7 @@ public class Dealer {
 	
 	@Override
 	public String toString() {
-		return "Dealer: " + hand;
+		return "dealer's hand " + hand;
 	}
 	
 	

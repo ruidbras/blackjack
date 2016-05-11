@@ -23,6 +23,10 @@ public class Card {
 		}
 	}
 	
+	public String getNum(){
+		return num;
+	}
+	
 	public int getSoftValue() {
 		return softValue;
 	}
@@ -30,6 +34,6 @@ public class Card {
 		return hardValue;
 	}
 	public String toString() {
-		return num + suit;
+		return num+suit;
 	}
 }

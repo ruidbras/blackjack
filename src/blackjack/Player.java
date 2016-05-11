@@ -83,12 +83,9 @@ public class Player {
 	 * have more than one hand it just removes the bets.
 	 */
 	public void setBetZero(){
-		if(getNumHands()==1){
-			bet.set(0, (double)0);
-			return;
-		}
-		bet.remove(getCurrentHand());
+		bet.set(getCurrentHand(),(double)0);
 	}
+	
 
 	
 	//Updates current hand
@@ -96,9 +93,6 @@ public class Player {
 		currentHand=n;
 	}
 	
-	public void addCredit(double i){ //nunca usada ainda
-		pile.updatePile(i);
-	}
 	
 	//Delivers a new card to the current hand
 	public void hit(Card c){
@@ -107,24 +101,14 @@ public class Player {
 	}
 	
 	
-	public boolean deal(double min_bet){
-		//if player hits deal without specify the bet value
+	public boolean deal(){
 		if(getBet()==0){
-		/* If it is the first deal of the game and the player didn't specify the value of the bet
-		* it's given the min_bet value to the bet, otherwise it's given the value of the previous bet
-		*/
-			if(oldbet==0){
-				oldbet = min_bet;
-				if(!bet(min_bet))return false;
-			}else if(!bet(oldbet)) return false;
+			return false;
 		}
 		oldbet = bet.get(getCurrentHand());
 		return true;
 	}
 	
-	/* Checks current bet, than checks if the balance is enough to double the bet.
-	 * If it's verified than updates the value of the new bet and receives a card.
-	 */
 	public boolean doubleDown(Card c){
 		double b=bet.get(getCurrentHand());
 		if(pile.getBalance()>=b){
@@ -133,33 +117,70 @@ public class Player {
 			hands.get(getCurrentHand()).addCard(c);
 			return true;
 		}
-		System.out.println("[!]Nao tem creditos suficientes para efectuar o double");
+		System.out.println("[!]Not enough credits");
 		return false;
 	}
 	
-	public boolean reBet(double b){
+	public boolean reBet(double b, double min_bet){
+		if(b==0){
+			setBalance(bet.get(getCurrentHand()));
+			if(oldbet==0){
+				if(pile.getBalance()<min_bet){
+					return false;
+				}
+				setBalance(-min_bet);
+				bet.set(getCurrentHand(), min_bet);
+				return true;
+			}
+			//Otherwise it's given the value of the previous bet
+			else{
+				if(pile.getBalance()<oldbet){
+					return false; 
+				}
+				setBalance(-oldbet);
+				bet.set(getCurrentHand(), oldbet);
+				return true;
+			}	
+		}
 		if((pile.getBalance()+bet.get(getCurrentHand()))>=b){
 			setBalance(bet.get(getCurrentHand()));
 			setBalance(-b);
 			bet.set(getCurrentHand(), b);
-			//oldbet=b; mudar para o deal
 			return true;
 		}else{
-			System.out.println("[!]Nao tem creditos suficientes para efectuar o bet");
+			System.out.println("[!]Not enough credits");
 		}
 		return false;
 	}
 	
-	public boolean bet(double b){
-		if(pile.getBalance()>=b){
-			setBalance(-b);
-			bet.set(getCurrentHand(), b);
-			oldbet=b;
-			return true;
-		}else{
-			System.out.println("[!]Nao tem creditos suficientes para efectuar o bet");
+	public boolean bet(double b, double min_bet){
+		//if player bets without specifying the bet value
+		if(b==0){
+			// If it is the first bet of the game and the player didn't specify the value, it's given the min_bet value to the bet
+			if(oldbet==0){
+				if(pile.getBalance()<min_bet){
+					return false;
+				}
+				setBalance(-min_bet);
+				bet.set(getCurrentHand(), min_bet);
+				return true;
+			}
+			//Otherwise it's given the value of the previous bet
+			else{
+				if(pile.getBalance()<oldbet){
+					return false; 
+				}
+				setBalance(-oldbet);
+				bet.set(getCurrentHand(), oldbet);
+				return true;
+			}
 		}
-		return false;
+		if(pile.getBalance()<b){
+			return false;
+		}
+		setBalance(-b);
+		bet.set(getCurrentHand(), b);
+		return true;
 	}
 	
 	
@@ -176,12 +197,10 @@ public class Player {
 		}
 		hands.get(index+1).cards.add(hands.get(index).cards.get(1));
 		bet.add(index+1, getBet());
+		bet(getBet(),0);
 		hands.get(index).cards.remove(1);
 		hands.get(index+1).addCard(a);
 		hands.get(index).addCard(b);
-		setCurrentHand(index+1);
-		bet(getBet());
-		System.out.println("player makes split");
 		return;
 	}
 	
@@ -192,23 +211,23 @@ public class Player {
 			if(getHand().getHandCanBeHit()){
 				return true;
 			}
-			while(getCurrentHand()>=0){
+			while(getCurrentHand()<getNumHands()){
 				if(getHand().twoAces()){
 					setCurrentHand(getCurrentHand());
 					return false;
 				}
-				setCurrentHand(getCurrentHand()-1);
+				setCurrentHand(getCurrentHand()+1);
 			}
-			setCurrentHand(0);
+			setCurrentHand(getNumHands()-1);
 			return false;
 		}
 
 	@Override
 	public String toString() {
 		if (numbHands!=1){
-			return "Player Hands: "+ hands;
+			return "player's hands "+"["+(getCurrentHand()+1)+"] "+getHand().toString();
 		}
-		return "Player Hand: " + hands;
+		return "player's hand " + getHand().toString();
 	}
 
 }

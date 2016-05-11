@@ -64,6 +64,8 @@ public class Main2 {
 		System.out.println("Type what you want to do? (bet/exit)");
 		
 		while(true){
+			System.out.println("");
+			
 			//Add junk to deck when deck is at ?%
 			if(simulation){
 				if((!game.ingame())&&game.getPercentageDeck()>((Simulation) mode).getShuffle()&&(!debug)){
@@ -76,11 +78,11 @@ public class Main2 {
 				}
 				if((!game.ingame())&&deck.shufflecount==((Simulation) mode).getS_number()){
 					System.out.println("Termina aqui");
+					strategy.printStats(player.getBalance());
 					return; //Add final prints ?
 				}
 			}else if(interactive){
 				if((!game.ingame())&&game.getPercentageDeck()>((Interactive) mode).getShuffle()&&(!debug)){
-					//deck.printDeck();
 					deck.addCards(junk.cards);
 					junk.emptyCards();
 					deck.shuffle();
@@ -89,23 +91,28 @@ public class Main2 {
 				}
 			}
 				
-			
 			in = mode.getInstruction();
-			
-			
+
 			if(in.charAt(0)=='b'&&(!game.ingame())){
-				try{
-					double b = Double.parseDouble(in.substring(in.indexOf(" ")));
-					if(game.betLimit(b, mode.getMin_bet(), mode.getMax_bet())){	
-						game.makeBet(b);
-					}else{
-						System.out.println("Invalid bet. Your bet must be within the range "+mode.getMin_bet()+" and "+mode.getMax_bet());
-					}
-				}catch(Exception name){
-					System.out.println("Invalid argument");
+				
+				if(in.length()==1){
+					game.makeBet(0,mode.getMin_bet());
 				}
-				if(simulation){
-					game.deal(mode.getMin_bet());
+				else{
+					try{
+						double b = Double.parseDouble(in.substring(in.indexOf(" ")));
+						if(game.betLimit(b, mode.getMin_bet(), mode.getMax_bet())){	
+							game.makeBet(b,mode.getMin_bet());
+						}else{
+							System.out.println("Invalid bet. Your bet must be within the range "+mode.getMin_bet()+" and "+mode.getMax_bet());
+						}
+					}catch(Exception name){
+						System.out.println("Invalid argument");
+					}
+					if(simulation){
+						game.deal(mode.getMin_bet());
+					}
+				
 				}
 			}else if(in.equals("d")&&(!game.ingame())){
 				game.deal(mode.getMin_bet());

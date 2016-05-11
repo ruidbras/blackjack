@@ -90,7 +90,12 @@ public class Hand extends CollectionOfCards{
 	
 	@Override
 	public String toString() {
-		return cards + " Total:" + total;
+		String ret="";
+		for(Card card: cards){
+			ret = ret + card.toString()+" ";
+		}
+		
+		return ret + "(" + total+")";
  	}
 	
 	
