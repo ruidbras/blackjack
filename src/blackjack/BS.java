@@ -358,7 +358,7 @@ public class BS {
 			/* Using the Hi-lo strategy */
 			r = HL(l,c,s,p);
 			/* Every adaptation in this case it's to hit */
-			System.out.println(firstplay);
+			//System.out.println(firstplay);
 			if(!firstplay){
 				if(r=='p'){
 					r = 's';

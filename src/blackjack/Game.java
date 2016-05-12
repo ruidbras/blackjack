@@ -13,9 +13,8 @@ public class Game {
 	private boolean firstplay;
 	private boolean alreadyBet;
 	int count_splits;
-	private boolean simulation;
 	
-	Game(Shoe shoe, Junk junk, Player p, Dealer d, Strategy s, BS bss, boolean sim){
+	Game(Shoe shoe, Junk junk, Player p, Dealer d, Strategy s, BS bss){
 		player = p;
 		dealer = d;
 		strategy = s;
@@ -28,7 +27,6 @@ public class Game {
 		alreadyBet=false;
 		count_splits=0;
 		bs = bss;
-		simulation=!sim;
 	}
 	
 	public boolean ingame(){
@@ -49,22 +47,25 @@ public class Game {
 	public void makeBet(double b, double min_bet){
 		if(alreadyBet) {
 			if(!player.reBet(b,min_bet)){
-				if(simulation) System.out.println("[!]Not enough credits");////////////////////sair
+				System.out.println("[!]Not enough credits");////////////////////sair
 			}
+			System.out.println("player is betting "+player.getBet());
 			return;
 		}
 		alreadyBet=true;
-		player.bet(b,min_bet);
+		if(!player.bet(b,min_bet)){
+			System.out.println("[!]Not enough credits");////////////////////sair
+		}
 		alreadyBet=true;
-		if(simulation) System.out.println("player is betting "+player.getBet());
+		System.out.println("player is betting "+player.getBet());
 	}
 	
 	public void deal(double min_bet){
 		if(!player.deal()) return;
 		dealer.drawFirstFour(player);
 		strategy.addPlays();
-		if(simulation) dealer.printDealersFirstTwo();
-		if(simulation) System.out.println(player);
+		dealer.printDealersFirstTwo();
+		System.out.println(player);
 		bs.countCard(player.getHand().getCards().getFirst());
 		bs.countCard(player.getHand().getCards().getLast());
 		bs.countCard(dealer.getDealerHand().getCards().getFirst());
@@ -73,62 +74,47 @@ public class Game {
 	
 	public void split(){
 		if(count_splits==3){
-			if(simulation) {
-				System.out.println("can't split more");
-			}else stand();
+			System.out.println("can't split more");
+			stand();
 			return;
 		}
 		if(player.getBalance()<player.getBet()){
-			if(simulation){
-				System.out.println("Not enough money");
-			}else stand();
+			System.out.println("Not enough money");
+			stand();
 			return;
 		}
 		player.split(dealer.dealCard(),dealer.dealCard());
 		bs.countCard(player.hands.get(player.getCurrentHand()).cards.get(1));
 		bs.countCard(player.hands.get(player.getCurrentHand()+1).cards.get(1));
+		player.printStart("p");
 		strategy.addPlays();
 		++count_splits;
 		wasASplit=true;
 		firstplay = true;
-		player.runHands();
-		if(simulation) System.out.println("player is splitting");
-		if(simulation) System.out.println("playing "+(player.getCurrentHand()+1)+"nd hand...");
-		if(simulation) System.out.println(player);
 	}
 	
 	public void insurance(){
 		//if it was already a split, insurance can't be made
 		if(wasASplit){
-			if(simulation) System.out.println("Can't make insurance after spliting");
+			System.out.println("Can't make insurance after spliting");
 			return;
 		}
-		if(simulation) System.out.println("player makes insurance");
+		System.out.println("player makes insurance");
 		if(player.setInsuranceBet()){
-			if(simulation) System.out.println("Current balance: "+player.getBalance());
 			insuranceMode=true;
 		}else{
-			if(simulation) System.out.println("Not enough money to make this play");
+			System.out.println("Not enough money to make this play");
 		}
 	}
 	
 	public void hit(){
-		//If it results from a split of a pair of Aces
-		if(player.runHands()==false){
-			if(simulation){
-				System.out.println("You can only split or stand");
-			}else stand();
-			return;
-		}
-		if(simulation) System.out.println("player hits");
 		firstplay = false;
 		player.hit(dealer.dealCard());
 		bs.countCard(player.getHand().cards.getLast());
-		if(simulation) System.out.println(player);
+		player.printStart("h");
 		if(player.getCurrentHand()<player.getNumHands()){
 			if(player.getHand().getTotal()>21){
-				if(simulation) System.out.println("player's "+"["+(player.getCurrentHand()+1)+"]" + "th hand busts");
-				strategy.addLoses();
+				player.printBustedHand();
 				player.setBetZero();
 				player.setCurrentHand(player.getCurrentHand()+1);
 				if(player.getCurrentHand()==player.getNumHands()){
@@ -136,7 +122,8 @@ public class Game {
 					finalizeDealer();
 					return;
 				}
-				if(simulation) System.out.println(player);
+				player.printPlayingHand();
+				System.out.println(player);
 				firstplay = true;
 			}
 		}
@@ -145,65 +132,68 @@ public class Game {
 	public void stand(){
 		firstplay = true;
 		if(player.getCurrentHand()+1<player.getNumHands()){
-			if(simulation) System.out.println("player stands "+"["+(player.getCurrentHand()+1)+"]");
+			player.printStart("s");
 			player.setCurrentHand(player.getCurrentHand()+1);
-			if(simulation) System.out.println(player);
-			player.runHands();
+			player.printPlayingHand();
+			System.out.println(player);
 			return;
 		}
 		else{
-			if(simulation) System.out.println("player stands");
+			player.printStart("s");
 			finalizeDealer();
 		}
 	}
-	
-	
-	
+
 	public boolean dealerFinalizeCards(){
 		if(player.allHandsBusted()){
-			if(simulation) System.out.println("dealer stands");
-			cleanTable();
-			return false;
+			System.out.println("dealer stands");
+			return true;
 		}
 		while(dealer.hand.getTotal()<17){
 			dealer.drawCardToDealer();
 			bs.countCard(dealer.getDealerHand().cards.getLast());
-			if(simulation) System.out.println("dealer hits");
-			if(simulation) System.out.println(dealer);
+			System.out.println("dealer hits");
+			System.out.println(dealer);
 			if(dealer.hand.getTotal()>21){
 				/* When the dealer busts */
-				if(simulation) System.out.println("dealer busts");
-				int i = player.getNumHands()-1;
+				System.out.println("dealer busts");
+				int i = 0;
 				player.setCurrentHand(i);
-				while(player.getCurrentHand()>=0){
-					player.setBalance(player.getBet()*2);
-					strategy.addWins();
-					player.setCurrentHand(--i);
+				while(player.getCurrentHand()<player.getNumHands()){
+					if(player.getBet()==0){
+						player.printWLP("loses");
+						strategy.addLoses();
+					}else{
+						player.setBalance(player.getBet()*2);
+						player.printWLP("wins");
+						strategy.addWins();
+					}
+					player.setCurrentHand(++i);
 				}
 				cleanTable();
 				return false;
 			}
 		}
-		if(simulation) System.out.println("dealer stands");
+		System.out.println("dealer stands");
 		return true;
 	}
 	
 	public void finalizeDealer(){
 		firstplay = true;
-		if(simulation) System.out.println(dealer);
+		System.out.println(dealer);
 		bs.countCard(dealer.getDealerHand().cards.get(1));
 		/* Check if the player has blackjack */
 		if(player.getHand().blackjack() && !wasASplit){
-			if(simulation) System.out.println("Player got a BlackJack!");
+			System.out.println("Player got a BlackJack!");
 			if(dealer.hand.blackjack()){
-				if(simulation) System.out.println("Dealer got a BlackJack!");
+				System.out.println("Dealer got a BlackJack!");
 				if(insuranceMode){
 					player.setBalance(2*player.getInsuranceBet());
-					if(simulation) System.out.println("Player wins insurance");
+					System.out.println("Player wins insurance");
 					insuranceMode=false;
 				}
 				player.setBalance(player.getBet());
-				if(simulation) System.out.println("player pushes and his current balance is "+player.getBalance());
+				System.out.println("player pushes and his current balance is "+player.getBalance());
 				strategy.addDealerbj();
 				strategy.addPlayerbj();
 				strategy.addPushes();
@@ -211,11 +201,11 @@ public class Game {
 				return;
 			}else{
 				if(insuranceMode){
-					if(simulation) System.out.println("Player loses insurance");
+					System.out.println("Player loses insurance");
 					insuranceMode=false;
 				}
 				player.setBalance((player.getBet())*2.5);//Should pay 2.5
-				if(simulation) System.out.println("Player wins and his current balance is "+player.getBalance());
+				System.out.println("Player wins and his current balance is "+player.getBalance());
 				strategy.addDealerbj();
 				strategy.addWins();
 				cleanTable();
@@ -225,15 +215,15 @@ public class Game {
 		/* Checks if the dealer has blackjack */
 		if(dealer.hand.blackjack()){
 			if(insuranceMode){
-				if(simulation) System.out.println("Dealers BlackJack!");
+				System.out.println("Dealers BlackJack!");
 				player.setBalance(2*player.getInsuranceBet());
-				if(simulation) System.out.println("Player wins insurance and his current balance is "+player.getBalance());
+				System.out.println("Player wins insurance and his current balance is "+player.getBalance());
 				cleanTable();
 				insuranceMode=false;
 				return;
 			}else{
-				if(simulation) System.out.println("Dealers BlackJack!");
-				if(simulation) System.out.println("Player loses and his current balance is "+player.getBalance());
+				System.out.println("Dealers BlackJack!");
+				System.out.println("Player loses and his current balance is "+player.getBalance());
 				strategy.addLoses();
 				strategy.addDealerbj();
 				insuranceMode = false;
@@ -242,14 +232,12 @@ public class Game {
 			}
 		}else{
 			if(insuranceMode){
-				if(simulation) System.out.println("Player loses insurance");
+				System.out.println("Player loses insurance");
 				insuranceMode=false;
 			}
 		}
 		
 		if(dealerFinalizeCards()==false){
-			if(simulation) System.out.println("Player wins and his current balance is "+player.getBalance());
-			strategy.addWins();
 			return;
 		}
 		
@@ -260,29 +248,30 @@ public class Game {
 			
 			/* If no one busts the game checks who is the winner */
 			if(player.getBet()==0){
-				if(simulation) System.out.println("player loses ["+(player.getCurrentHand()+1)+"] and his current balance is "+player.getBalance());
+				player.printWLP("loses");
+				strategy.addLoses();
 				player.setCurrentHand(++n);
 				continue;
 			}
 			if(player.getHand().getTotal()>dealer.hand.getTotal()){
 				player.setBalance((player.getBet())*2);
 				strategy.addWins();
-				if(simulation) System.out.println("player wins ["+(player.getCurrentHand()+1)+"] and his current balance is "+player.getBalance());
+				player.printWLP("wins");
 			}else if(player.getHand().getTotal()==dealer.hand.getTotal()){
 				//If he has a 21 hand value of two cards, it wins an ordinary 21 made of more than 2 cards
 				if(player.getHand().countCards()==2 && player.getHand().genTotal()==21){
 					player.setBalance(2*player.getBet());
 					strategy.addWins();
-					if(simulation) System.out.println("player wins ["+(player.getCurrentHand()+1)+"] and his current balance is "+player.getBalance());
+					player.printWLP("wins");
 				}else{
 					player.setBalance(player.getBet());
 					strategy.addPushes();
-					if(simulation) System.out.println("player pushes ["+(player.getCurrentHand()+1)+"] and his current balance is "+player.getBalance());
+					player.printWLP("pushes");
 				}
 			}
 			else{
 				strategy.addLoses();
-				if(simulation) System.out.println("player loses ["+(player.getCurrentHand()+1)+"] and his current balance is "+player.getBalance());
+				player.printWLP("loses");
 			}
 			
 			player.setCurrentHand(++n);
@@ -291,37 +280,28 @@ public class Game {
 	}
 	
 	public void doubleDown(){
-		//If it results from a split of a pair of Aces
-		if(player.runHands()==false){
-			if(simulation){
-				System.out.println("You can only split or stand");
-			}else stand();
+		if(player.getBalance()<player.getBet()&&!player.getHand().worthForDouble()){
+			System.out.println("can't make this play");
+			stand();
 			return;
 		}
-		if(!player.doubleDown(dealer.dealCard())){
-			if(simulation){
-				System.out.println("can't make this play");
-			}else stand();
-			return;
-		}
-		if(simulation) System.out.println("player doubles down");
+		player.doubleDown(dealer.dealCard());
+		System.out.println("player doubles down");
 		firstplay = false;
 		bs.countCard(player.getHand().cards.getLast());
-		if(simulation) System.out.println(player);
-		
+		System.out.println(player);
 		if(player.getCurrentHand()<player.getNumHands()){
 			if(player.getHand().getTotal()>21){
-				if(simulation) System.out.println("player busts "+"["+(player.getCurrentHand()+1)+"]" + "th hand busts");
-				strategy.addLoses();
+				System.out.println("player busts "+"["+(player.getCurrentHand()+1)+"]" + "th hand busts");
 				player.setBetZero();
 				player.setCurrentHand(player.getCurrentHand()+1);
 				if(player.getCurrentHand()==player.getNumHands()){
 					player.setCurrentHand(player.getCurrentHand()-1);
-					if(simulation) System.out.println(player);
+					System.out.println(player);
 					finalizeDealer();
 					return;
 				}
-				if(simulation) System.out.println(player);
+				System.out.println(player);
 				firstplay = true;
 			}
 		}
@@ -363,19 +343,19 @@ public class Game {
 			System.out.println("Shuffle must be greater than 10 and lesser than 100");
 			System.exit(0);
 		}
-		if(simulation)System.out.println("Inputs are ok");
+		System.out.println("Inputs are ok");
 	}
 	
 	public void surrender(){
 		if(wasASplit){
-			if(simulation){
-				System.out.println("can't surrend");
-			}else stand();
+			System.out.println("can't surrend");
+			stand();
+			return;
 		}
-		if(simulation) System.out.println("player is surrendering");
-		if(simulation) System.out.println(dealer);
+		System.out.println("player is surrendering");
+		System.out.println(dealer);
 		player.setBalance(0.5*player.getBet());
-		if(simulation) System.out.println("player current balance is "+player.getBalance());
+		System.out.println("player current balance is "+player.getBalance());
 		cleanTable();
 	}
 	

@@ -108,9 +108,6 @@ public class Player {
 	}
 	
 	public boolean doubleDown(Card c){
-		if(!getHand().worthForDouble()){
-			return false;
-		}
 		double b=bet.get(getCurrentHand());
 		if(pile.getBalance()>=b){
 			setBalance(-b);
@@ -183,9 +180,6 @@ public class Player {
 	
 	
 	public void split(Card a, Card b){
-		if(pile.getBalance()<getBet()){
-			return;
-		}
 		int index=getCurrentHand();
 		hands.add(index+1, new Hand());
 		setNumbHands();
@@ -202,24 +196,7 @@ public class Player {
 		return;
 	}
 	
-	/*After a split runs all hands to check if there are hands of two aces, than the boolean result says if hand can or can not
-	be hit or doubled*/
-		
-	public boolean runHands(){
-		//se não for false é porque não foi um split de AAs
-		if(getHand().getHandCanBeHit()){
-			return true;			
-		}
-		while(getCurrentHand()<getNumHands()){
-			if(getHand().twoAces()){
-				setCurrentHand(getCurrentHand());
-				return false;
-			}
-			setCurrentHand(getCurrentHand()+1);
-		}
-		setCurrentHand(getNumHands()-1);
-		return false;
-	}
+
 		
 	public boolean allHandsBusted(){
 		for(Double d: bet){
@@ -228,6 +205,65 @@ public class Player {
 			}
 		}
 		return true;
+	}
+	
+	public void printPlayingHand(){
+		if (numbHands!=1){
+			if(getCurrentHand()==0){
+				System.out.println("playing "+(getCurrentHand()+1)+"st hand...");
+			}
+			else if(getCurrentHand()==1){
+				System.out.println("playing "+(getCurrentHand()+1)+"nd hand...");
+			}else if(getCurrentHand()==2){
+				System.out.println("playing "+(getCurrentHand()+1)+"rd hand...");
+			}else{
+				System.out.println("playing "+(getCurrentHand()+1)+"th hand...");
+			}
+		}
+	}
+	
+	public void printStart(String action){
+		if(action=="s"){
+			if (numbHands!=1){
+				System.out.println("player stands ["+(getCurrentHand()+1)+"]");
+			}else{
+				System.out.println("player stands");
+			}
+		}
+		if(action=="h"){
+			if (numbHands!=1){
+				System.out.println("player hits ["+(getCurrentHand()+1)+"]");
+			}else{
+				System.out.println("player hits");
+			}
+			System.out.println(toString());
+		}
+		if(action=="2"){
+			if (numbHands!=1){
+				System.out.println("player doubles ["+(getCurrentHand()+1)+"]");
+			}else{
+				System.out.println("player doubles");
+			}
+			System.out.println(toString());
+		}
+		if(action=="p"){
+			System.out.println("player is splitting");
+			printPlayingHand();
+			System.out.println(toString());
+		}
+	}
+	
+	public void printBustedHand(){
+		if (numbHands!=1){
+			System.out.println("player busts "+"["+(getCurrentHand()+1)+"]");
+		}else{
+			System.out.println("player's busts");
+		}
+	}
+	
+	public void printWLP(String str){
+		if (numbHands!=1) System.out.println("player "+str+" ["+(getCurrentHand()+1)+"] and his current balance is "+getBalance());
+		else  System.out.println("player "+str+" and his current balance is "+getBalance());
 	}
 	
 	@Override

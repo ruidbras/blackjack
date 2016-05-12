@@ -47,7 +47,7 @@ public class Main2 {
 		player = new Player(mode.getBalance());
 		dealer = new Dealer(shoe, junk);
 		strategy = new Strategy(mode.getBalance(), mode.getMin_bet(), mode.getMax_bet());
-		game = new Game(shoe, junk, player, dealer, strategy, bs,simulation);
+		game = new Game(shoe, junk, player, dealer, strategy, bs);
 		
 		if(interactive){
 			game.checkInputs(mode.getMin_bet(), mode.getMax_bet(), mode.getBalance(), ((Interactive) mode).getShoe(), ((Interactive) mode).getShuffle(), false);
@@ -63,7 +63,9 @@ public class Main2 {
 		
 		while(true){
 			
-			if(!simulation)System.out.println("");
+			System.out.println("");
+			System.out.println(player.getBalance());
+			System.out.println(shoe.cards.size()+junk.cards.size());
 			
 			//Add junk to deck when deck is at ?%
 			if(simulation){
