@@ -1,16 +1,16 @@
 package blackjack;
 
 public class Strategy {
-	private double plays;
-	private double playerbj;
-	private double dealerbj;
-	private double wins;
-	private double loses;
-	private double pushes;
-	private final double balanceinit;
-	private int bet;
-	private int minbet;
-	private int maxbet;
+	public double plays;
+	public double playerbj;
+	public double dealerbj;
+	public double wins;
+	public double loses;
+	public double pushes;
+	public final double balanceinit;
+	public int bet;
+	public int minbet;
+	public int maxbet;
 	
 	Strategy(double i, int min, int max){
 		balanceinit = i;

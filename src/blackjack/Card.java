@@ -34,6 +34,10 @@ public class Card {
 		return hardValue;
 	}
 	public String toString() {
-		return num+suit;
+		return num+getSuit();
+	}
+
+	public String getSuit() {
+		return suit;
 	}
 }

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public abstract class CollectionOfCards {
 	
-	LinkedList<Card> cards;
+	public LinkedList<Card> cards;
 	
 	public CollectionOfCards() {
 		cards=new LinkedList<Card>();

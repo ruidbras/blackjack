@@ -12,7 +12,13 @@ public class Game {
 	private boolean insuranceMode;
 	private boolean firstplay;
 	private boolean alreadyBet;
-	int count_splits;
+	public int count_splits;
+	public Junk handDealer= new Junk();
+	public Junk handPlayer = new Junk();
+	public Junk handPlayer2 = new Junk();
+	public Junk handPlayer3 = new Junk();
+	public Junk handPlayer4 = new Junk();
+	
 	
 	Game(Shoe shoe, Junk junk, Player p, Dealer d, Strategy s, BS bss){
 		player = p;
@@ -61,6 +67,16 @@ public class Game {
 	}
 	
 	public void deal(double min_bet){
+		handDealer.emptyCards();
+		handDealer = new Junk();
+		handPlayer.emptyCards();
+		handPlayer = new Junk();
+		handPlayer2.emptyCards();
+		handPlayer2 = new Junk();
+		handPlayer3.emptyCards();
+		handPlayer3 = new Junk();
+		handPlayer4.emptyCards();
+		handPlayer4 = new Junk();
 		if(!player.deal()) return;
 		dealer.drawFirstFour(player);
 		strategy.addPlays();
@@ -70,9 +86,19 @@ public class Game {
 		bs.countCard(player.getHand().getCards().getLast());
 		bs.countCard(dealer.getDealerHand().getCards().getFirst());
 		ingame = true;
+		handDealer.addCards(dealer.getDealerHand().getCards());
+		handPlayer.addCards(player.hands.get(0).getCards());
 	}
 	
 	public void split(){
+		handPlayer.emptyCards();
+		handPlayer = new Junk();
+		handPlayer2.emptyCards();
+		handPlayer2 = new Junk();
+		handPlayer3.emptyCards();
+		handPlayer3 = new Junk();
+		handPlayer4.emptyCards();
+		handPlayer4 = new Junk();
 		if(count_splits==3){
 			System.out.println("can't split more");
 			stand();
@@ -84,13 +110,30 @@ public class Game {
 			return;
 		}
 		player.split(dealer.dealCard(),dealer.dealCard());
-		bs.countCard(player.hands.get(player.getCurrentHand()).cards.get(1));
-		bs.countCard(player.hands.get(player.getCurrentHand()+1).cards.get(1));
+		bs.countCard(player.hands.get(player.getCurrentHand()).getCards().get(1));
+		bs.countCard(player.hands.get(player.getCurrentHand()+1).getCards().get(1));
 		player.printStart("p");
 		strategy.addPlays();
 		++count_splits;
 		wasASplit=true;
 		firstplay = true;
+		if(player.getNumHands()==1)
+			handPlayer.addCards(player.hands.get(0).getCards());
+		if(player.getNumHands()==2){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+		}
+		if(player.getNumHands()==3){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+		}
+		if(player.getNumHands()==4){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+			handPlayer4.addCards(player.hands.get(3).getCards());
+		}
 	}
 	
 	public void insurance(){
@@ -108,9 +151,19 @@ public class Game {
 	}
 	
 	public void hit(){
+		handDealer.emptyCards();
+		handDealer = new Junk();
+		handPlayer.emptyCards();
+		handPlayer = new Junk();
+		handPlayer2.emptyCards();
+		handPlayer2 = new Junk();
+		handPlayer3.emptyCards();
+		handPlayer3 = new Junk();
+		handPlayer4.emptyCards();
+		handPlayer4 = new Junk();
 		firstplay = false;
 		player.hit(dealer.dealCard());
-		bs.countCard(player.getHand().cards.getLast());
+		bs.countCard(player.getHand().getCards().getLast());
 		player.printStart("h");
 		if(player.getCurrentHand()<player.getNumHands()){
 			if(player.getHand().getTotal()>21){
@@ -127,6 +180,24 @@ public class Game {
 				firstplay = true;
 			}
 		}
+		handDealer.addCards(dealer.getDealerHand().getCards());
+		if(player.getNumHands()==1)
+			handPlayer.addCards(player.hands.get(0).getCards());
+		if(player.getNumHands()==2){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+		}
+		if(player.getNumHands()==3){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+		}
+		if(player.getNumHands()==4){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+			handPlayer4.addCards(player.hands.get(3).getCards());
+		}
 	}
 	
 	public void stand(){
@@ -142,6 +213,24 @@ public class Game {
 			player.printStart("s");
 			finalizeDealer();
 		}
+		handDealer.addCards(dealer.getDealerHand().getCards());
+		if(player.getNumHands()==1)
+			handPlayer.addCards(player.hands.get(0).getCards());
+		if(player.getNumHands()==2){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+		}
+		if(player.getNumHands()==3){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+		}
+		if(player.getNumHands()==4){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+			handPlayer4.addCards(player.hands.get(3).getCards());
+		}
 	}
 
 	public boolean dealerFinalizeCards(){
@@ -151,7 +240,7 @@ public class Game {
 		}
 		while(dealer.hand.getTotal()<17){
 			dealer.drawCardToDealer();
-			bs.countCard(dealer.getDealerHand().cards.getLast());
+			bs.countCard(dealer.getDealerHand().getCards().getLast());
 			System.out.println("dealer hits");
 			System.out.println(dealer);
 			if(dealer.hand.getTotal()>21){
@@ -181,7 +270,7 @@ public class Game {
 	public void finalizeDealer(){
 		firstplay = true;
 		System.out.println(dealer);
-		bs.countCard(dealer.getDealerHand().cards.get(1));
+		bs.countCard(dealer.getDealerHand().getCards().get(1));
 		/* Check if the player has blackjack */
 		if(player.getHand().blackjack() && !wasASplit){
 			strategy.addPlayerbj();
@@ -292,7 +381,7 @@ public class Game {
 		player.doubleDown(dealer.dealCard());
 		System.out.println("player doubles down");
 		firstplay = false;
-		bs.countCard(player.getHand().cards.getLast());
+		bs.countCard(player.getHand().getCards().getLast());
 		System.out.println(player);
 		if(player.getCurrentHand()<player.getNumHands()){
 			if(player.getHand().getTotal()>21){
@@ -313,6 +402,34 @@ public class Game {
 	}
 	
 	public void cleanTable(){
+		handDealer.emptyCards();
+		handDealer = new Junk();
+		handPlayer.emptyCards();
+		handPlayer = new Junk();
+		handPlayer2.emptyCards();
+		handPlayer2 = new Junk();
+		handPlayer3.emptyCards();
+		handPlayer3 = new Junk();
+		handPlayer4.emptyCards();
+		handPlayer4 = new Junk();
+		handDealer.addCards(dealer.getDealerHand().getCards());
+		if(player.getNumHands()==1)
+			handPlayer.addCards(player.hands.get(0).getCards());
+		if(player.getNumHands()==2){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+		}
+		if(player.getNumHands()==3){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+		}
+		if(player.getNumHands()==4){
+			handPlayer.addCards(player.hands.get(0).getCards());
+			handPlayer2.addCards(player.hands.get(1).getCards());
+			handPlayer3.addCards(player.hands.get(2).getCards());
+			handPlayer4.addCards(player.hands.get(3).getCards());
+		}
 		firstplay=true;
 		dealer.cleanDealerHand();
 		dealer.cleanPlayerHands(player);

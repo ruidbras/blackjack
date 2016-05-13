@@ -36,16 +36,16 @@ public class PileOfChips {
 	
 	public void divideBalance(){
 		int n = (int) (balance/100);
-		blackStack.numberOfChips = n;
+		getBlackStack().setNumberOfChips(n);
 		double r = balance%100;
 		n = (int) (r/25);
-		greenStack.numberOfChips = n;
+		getGreenStack().setNumberOfChips(n);
 		r = (balance)%100%25;
 		n = (int) (r/5);
-		redStack.numberOfChips = n;
+		getRedStack().setNumberOfChips(n);
 		r = (balance)%100%25%5;
 		n = (int) (r/1);
-		whiteStack.numberOfChips = n;
+		getWhiteStack().setNumberOfChips(n);
 	}
 	
 	public void changeChips(int bet){
@@ -61,8 +61,40 @@ public class PileOfChips {
 	
 	@Override
 	public String toString() {
-		return "PileOfChips [balance=" + balance + ", whiteStack=" + whiteStack + ", redStack=" + redStack
-				+ ", greenStack=" + greenStack + ", blackStack=" + blackStack + "]";
+		return "PileOfChips [balance=" + balance + ", whiteStack=" + getWhiteStack() + ", redStack=" + getRedStack()
+				+ ", greenStack=" + getGreenStack() + ", blackStack=" + getBlackStack() + "]";
+	}
+
+	public Chip getWhiteStack() {
+		return whiteStack;
+	}
+
+	public void setWhiteStack(Chip whiteStack) {
+		this.whiteStack = whiteStack;
+	}
+
+	public Chip getRedStack() {
+		return redStack;
+	}
+
+	public void setRedStack(Chip redStack) {
+		this.redStack = redStack;
+	}
+
+	public Chip getGreenStack() {
+		return greenStack;
+	}
+
+	public void setGreenStack(Chip greenStack) {
+		this.greenStack = greenStack;
+	}
+
+	public Chip getBlackStack() {
+		return blackStack;
+	}
+
+	public void setBlackStack(Chip blackStack) {
+		this.blackStack = blackStack;
 	}
 	
 	/*public static void main(String[] args){

@@ -1,7 +1,7 @@
 package blackjack;
 
 public class Dealer {
-	Hand hand;
+	public Hand hand;
 	Shoe shoe;
 	Junk junk;
 
@@ -49,7 +49,7 @@ public class Dealer {
 	
 	
 	public void drawFirstFour(Player p){
-		//Apenas verificacoes de erros se chamarmos a funÃ§Ã£o quando nao devemos
+		//Apenas verificacoes de erros se chamarmos a função quando nao devemos
 		if(hand.countCards()!=0&&p.getHand().countCards()!=0&&p.getNumHands()==1){
 			return;
 		}

@@ -19,7 +19,7 @@ public class Player {
 		bet = new LinkedList<Double>();
 		bet.add((double)0);
 		hands.add(new Hand());
-		pile = new PileOfChips(i);
+		setPile(new PileOfChips(i));
 		numbHands=1;
 		currentHand=0;
 		insuranceBet=0;
@@ -49,7 +49,7 @@ public class Player {
 	}
 
 	public double getBalance() {
-		return pile.getBalance();
+		return getPile().getBalance();
 	}
 	
 	public double getBet() {
@@ -57,7 +57,7 @@ public class Player {
 	}
 	
 	public void setBalance(double d) {
-		pile.updatePile(d);
+		getPile().updatePile(d);
 	}
 	
 	
@@ -109,7 +109,7 @@ public class Player {
 	
 	public boolean doubleDown(Card c){
 		double b=bet.get(getCurrentHand());
-		if(pile.getBalance()>=b){
+		if(getPile().getBalance()>=b){
 			setBalance(-b);
 			bet.set(getCurrentHand(), 2*b);
 			hands.get(getCurrentHand()).addCard(c);
@@ -122,7 +122,7 @@ public class Player {
 		if(b==0){
 			setBalance(bet.get(getCurrentHand()));
 			if(oldbet==0){
-				if(pile.getBalance()<min_bet){
+				if(getPile().getBalance()<min_bet){
 					return false;
 				}
 				setBalance(-min_bet);
@@ -131,7 +131,7 @@ public class Player {
 			}
 			//Otherwise it's given the value of the previous bet
 			else{
-				if(pile.getBalance()<oldbet){
+				if(getPile().getBalance()<oldbet){
 					return false; 
 				}
 				setBalance(-oldbet);
@@ -139,7 +139,7 @@ public class Player {
 				return true;
 			}	
 		}
-		if((pile.getBalance()+bet.get(getCurrentHand()))>=b){
+		if((getPile().getBalance()+bet.get(getCurrentHand()))>=b){
 			setBalance(bet.get(getCurrentHand()));
 			setBalance(-b);
 			bet.set(getCurrentHand(), b);
@@ -153,7 +153,7 @@ public class Player {
 		if(b==0){
 			// If it is the first bet of the game and the player didn't specify the value, it's given the min_bet value to the bet
 			if(oldbet==0){
-				if(pile.getBalance()<min_bet){
+				if(getPile().getBalance()<min_bet){
 					return false;
 				}
 				setBalance(-min_bet);
@@ -162,7 +162,7 @@ public class Player {
 			}
 			//Otherwise it's given the value of the previous bet
 			else{
-				if(pile.getBalance()<oldbet){
+				if(getPile().getBalance()<oldbet){
 					return false; 
 				}
 				setBalance(-oldbet);
@@ -170,7 +170,7 @@ public class Player {
 				return true;
 			}
 		}
-		if(pile.getBalance()<b){
+		if(getPile().getBalance()<b){
 			return false;
 		}
 		setBalance(-b);
@@ -187,10 +187,10 @@ public class Player {
 			hands.get(index).setHandCanBeHit(false);
 			hands.get(index+1).setHandCanBeHit(false);
 		}
-		hands.get(index+1).cards.add(hands.get(index).cards.get(1));
+		hands.get(index+1).getCards().add(hands.get(index).getCards().get(1));
 		bet.add(index+1, getBet());
 		bet(getBet(),0);
-		hands.get(index).cards.remove(1);
+		hands.get(index).getCards().remove(1);
 		hands.get(index+1).addCard(a);
 		hands.get(index).addCard(b);
 		return;
@@ -272,6 +272,14 @@ public class Player {
 			return "player's hand "+"["+(getCurrentHand()+1)+"] "+getHand().toString();
 		}
 		return "player's hand " + getHand().toString();
+	}
+
+	public PileOfChips getPile() {
+		return pile;
+	}
+
+	public void setPile(PileOfChips pile) {
+		this.pile = pile;
 	}
 
 }
