@@ -60,7 +60,7 @@ public class Main {
 			game.checkInputs(mode.getMin_bet(), mode.getMax_bet(), mode.getBalance(), ((Simulation) mode).getShoe(), ((Simulation) mode).getShuffle(), false);	
 		}
 		 
-		if(args[6].equals("-gui")){
+		if(mode_type.equals("-i")&&args[6].equals("-gui")){
 			try {
 				App window = new App(player, dealer, shoe, junk, game, strategy, bs, mode.getMin_bet(), mode.getMax_bet(), mode.getBalance());
 				window.frame.setVisible(true);

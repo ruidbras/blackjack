@@ -257,7 +257,7 @@ public class Player {
 		if (numbHands!=1){
 			System.out.println("player busts "+"["+(getCurrentHand()+1)+"]");
 		}else{
-			System.out.println("player's busts");
+			System.out.println("player busts");
 		}
 	}
 	

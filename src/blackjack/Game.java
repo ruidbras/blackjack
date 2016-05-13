@@ -385,7 +385,7 @@ public class Game {
 		System.out.println(player);
 		if(player.getCurrentHand()<player.getNumHands()){
 			if(player.getHand().getTotal()>21){
-				System.out.println("player busts "+"["+(player.getCurrentHand()+1)+"]" + "th hand busts");
+				player.printBustedHand();
 				player.setBetZero();
 				player.setCurrentHand(player.getCurrentHand()+1);
 				if(player.getCurrentHand()==player.getNumHands()){
