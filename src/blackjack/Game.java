@@ -379,10 +379,9 @@ public class Game {
 			return;
 		}
 		player.doubleDown(dealer.dealCard());
-		System.out.println("player doubles down");
 		firstplay = false;
 		bs.countCard(player.getHand().getCards().getLast());
-		System.out.println(player);
+		player.printStart("2");
 		if(player.getCurrentHand()<player.getNumHands()){
 			if(player.getHand().getTotal()>21){
 				player.printBustedHand();
