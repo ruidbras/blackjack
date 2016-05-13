@@ -394,7 +394,7 @@ public class Game {
 					finalizeDealer();
 					return;
 				}
-				System.out.println(player);
+				player.printPlayingHand();
 				firstplay = true;
 			}
 		}
