@@ -390,7 +390,6 @@ public class Game {
 				player.setCurrentHand(player.getCurrentHand()+1);
 				if(player.getCurrentHand()==player.getNumHands()){
 					player.setCurrentHand(player.getCurrentHand()-1);
-					System.out.println(player);
 					finalizeDealer();
 					return;
 				}
