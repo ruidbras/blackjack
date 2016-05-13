@@ -60,7 +60,7 @@ public class Simulation extends Mode{
 	}
 	
 	public String getInstruction(){
-		if(shoe.shufflecount<s_number&&player.getBalance()>=min_bet){
+		
 			//System.out.println("BS:"+strat+"  HL:"+(!strat)+"  AF:"+af);
 			if(game.ingame()){
 				/* Give advice on the next play */
@@ -68,11 +68,26 @@ public class Simulation extends Mode{
 				in =Character.toString(bs.advice(player.getHand().getTotal(), dealer.getDealerHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().cardsSameValue(), game.firstplay(), strat));
 				if((bs.advice(player.getHand().getTotal(), dealer.getDealerHand().getFirst().getHardValue(), player.getHand().isSoft(), player.getHand().cardsSameValue(), game.firstplay(), strat))=='d'){
 					in="2";
-					//System.out.println("advice 2");
+					if(!player.getHand().worthForDouble()){
+						if(player.getHand().getTotal()==18){
+							in="s";
+						}else{
+							in="h";
+						}
+					}
+					if(player.getBalance()<player.getBet()){
+						System.out.println("[!]Not enough credits");
+						in = "q";
+					}
 				}
 				if(!strat){
-					if(bs.getCount()>=3&&game.ingame()&&dealer.canHaveBlackjack()&&game.firstplay()&&(!game.insuranceMode())&&(!game.wasASplit()))
+					if(bs.getCount()>=3&&game.ingame()&&dealer.canHaveBlackjack()&&game.firstplay()&&(!game.insuranceMode())&&(!game.wasASplit())){
 						in="i";
+						if(player.getBalance()<player.getBet()){
+							System.out.println("[!]Not enough credits");
+							in = "q";
+						}
+					}
 				}
 			}else{
 				/* Give advice on the next bet */
@@ -81,18 +96,38 @@ public class Simulation extends Mode{
 						if(bs.getAfcount()>=2){
 							//System.out.println("b "+player.getOldbet()*2);
 							in="b "+player.getOldbet()*2;
+							if(player.getOldbet()*2>max_bet){
+								in = "b " + max_bet;
+							}else if(player.getOldbet()*2<min_bet){
+								in = "b " + min_bet;
+							}
+							if(player.getBalance()<player.getOldbet()*2){
+								System.out.println("[!]Not enough credits");
+								in = "q";
+							}
 						}else{
 							//System.out.println("b "+min_bet);
 							in="b "+min_bet;
+							if(player.getBalance()<min_bet){
+								System.out.println("[!]Not enough credits");
+								in = "q";
+							}
 						}
 					}else{
 						//System.out.println("b " +strategy.getBet(player.getOldbet()));
 						in="b "+strategy.getBet(player.getOldbet());
+						if(strategy.getBet(player.getOldbet())>max_bet){
+							in = "b " + max_bet;
+						}else if(strategy.getBet(player.getOldbet())<min_bet){
+							in = "b " + min_bet;
+						}
+						if(player.getBalance()<strategy.getBet(player.getOldbet())){
+							System.out.println("[!]Not enough credits");
+							in = "q";
+						}
 					}
 			}
-		}else{
-			in="q";
-		}
+		
 		return in;
 	}
 	

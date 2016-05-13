@@ -64,8 +64,9 @@ public class Main2 {
 		while(true){
 			
 			System.out.println("");
-			System.out.println(player.getBalance());
-			System.out.println(shoe.cards.size()+junk.cards.size());
+			//System.out.println(player.getBalance());
+			//System.out.println(shoe.cards.size()+junk.cards.size());
+			//System.out.println(shoe.cards.size());
 			
 			//Add junk to deck when deck is at ?%
 			if(simulation){
@@ -158,7 +159,8 @@ public class Main2 {
 				game.split();
 			}
 			else if(in.equals("q")){
-				strategy.printStats(player.getBalance());
+				if(simulation)strategy.printStats(player.getBalance());
+				System.out.println("bye");
 				return;
 			}
 			else if(in.equals("$")){

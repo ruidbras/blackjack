@@ -184,6 +184,7 @@ public class Game {
 		bs.countCard(dealer.getDealerHand().cards.get(1));
 		/* Check if the player has blackjack */
 		if(player.getHand().blackjack() && !wasASplit){
+			strategy.addPlayerbj();
 			System.out.println("Player got a BlackJack!");
 			if(dealer.hand.blackjack()){
 				System.out.println("Dealer got a BlackJack!");
@@ -195,7 +196,6 @@ public class Game {
 				player.setBalance(player.getBet());
 				System.out.println("player pushes and his current balance is "+player.getBalance());
 				strategy.addDealerbj();
-				strategy.addPlayerbj();
 				strategy.addPushes();
 				cleanTable();
 				return;
@@ -206,7 +206,6 @@ public class Game {
 				}
 				player.setBalance((player.getBet())*2.5);//Should pay 2.5
 				System.out.println("Player wins and his current balance is "+player.getBalance());
-				strategy.addDealerbj();
 				strategy.addWins();
 				cleanTable();
 				return;
@@ -214,10 +213,12 @@ public class Game {
 		}
 		/* Checks if the dealer has blackjack */
 		if(dealer.hand.blackjack()){
+			strategy.addDealerbj();
 			if(insuranceMode){
 				System.out.println("Dealers BlackJack!");
 				player.setBalance(2*player.getInsuranceBet());
 				System.out.println("Player wins insurance and his current balance is "+player.getBalance());
+				strategy.addLoses();
 				cleanTable();
 				insuranceMode=false;
 				return;
@@ -225,7 +226,6 @@ public class Game {
 				System.out.println("Dealers BlackJack!");
 				System.out.println("Player loses and his current balance is "+player.getBalance());
 				strategy.addLoses();
-				strategy.addDealerbj();
 				insuranceMode = false;
 				cleanTable();
 				return;
@@ -280,9 +280,13 @@ public class Game {
 	}
 	
 	public void doubleDown(){
-		if(player.getBalance()<player.getBet()&&!player.getHand().worthForDouble()){
+		if(player.getBalance()<player.getBet()){
 			System.out.println("can't make this play");
 			stand();
+			return;
+		}
+		if(!player.getHand().worthForDouble()){
+			System.out.println("can't make this play");
 			return;
 		}
 		player.doubleDown(dealer.dealCard());
@@ -356,6 +360,7 @@ public class Game {
 		System.out.println(dealer);
 		player.setBalance(0.5*player.getBet());
 		System.out.println("player current balance is "+player.getBalance());
+		strategy.addLoses();
 		cleanTable();
 	}
 	
