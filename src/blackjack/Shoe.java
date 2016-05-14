@@ -5,13 +5,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
 
+//This class inherits CollectionOfCards and has a parameter shufflecount that stores the number of shuffles performed to the list of cards
+//during the game.
 public class Shoe extends CollectionOfCards{
 	
+	private int shufflecount = -1;
 	
-	Card temp; 
-	int shufflecount = -1;
-	
-	Shoe(int n_decks){
+	//Creates a shoe with a number of n_decks decks.
+	public Shoe(int n_decks){
 		int j=1,w=0;
 		for(int i=0;i<n_decks*52;i++){
 			if(i==52+52*w){
@@ -23,19 +24,19 @@ public class Shoe extends CollectionOfCards{
 			}
 			if(i<13+52*w){
 				if(i==52*w){
-					cards.add(new Card("A","D"));
+					getCards().add(new Card("A","D"));
 					j++;
 				}else if(i==10+52*w){
-					cards.add(new Card("J","D"));
+					getCards().add(new Card("J","D"));
 					j++;
 				}else if(i==11+52*w){
-					cards.add(new Card("Q","D"));
+					getCards().add(new Card("Q","D"));
 					j++;
 				}else if(i==12+52*w){
-					cards.add(new Card("K","D"));
+					getCards().add(new Card("K","D"));
 					j++;
 				}else{
-					cards.add(new Card(String.valueOf(j++),"D"));
+					getCards().add(new Card(String.valueOf(j++),"D"));
 				}
 			}
 			if(i==13+52*w){
@@ -43,19 +44,19 @@ public class Shoe extends CollectionOfCards{
 			}
 			if(i>=13+52*w && i< 26+52*w){
 				if(i==13+52*w){
-					cards.add(new Card("A","S"));
+					getCards().add(new Card("A","S"));
 					j++;
 				}else if(i==23+52*w){
-					cards.add(new Card("J","S"));
+					getCards().add(new Card("J","S"));
 					j++;
 				}else if(i==24+52*w){
-					cards.add(new Card("Q","S"));
+					getCards().add(new Card("Q","S"));
 					j++;
 				}else if(i==25+52*w){
-					cards.add(new Card("K","S"));
+					getCards().add(new Card("K","S"));
 					j++;
 				}else{
-					cards.add(new Card(String.valueOf(j++),"S"));
+					getCards().add(new Card(String.valueOf(j++),"S"));
 				}
 			}
 			if(i==26+52*w){
@@ -63,19 +64,19 @@ public class Shoe extends CollectionOfCards{
 			}
 			if(i>=26+52*w && i< 39+52*w){
 				if(i==26+52*w){
-					cards.add(new Card("A","C"));
+					getCards().add(new Card("A","C"));
 					j++;
 				}else if(i==36+52*w){
-					cards.add(new Card("J","C"));
+					getCards().add(new Card("J","C"));
 					j++;
 				}else if(i==37+52*w){
-					cards.add(new Card("Q","C"));
+					getCards().add(new Card("Q","C"));
 					j++;
 				}else if(i==38+52*w){
-					cards.add(new Card("K","C"));
+					getCards().add(new Card("K","C"));
 					j++;
 				}else{
-					cards.add(new Card(String.valueOf(j++),"C"));
+					getCards().add(new Card(String.valueOf(j++),"C"));
 				}
 			}
 			if(i==39+52*w){
@@ -83,26 +84,27 @@ public class Shoe extends CollectionOfCards{
 			}
 			if(i>=39+52*w && i< 52+52*w){
 				if(i==39+52*w){
-					cards.add(new Card("A","H"));
+					getCards().add(new Card("A","H"));
 					j++;
 				}else if(i==49+52*w){
-					cards.add(new Card("J","H"));
+					getCards().add(new Card("J","H"));
 					j++;
 				}else if(i==50+52*w){
-					cards.add(new Card("Q","H"));
+					getCards().add(new Card("Q","H"));
 					j++;
 				}else if(i==51+52*w){
-					cards.add(new Card("K","H"));
+					getCards().add(new Card("K","H"));
 					j++;
 				}else{
-					cards.add(new Card(String.valueOf(j++),"H"));
+					getCards().add(new Card(String.valueOf(j++),"H"));
 				}
 			}
 		}
 		
 	}
 	
-	Shoe(String path) throws IOException{
+	//Receives as input the path of the txt file, containing the number and suit of all the cards to store in the shoe.
+	public Shoe(String path) throws IOException{
 		int c=0;
 		String value;
 		String suit;
@@ -118,19 +120,19 @@ public class Shoe extends CollectionOfCards{
 							if((c=rShoereader.read())!=-1){
 								suit = "" + (char)c;
 								//System.out.println(value + " " + suit);
-								cards.add(new Card(value, suit));
+								getCards().add(new Card(value, suit));
 							}
 						}else{
 							suit = "" + (char)c;
 							//System.out.println(value + " " + suit);
-							cards.add(new Card(value, suit));
+							getCards().add(new Card(value, suit));
 						}
 					}
 				}else{
 					value = "" + (char)c;
 					if((c=rShoereader.read())!=-1){
 						suit = "" + (char)c;
-						cards.add(new Card(value, suit));
+						getCards().add(new Card(value, suit));
 					}
 				}
 			}
@@ -138,15 +140,23 @@ public class Shoe extends CollectionOfCards{
 		rShoereader.close();
 	}
 	
-	public void shuffle(){
-		Collections.shuffle(cards);
-		++shufflecount;
+	//Returns shufflecount.
+	public int getShufflecount(){
+		return shufflecount;
 	}
 	
-	public Card dealCard(){
-		if(cards.size()>0){
-			temp = cards.get(0);
-			cards.remove(0);
+	//Shuffles the list of cards with the method Collections.shuffle().
+	public void shuffle(){
+		Collections.shuffle(getCards());
+		++shufflecount;
+	}
+	//Returns the first card of the list of cards and removes it from the list, shifting all elements for the left.
+	//If the list of cards is empty, the method returns null.
+	protected Card dealCard(){
+		Card temp;
+		if(getCards().size()>0){
+			temp = getCards().get(0);
+			getCards().remove(0);
 			return temp;
 		}
 		return null;

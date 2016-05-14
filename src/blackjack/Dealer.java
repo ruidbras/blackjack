@@ -1,55 +1,60 @@
 package blackjack;
 
-public class Dealer {
-	public Hand hand;
-	Shoe shoe;
-	Junk junk;
 
-	/* Constructor */
-	Dealer(Shoe d, Junk j){
+//This class has associated three classes. The Hand hand of the dealer, Shoe shoe containing all the cards to distribute to dealer's hand and 
+//player's hands, and Junk junk to store all used cards.
+public class Dealer {
+	private Hand hand;
+	private Shoe shoe;
+	private Junk junk;
+
+	//The constructor receives as inputs the Shoe and Junk to associate and creates a new empty Hand
+	public Dealer(Shoe d, Junk j){
 		hand = new Hand();
 		shoe=d;
 		junk=j;
 	}
 	
-	/* Method */
+	//Returns dealer's hand
 	public Hand getDealerHand() {
 		return hand;
 	}
-	
+	//Verifies if dealer's shown card is an Ace
+	//Returns true if it is an Ace, returns false if it's not an Ace
 	public boolean canHaveBlackjack(){
 		if(hand.countCards()==2){
-			if(hand.cards.get(0).getHardValue()==11){
+			if(hand.getCards().get(0).getHardValue()==11){
 				return true;
 			}
 		}
 		return false;
 	}
-	
+	//Prints in the terminal the initial hand of the dealer, hiding the hole card
 	public void printDealersFirstTwo(){
 		if (hand.countCards()==2){
 			System.out.println("dealer's hand "+ hand.getFirst().toString() + " X");
 		}
 	}
-	
-	public Card dealCard(){
+	//Accesses shoe and takes a card from the beginning of the LinkedList<Card>. If the shoe is empty the junk is added back to the deck
+	//and re-shuffled, and then takes a card from the beginning of the LinkedList<Card>.
+	Card dealCard(){
 		Card temp=shoe.dealCard();
 		if(temp==null){
-			shoe.addCards(junk.cards);
+			shoe.addCards(junk.getCards());
 			junk.emptyCards();
 			shoe.shuffle();
 			return shoe.dealCard();
 		}
 		return temp;
 	}
-	
+	//Adds a new card to the hand of the dealer, this card is took from the shoe
 	public void drawCardToDealer(){
 		hand.addCard(dealCard());
 	}
 	
-	
+	//Distributes the first four cards of the game, the first two are dealt to the dealer and the next two to the player
+	//It must receive a Player as input
 	public void drawFirstFour(Player p){
-		//Apenas verificacoes de erros se chamarmos a função quando nao devemos
 		if(hand.countCards()!=0&&p.getHand().countCards()!=0&&p.getNumHands()==1){
 			return;
 		}
@@ -58,41 +63,36 @@ public class Dealer {
 		p.getHand().addCard(dealCard());
 		p.getHand().addCard(dealCard());
 	}
-	
-	public void finalize(){
-		while(hand.genTotal()<17)
-			hand.addCard(dealCard());
-	}
-
+	//Adds the cards from dealer's hand to the junk, and then empties the elements from his hand
 	public void cleanDealerHand(){
-		junk.addCards(hand.cards);
+		junk.addCards(hand.getCards());
 		hand.emptyCards();
 	}
-	
+	//Receives as input a Player, than removes all hands and bets from an index greater than 0 from the respective lists hands and bet,
+	//and leaves the first hand of the list.
+	//The cards from the hands are added to the junk and bet from the first index is set to 0.
 	public void cleanPlayerHands(Player p){
 		p.setNumbHands();
 		int i = p.getNumHands()-1;
 		while(i>0){
-			junk.addCards(p.hands.get(i).cards);
-			p.hands.get(i).emptyCards();
-			p.hands.remove(i);
-			p.bet.remove(i);
+			junk.addCards(p.getCards(i));
+			p.emptyHand(i);
+			p.removeHand(i);
+			p.removeBet(i);
 			p.setNumbHands();
 			i=p.getNumHands()-1;
 		}
-		junk.addCards(p.hands.get(i).cards);
-		p.hands.get(0).emptyCards();
-		p.hands.get(0).setHandCanBeHit(true);
-		p.bet.set(0, (double) 0);
+		junk.addCards(p.hands.get(i).getCards());
+		p.emptyHand(0);
+		p.getHand(0).setHandCanBeHit(true);
+		p.getBets().set(0, (double) 0);
 		p.setNumbHands();
 		p.setCurrentHand(0);
 	
 }
-	
+	//Returns a string in the format "dealer's hand: " + hand.toString().
 	@Override
 	public String toString() {
 		return "dealer's hand " + hand;
 	}
-	
-	
 }

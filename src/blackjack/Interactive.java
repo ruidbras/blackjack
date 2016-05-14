@@ -19,6 +19,7 @@ public class Interactive extends Mode{
 	public String getInstruction(){
 		System.out.print("#");
 		in = sc.nextLine();
+		if(in.equals(""))in="void";
 		if(in.equals("q"))sc.close();
 		return in;
 	}
