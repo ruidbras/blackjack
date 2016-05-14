@@ -109,10 +109,10 @@ public class Statistics {
 	 * @param balance
 	 */
 	public void printStats(double balance){
-		System.out.println("BJ P/D	:	"+playerbj/plays+"/"+dealerbj/plays);
-		System.out.println("Win		:	"+wins/plays);
-		System.out.println("Lose		:	"+loses/plays);
-		System.out.println("Push		:	"+pushes/plays);
+		System.out.println("BJ P/D	:	"+(float)playerbj/plays+"/"+(float)dealerbj/plays);
+		System.out.println("Win		:	"+(float)wins/plays);
+		System.out.println("Lose		:	"+(float)loses/plays);
+		System.out.println("Push		:	"+(float)pushes/plays);
 		System.out.println("Balance		:	"+balance+"("+(balance-balanceinit)*100/balanceinit+"%)");
 	}
 	/**

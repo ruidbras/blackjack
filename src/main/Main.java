@@ -2,7 +2,6 @@ package main;
 
 import java.io.IOException;
 
-import blackjack.Strategy;
 import blackjack.Dealer;
 import blackjack.Debug;
 import blackjack.Game;
@@ -15,6 +14,7 @@ import blackjack.Player;
 import blackjack.Shoe;
 import blackjack.Simulation;
 import blackjack.Statistics;
+import blackjack.Strategy;
 import graphical.App;
 
 /**
