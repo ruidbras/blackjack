@@ -19,6 +19,7 @@ import blackjack.Strategy;
 import blackjack.Card;
 import blackjack.Dealer;
 import blackjack.Game;
+import blackjack.GameType;
 import blackjack.Junk;
 import blackjack.Player;
 import blackjack.Shoe;
@@ -47,12 +48,12 @@ public class App{
 	public Container layeredPane;
 	
 	//Create the application.
-	public App(Player player, Dealer dealer, Shoe deck, Junk junk, Game game, Statistics statistics, Strategy str, int min_bet, int max_bet, double b) throws IOException {
+	public App(Player player, Dealer dealer, Shoe deck, Junk junk, GameType game, Statistics statistics, Strategy str, int min_bet, int max_bet, double b) throws IOException {
 		initialize(player, dealer, deck, junk, game, statistics, str, min_bet, max_bet, b);
 	}
 
 	//Initialize the contents of the frame.
-	private void initialize(Player player, Dealer dealer, Shoe deck,Junk junk, Game game, Statistics statistics, Strategy str, int bet_min, int bet_max, double b) throws IOException {
+	private void initialize(Player player, Dealer dealer, Shoe deck,Junk junk, GameType game, Statistics statistics, Strategy str, int bet_min, int bet_max, double b) throws IOException {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//MAIN WINDOW	
 		
@@ -60,13 +61,13 @@ public class App{
 		frame.setBounds(100, 100, 1600, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		frame.setResizable(false);  // Don't let the user change the size of the window
+		frame.setResizable(true);  // Don't let the user change the size of the window
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//PARAMETERS
 		min_bet = bet_min;
 		max_bet = bet_max;
 		balance = b;
-		g = game;
+		g = (Game) game;
 		j = junk;
 		this.statistics = statistics;
 		d = dealer;
@@ -406,7 +407,7 @@ public class App{
 		    		space += 73;
 		   			makeImg(230+space, 155, 73, 110, newColor, 52);			
 					
-		   			if(g.count_splits>3){
+		   			if(g.count_splits()>3){
 		   				printStringScreen(screen, "Can't split more\n");
 		   			}
 		   			frame.revalidate();

@@ -5,13 +5,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
 
-//This class inherits CollectionOfCards and has a parameter shufflecount that stores the number of shuffles performed to the list of cards
-//during the game.
+
+/**This class inherits CollectionOfCards and has a parameter shufflecount that stores the number of shuffles performed to the list of cards
+ * during the game.
+ * 
+ * @author Pedro Esteves, Ricardo Cristino, Rui Brás
+ * @version 1.0
+ */
 public class Shoe extends CollectionOfCards{
 	
 	private int shufflecount = -1;
 	
-	//Creates a shoe with a number of n_decks decks.
+	/**Creates a shoe with a number of n_decks decks.
+	 * 
+	 * @param n_decks
+	 */
 	public Shoe(int n_decks){
 		int j=1,w=0;
 		for(int i=0;i<n_decks*52;i++){
@@ -103,7 +111,11 @@ public class Shoe extends CollectionOfCards{
 		
 	}
 	
-	//Receives as input the path of the txt file, containing the number and suit of all the cards to store in the shoe.
+	/**Receives as input the path of the txt file, containing the number and suit of all the cards to store in the shoe.
+	 * 
+	 * @param path
+	 * @throws IOException
+	 */
 	public Shoe(String path) throws IOException{
 		int c=0;
 		String value;
@@ -140,18 +152,27 @@ public class Shoe extends CollectionOfCards{
 		rShoereader.close();
 	}
 	
-	//Returns shufflecount.
+	/**Returns shufflecount.
+	 * 
+	 * @return
+	 */
 	public int getShufflecount(){
 		return shufflecount;
 	}
 	
-	//Shuffles the list of cards with the method Collections.shuffle().
+	/**Shuffles the list of cards with the method Collections.shuffle().
+	 * 
+	 */
 	public void shuffle(){
 		Collections.shuffle(getCards());
 		++shufflecount;
 	}
-	//Returns the first card of the list of cards and removes it from the list, shifting all elements for the left.
-	//If the list of cards is empty, the method returns null.
+	
+	/**Returns the first card of the list of cards and removes it from the list, shifting all elements for the left.
+	 * If the list of cards is empty, the method returns null.
+	 * 
+	 * @return
+	 */
 	protected Card dealCard(){
 		Card temp;
 		if(getCards().size()>0){

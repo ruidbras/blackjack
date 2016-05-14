@@ -1,7 +1,9 @@
 package blackjack;
 
 /**This abstract Class has a Player, a Dealer, a Strategy, a Shoe, a Junk, a Statistics, some Boolean variables to indicate states and an Integer variable.
-* This class has is used to 
+* This class has is used to perform all the interactions between the player and the dealer, to implement every moves in each side rule, and to
+* define the rules of the blackjack game.
+* During the game all the wins, loses, pushes and blackjacks occurrences are counted to calculate statistics.
 * ingame is a boolean variable that indicates if a player is in game or not, this variable is set to true when it's typed d, and set to false when the game ends and the dealer removes all the cards from the table.
 * wasASplit is set to true when it's made the first split of the game.
 * insuranceMode is set to true after making insurance.
@@ -25,7 +27,7 @@ public abstract class GameType {
 	private boolean alreadyBet;
 	protected int count_splits;
 
-	
+	/**The constructor*/
 	public GameType(Shoe shoe, Junk junk, Player p, Dealer d, Statistics s, Strategy str){
 		player = p;
 		dealer = d;

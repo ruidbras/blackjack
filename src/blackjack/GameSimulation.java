@@ -4,6 +4,8 @@ package blackjack;
 /** This class extends an abstract class GameType. It has the same implementation that Class Game, also extended from GameType, but
  * has no System.out.println() methods and similar or any other methods that call them. It also does't have any methods or parameters
  * related to the package graphical, so in simulation there is no graphical interface launched.
+ * @author Pedro Esteves, Ricardo Cristino, Rui Bras
+ * @version 1.0
  * */
 public class GameSimulation extends GameType {
 
@@ -228,7 +230,7 @@ public class GameSimulation extends GameType {
 			stand();
 			return;
 		}
-		if(!player.getHand().canDouble()){
+		if(!player.getHand().canDouble()||wasASplit()){
 			stand();
 			return;
 		}

@@ -376,7 +376,7 @@ public class Game extends GameType{
 	//If all these conditions are verified than it's set a new bet, doubling the previous one and it's discounted the value in player's
 	//balance. A new card is delivered to the hand and hand automatically stands. 
 	public void doubleDown(){
-		if(!ingame() || !firstplay()){
+		if(!ingame() || !firstplay()||wasASplit()){
 			System.out.println("2: Illegal command");
 			return;
 		}
