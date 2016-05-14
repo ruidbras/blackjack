@@ -47,23 +47,22 @@ public class App{
 	private JTextField textField;
 	public Container layeredPane;
 	
-	//Create the application.
+	//The constructor associates a Shoe, a Junk, a Player, the max and min bets and initial balance a Statistics and a Strategy to the interface.
 	public App(Player player, Dealer dealer, Shoe deck, Junk junk, GameType game, Statistics statistics, Strategy str, int min_bet, int max_bet, double b) throws IOException {
 		initialize(player, dealer, deck, junk, game, statistics, str, min_bet, max_bet, b);
 	}
 
-	//Initialize the contents of the frame.
+	//This method receives the parameters that are necessary to run the graphical interface.
+	//It initializes the frame (window)  and its contents. It is not possible to change the size of the window since it is checked to not be resizable.
+	//It starts by creating the window and then upload some labels that correspond to the number of chips that the player has, as well as his balance.
+	//Two different screens are uploaded, one that it is not editable, with some general rules printed and one screen where the statistics, the advices, etc are printed throughout the game
+	//Since this last screen has a scroll bar since a lot can be printed in it.
 	private void initialize(Player player, Dealer dealer, Shoe deck,Junk junk, GameType game, Statistics statistics, Strategy str, int bet_min, int bet_max, double b) throws IOException {
-		/////////////////////////////////////////////////////////////////////////////////////////
-		//MAIN WINDOW	
-		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1600, 900);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		frame.setResizable(true);  // Don't let the user change the size of the window
-		/////////////////////////////////////////////////////////////////////////////////////////
-		//PARAMETERS
+		frame.setResizable(false);
 		min_bet = bet_min;
 		max_bet = bet_max;
 		balance = b;
@@ -73,8 +72,7 @@ public class App{
 		d = dealer;
 		p = player;
 		this.str = str;
-		///////////////////////////////////////////////////////////////////////////////////////
-		//BALANCE LABELS
+		
 		jlbNumWhite = new JLabel(Integer.toString(p.getPile().getWhiteStack().getNumberOfChips()));
 		jlbNumWhite.setForeground(Color.WHITE);
 		jlbNumWhite.setFont(new Font("Arial", Font.BOLD, 16));
@@ -99,20 +97,19 @@ public class App{
 		jlbNumBlack.setBounds(615, 740, 311, 23);
 		frame.getContentPane().add(jlbNumBlack);
 
-		
 		lblBalanceValue = new JLabel(Double.toString(balance));
 		lblBalanceValue.setFont(new Font("Arial", Font.PLAIN, 30));
 		lblBalanceValue.setForeground(Color.ORANGE);
 		lblBalanceValue.setBounds(155, 780, 179, 34);
 		frame.getContentPane().add(lblBalanceValue);
 
-		///////////////////////////////////////////////////////////////////////////
-		//DONE till now
 		screen = makeScreen();
 		rules_screen = makeRulesScreen();
 		StringBuilder s = new StringBuilder();
-		s.append("Important Rules:\n\nYour pile will always have the higher possible chips\nMaximum of 4 hands\n"); 
-		s.append("Dealer must stand on 17\n");
+		s.append("Important Rules:\n\nYour pile will always have the higher possible chips\n\nMaximum of 4 hands\n\n"); 
+		s.append("Dealer must stand on 17\n\nIf the player busts all hands, the dealer wins and does not need to hit up to 17\n\n");
+		s.append("The player can only place an insurance bet in the very beginning of the hand, not after a split\n\n");
+		s.append("After a split the player can only hit, stand or double (or split again, up to four hands maximum\n\n");
 		printStringScreen(rules_screen, s.toString());
 		makeButton();
 		makeLabel();
@@ -126,13 +123,13 @@ public class App{
 		textField = new JTextField();
 		textField.setBounds(34, 726, 86, 20);
 		frame.getContentPane().add(textField);
-		textField.setColumns(10);
-
-		
+		textField.setColumns(10);	
 	}
 	
-	///////////////////////////////////////////////////////////
-	
+	//Class that implements the action associated with the bet button.
+	//If the value inserted in the textfield is between the min and max bets value that same value is bet.
+	//If there is no value on the textfield there are two options: if there was a previous play then the previous bet is used. Otherwise the min bet is used.
+	//If there is no valid number in the textfield, a print is sent to the JtextArea on the interface
     private class ActionBet implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -158,42 +155,50 @@ public class App{
         }
     }
     
+    //Class that implements the action associated with the deal button.
+    //The player's first hand is printed as well as the first card and hole card of the dealer's hand
+    //The button checks if the bet is valid. if there is something that it is not supposed to be on bet space while clicking the button it is asked to the player to delete it
     private class ActionDeal implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-        	//What we want the button to do
         	EventQueue.invokeLater( new Runnable() {
             @Override public void run() {    
                 if(!g.ingame()){
             		try{
             			g.deal(Double.parseDouble(textField.getText()));
             		}catch(Exception a){
-            			g.deal(min_bet);
+            			if(p.getOldbet()==0){
+            				g.deal(min_bet);
+            			}else{
+            				g.deal(p.getOldbet());
+            			}
             		}
-                	if(p.deal()){
-			    		handsLabels();
-						int space = 0;
-		        		for(Card card: g.handPlayer.getCards()){
-		        			int k = searchCard(card);
-		        			makeImg(170+space, 555, 73, 110, newColor, k);
-		        			space += 73;
-		        		}
-		
-			    		space = 0;
-			    		int k = searchCard(g.handDealer.getCards().getFirst());
-			    		makeImg(230+space, 155, 73, 110, newColor, k);
-			    		space += 73;
-			    		makeImg(230+space, 155, 73, 110, newColor, 52);
-			    		frame.revalidate();
-	                	}else{
-	                		printStringScreen(screen, "You must bet first\n");
-    			
-	                	}
-                	}
+            			if(p.deal()){
+    			    		handsLabels();
+    						int space = 0;
+    		        		for(Card card: g.handPlayer.getCards()){
+    		        			int k = searchCard(card);
+    		        			makeImg(170+space, 555, 73, 110, newColor, k);
+    		        			space += 73;
+    		        		}
+    		
+    			    		space = 0;
+    			    		int k = searchCard(g.handDealer.getCards().getFirst());
+    			    		makeImg(230+space, 155, 73, 110, newColor, k);
+    			    		space += 73;
+    			    		makeImg(230+space, 155, 73, 110, newColor, 52);
+    			    		frame.revalidate();
+    	                }else{
+    	                	printStringScreen(screen, "You must bet first\n");
+        			
+    	                }
                 }
+            }
             }); 
         }
     }
-    
+
+	//Class that implements the action associated with the exit button.
+    //The player leaves the game graciously.
     private class ActionExit implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -201,6 +206,8 @@ public class App{
         }
     }
     
+	//Class that implements the action associated with the clear button.
+    //At any time, the player can clean the space where the cards are printed.
     private class ActionClear implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -209,6 +216,10 @@ public class App{
         }
     }
     
+    //Class that implements the action associated with the hit button.
+    //The player's hands are printed as well as their values.
+    //If the player is still in action then the dealer's hand shown correspond only to the first cards and the hole card.
+    //The value of the dealer's hand is only printed when his whole hand is shown
     private class ActionHit implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -248,16 +259,13 @@ public class App{
         			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
         			space += 73;
         		}
-    		updateBalance();
-
-    		space = 0;
-    
+        		updateBalance();
+        		space = 0;
     			if(d.getDealerHand().countCards()==2){
     				int k = searchCard(d.getDealerHand().getFirst());
 		    		makeImg(230+space, 155, 73, 110, newColor, k);
 		    		space += 73;
 		    		makeImg(230+space, 155, 73, 110, newColor, 52);
-		    		//frame.revalidate();
     			}else{
     				for(Card card: g.handDealer.getCards()){
     				int k = searchCard(card);
@@ -273,10 +281,15 @@ public class App{
     			}
     			handsLabels();
         		frame.revalidate();
-                }   
+            }   
     	    }); 
         }
     }
+    
+    //Class that implements the action associated with the stand button.
+    //The player's hands are printed as well as their values.
+    //If the player is still in action then the dealer's hand shown correspond only to the first cards and the hole card.
+    //The value of the dealer's hand is only printed when his whole hand is shown
     private class ActionStand implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -289,8 +302,6 @@ public class App{
             	}
         		int space = 0;
         		int vertical = 0;
-        		
-	        	
         		for(Card card: g.handPlayer.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555, 73, 110, newColor, k);
@@ -318,27 +329,12 @@ public class App{
         			space += 73;
         		}
         		updateBalance();
-	
         		space = 0;
-        		/*for(Card card: g.handDealer.cards){
-        			int k = searchCard(card);
-        			makeImg(230+space, 155, 73, 110, newColor, k);
-        			space += 73;
-        		}
-	    		JPanel panel = new JPanel();
-	    		panel.setBackground(newColor);
-				panel.setBounds(30, 155, 200, 30);
-				panel.add(createLabel("Dealer's hand", Color.WHITE, "ARIAL", 16, 130, 155, 200, 30));
-				panel.add(createLabel("("+String.valueOf(g.handDealer.genTotal())+")", Color.WHITE, "ARIAL", 16, 130, 155, 200, 30));
-				frame.getContentPane().add(panel);
-				frame.revalidate();*/
-        		handsLabels();
-				if((g.handPlayer.genTotal()<22&&g.handPlayer2.genTotal()<22&&g.handPlayer3.genTotal()<22&&g.handPlayer4.genTotal()<22)&&d.getDealerHand().countCards()==2){
+				if(d.getDealerHand().countCards()==2){
     				int k = searchCard(d.getDealerHand().getFirst());
 		    		makeImg(230+space, 155, 73, 110, newColor, k);
 		    		space += 73;
 		    		makeImg(230+space, 155, 73, 110, newColor, 52);
-		    		//frame.revalidate();
     			}else{
     				for(Card card: g.handDealer.getCards()){
     				int k = searchCard(card);
@@ -352,14 +348,16 @@ public class App{
     				frame.getContentPane().add(panel);
     				}
     			}
-				
-				
+        		handsLabels();
 				frame.revalidate();
             	}   
 	        }); 	
         }
     }
     
+  //Class that implements the action associated with the split button.
+  //The player's hands are printed as well as their values.
+  //The dealer's hand shown correspond only to the first cards and the hole card.
     private class ActionSplit implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -367,56 +365,54 @@ public class App{
         	frame.revalidate();
         	EventQueue.invokeLater( new Runnable() {
         	@Override public void run() {   
-        		if(g.ingame()&&p.getHand().cardsSameValue()){
+        		if(g.ingame()){
 					g.split();
 	        	}
+    			int space = 0;
+        		int vertical = 0;
+        		
+        		for(Card card: g.handPlayer.getCards()){
+        			int k = searchCard(card);
+        			makeImg(170+space, 555, 73, 110, newColor, k);
+        			space += 73;
+        		}
+        		space = 0;
+        		vertical-=100;
+        		for(Card card: g.handPlayer2.getCards()){
+        			int k = searchCard(card);
+        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
+        			space += 73;
+        		}
+        		space = 0;
+        		vertical-=100;
+        		for(Card card: g.handPlayer3.getCards()){
+        			int k = searchCard(card);
+        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
+        			space += 73;
+        		}
+        		space = 0;
+        		vertical-=100;
+        		for(Card card: g.handPlayer4.getCards()){
+        			int k = searchCard(card);
+        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
+        			space += 73;
+        		}
+	    		space = 0;
+	    		int k = searchCard(g.handDealer.getCards().getFirst());
+	    		makeImg(230+space, 155, 73, 110, newColor, k);
+	    		space += 73;
+	   			makeImg(230+space, 155, 73, 110, newColor, 52);			
         		handsLabels();
-        			int space = 0;
-	        		int vertical = 0;
-	        		
-	        		for(Card card: g.handPlayer.getCards()){
-	        			int k = searchCard(card);
-	        			makeImg(170+space, 555, 73, 110, newColor, k);
-	        			space += 73;
-	        		}
-	        		space = 0;
-	        		vertical-=100;
-	        		for(Card card: g.handPlayer2.getCards()){
-	        			int k = searchCard(card);
-	        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
-	        			space += 73;
-	        		}
-	        		space = 0;
-	        		vertical-=100;
-	        		for(Card card: g.handPlayer3.getCards()){
-	        			int k = searchCard(card);
-	        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
-	        			space += 73;
-	        		}
-	        		space = 0;
-	        		vertical-=100;
-	        		for(Card card: g.handPlayer4.getCards()){
-	        			int k = searchCard(card);
-	        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
-	        			space += 73;
-	        		}
-	        	
-		    		space = 0;
-		    		int k = searchCard(g.handDealer.getCards().getFirst());
-		    		makeImg(230+space, 155, 73, 110, newColor, k);
-		    		space += 73;
-		   			makeImg(230+space, 155, 73, 110, newColor, 52);			
-					
-		   			if(g.count_splits()>3){
-		   				printStringScreen(screen, "Can't split more\n");
-		   			}
-		   			frame.revalidate();
+	   			frame.revalidate();
 			}
         }); 
       }
   }
     
-    
+    //Class that implements the action associated with the doubledown button.
+    //The player's hands are printed as well as their values.
+    //If the player is still in action then the dealer's hand shown correspond only to the first cards and the hole card.
+    //The value of the dealer's hand is only printed when his whole hand is shown
     private class ActionDoubleDown implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -424,23 +420,62 @@ public class App{
         			g.doubleDown();
         	}
         	int space = 0;
+        	int vertical = 0;
     		for(Card card: g.handPlayer.getCards()){
     			int k = searchCard(card);
     			makeImg(170+space, 555, 73, 110, newColor, k);
     			space += 73;
     		}
-    		updateBalance();
-
     		space = 0;
-    		for(Card card: g.handDealer.getCards()){
+    		vertical-=100;
+    		for(Card card: g.handPlayer2.getCards()){
     			int k = searchCard(card);
-    			makeImg(230+space, 155, 73, 110, newColor, k);
+    			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
     			space += 73;
     		}
+    		space = 0;
+    		vertical-=100;
+    		for(Card card: g.handPlayer3.getCards()){
+    			int k = searchCard(card);
+    			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
+    			space += 73;
+    		}
+    		space = 0;
+    		vertical-=100;
+    		for(Card card: g.handPlayer4.getCards()){
+    			int k = searchCard(card);
+    			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
+    			space += 73;
+    		}
+    		updateBalance();
+    		space = 0;
+    		if(d.getDealerHand().countCards()==2){
+				int k = searchCard(d.getDealerHand().getFirst());
+	    		makeImg(230+space, 155, 73, 110, newColor, k);
+	    		space += 73;
+	    		makeImg(230+space, 155, 73, 110, newColor, 52);
+	    		//frame.revalidate();
+			}else{
+				for(Card card: g.handDealer.getCards()){
+				int k = searchCard(card);
+				makeImg(230+space, 155, 73, 110, newColor, k);
+				space += 73;
+	    		JPanel panel = new JPanel();
+	    		panel.setBackground(newColor);
+				panel.setBounds(40, 155, 180, 30);
+				panel.add(createLabel("Dealer's hand", Color.WHITE, "ARIAL", 16,130, 155, 180, 30));
+				panel.add(createLabel("("+String.valueOf(g.handDealer.genTotal())+")", Color.WHITE, "ARIAL", 16, 130, 155, 180, 30));
+				frame.getContentPane().add(panel);
+				}
+			}
+        	handsLabels();
     		frame.revalidate();
         }
     }
 
+    //Class that implements the action associated with the insurance button.
+    //The player's first hands is printed as well as its values.
+    //The value of the dealer's hand is only printed when his whole hand is shown
     private class ActionInsurance implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -451,32 +486,47 @@ public class App{
     		for(Card card: g.handPlayer.getCards()){
     			int k = searchCard(card);
     			makeImg(170+space, 555, 73, 110, newColor, k);
-    			space += 20;
+    			space += 73;
     		}
     		updateBalance();
-
     		space = 0;
-    		for(Card card: g.handDealer.getCards()){
-    			int k = searchCard(card);
-    			makeImg(230+space, 155, 73, 110, newColor, k);
-    			space += 20;
-    		}
+			int k = searchCard(d.getDealerHand().getFirst());
+    		makeImg(230+space, 155, 73, 110, newColor, k);
+    		space += 73;
+    		makeImg(230+space, 155, 73, 110, newColor, 52);
     		frame.revalidate();
         }
     }
     
+    //Class that implements the action associated with the surrender button.
+    //The player can only surrender on the first play so after the cards are dealt and a surrender is performed, the dealer's hand is printed as well as its value
     private class ActionSurrender implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
         	if(g.ingame()&&g.firstplay()){
         		g.surrender();
         		updateBalance();
-        		frame.revalidate();
+        		int space = 0;
+        		for(Card card: g.handDealer.getCards()){
+    				int k = searchCard(card);
+    				makeImg(230+space, 155, 73, 110, newColor, k);
+    				space += 73;
+    	    		JPanel panel = new JPanel();
+    	    		panel.setBackground(newColor);
+    				panel.setBounds(40, 155, 180, 30);
+    				panel.add(createLabel("Dealer's hand", Color.WHITE, "ARIAL", 16,130, 155, 180, 30));
+    				panel.add(createLabel("("+String.valueOf(g.handDealer.genTotal())+")", Color.WHITE, "ARIAL", 16, 130, 155, 180, 30));
+    				frame.getContentPane().add(panel);
+        		}
+        		handsLabels();
+    			frame.revalidate();
         	}
         }
-    }    
-    
+    } 
 	
+    //Class that implements the action associated with the advice button.
+    //The advice is given according to the multiple game strategies.
+    //These advices are printed on a JtextArea named screen.
     private class ActionAdvice implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -489,8 +539,6 @@ public class App{
 				if(str.getCount()>=3&&g.firstplay()&&(!g.insuranceMode()))a='i';
 				ps.append("Hi-lo Strategy: "+ a + "\n");
 			}else{
-				/* Give advice on the next bet */
-				//System.out.println("Ilustrativo.. oldbet = "+player.getOldbet());
 				if(str.getAfcount()>=2){
 					ps.append("Ace-Five Strategy: b "+p.getOldbet()*2 + "\n");
 				}else{
@@ -503,6 +551,8 @@ public class App{
         }
     }
 
+    //Class that implements the action associated with the statistics button.
+    //These statistics are printed on a JtextArea named screen.
     private class ActionStatistics implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
@@ -524,6 +574,10 @@ public class App{
         }
     }
 	
+    //This method creates a JButton.
+    //It receives a String named label that corresponds to the name that appears on the button
+    //It receives an ActionListener al that corresponds to the action performed by the same button.
+    //It receives the position coordinates (x, y) where the button should appear on the window and the width and height of the button (w and h) 
     public JButton createButton(String label, ActionListener al, int x, int y, int w, int h) {
         JButton button = new JButton(label);
         button.setBounds(x, y, w, h);
@@ -531,6 +585,8 @@ public class App{
         return button;
     }
 	
+    //This method adds all the JButtons created to a panel on the frame/window.
+    //The panel with all the buttons with the corresponding actions is returned.
 	public JPanel makeButton(){
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(createButton("Bet", new ActionBet(), 144, 726, 100, 23));
@@ -549,6 +605,10 @@ public class App{
 		return panel;	
 	}
 	
+	//This method creates a JLabel.
+	//It receives a String named label that corresponds to the name that appears on the label
+    //It receives color c that corresponds to the color of the font of the label and also the font that is wanted as well as its size.
+    //It receives the position coordinates (x, y) where the label should appear on the window and the width and height of the button (w and h) 
     public JLabel createLabel(String label, Color c, String font, int size, int x, int y, int w, int h) {
         JLabel lbl = new JLabel(label);
         lbl.setForeground(c);
@@ -557,6 +617,10 @@ public class App{
 		return lbl;
     }
 	
+    //This method adds two labels to a panel on the frame/window.
+    //The first label corresponds to a welcoming message.
+    //The second label corresponds to the String "Balance: " printed before the actual value of the player's balance.
+    //The panel with the two Jlabels is returned.
 	public JPanel makeLabel(){
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(createLabel("Welcome to the POO BlackJack Game", Color.WHITE, "ARIAL", 16, 246, 16, 311, 23));
@@ -564,22 +628,35 @@ public class App{
 		return panel;
 	}
 	
+	//This method creates a JLabel.
+	//It receives a panel where the image will be printed.
+	//It receives color c that corresponds to the color of the background of the panel.
+	//It receives the position coordinates (x, y) where the label should appear on the window and the width and height of the button (w and h) 
+	//It receives an integer i taht corresponds to the position i of a vector that stores all the images that can be printed.
+	//The Jlabel with the image is returned
     public JLabel createImg(JPanel panel, Color c, int x, int y, int w, int h, int i) {
 		JLabel picLabel = images.addImg(frame, panel, x, y, w, h, c, i);
 		return picLabel;
     }
 
-	public JPanel makeImg(int x, int y, int w, int h, Color c, int i){
+    //This method creates a new panel with the image created with the method createImg().
+	//The new panel is returned.
+    public JPanel makeImg(int x, int y, int w, int h, Color c, int i){
 		JPanel panel = new JPanel();
 		panel.setBounds(x, y, w, h);
 		panel.add(createImg(panel, c, x, y, w, h, i));
 		return panel;
 	}
 	
+    //This method creates a new JTextArea named screen
+    //screen.setLineWrap(true); tells it to break the string in order to fit the TextArea
+    //screen.setWrapStyleWord(true); tells it to break at the word instead of breaking it at the character
+    //The JTextArea has a scroll bar associated that allows the user to move it up and down if he wants to check older text printed or newer.
+    //screen.setEditable(false); means that nothing can be inserted in it directly by the user meaning that the values shown cannot be modified
     public JTextArea makeScreen() {
 		JTextArea screen = new JTextArea();
-		screen.setLineWrap(true);  //this tells it to break the string to fit the TextArea
-		screen.setWrapStyleWord(true);  //this tells it to break at the word instead of at the character
+		screen.setLineWrap(true);
+		screen.setWrapStyleWord(true);  
 		JScrollPane scroll = new JScrollPane (screen, 
 				   JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scroll.setBounds(1080, 11, 480, 778);
@@ -590,10 +667,14 @@ public class App{
         return screen;
     }
     
+    //This method creates a new JTextArea named makeRulesScreen
+    //screen.setLineWrap(true); tells it to break the string in order to fit the TextArea
+    //screen.setWrapStyleWord(true); tells it to break at the word instead of breaking it at the character
+    //rules_screen.setEditable(false); means that nothing can be inserted in it directly by the user meaning that the values shown cannot be modified
     public JTextArea makeRulesScreen() {
 		JTextArea rules_screen = new JTextArea();
-		rules_screen.setLineWrap(true);  //this tells it to break the string to fit the TextArea
-		rules_screen.setWrapStyleWord(true);  //this tells it to break at the word instead of at the character
+		rules_screen.setLineWrap(true);
+		rules_screen.setWrapStyleWord(true);
 		rules_screen.setBounds(784, 11, 286, 668);
 		rules_screen.setEditable(false);
 		Color newColor = new Color(224, 224 , 224);
@@ -603,14 +684,20 @@ public class App{
         return rules_screen;
     }
     
+    //This method prints a float on the JTextArea named screen
     public void printNumberScreen(JTextArea screen, float f) {
         screen.append(String.valueOf(f));
     }
     
+    //This method prints a String on the JTextArea named screen
     public void printStringScreen(JTextArea screen, String s) {
         screen.append(s);
     }
     
+    //This method updates multiple labels of the window.
+    //The label with the value of the player's balance is updated.
+    //The labels with the numbers of chips corresponding to each chip color are updated.
+    //The window is then refreshed.
     public void updateBalance(){
 		lblBalanceValue.setText(String.valueOf(p.getPile().getBalance()));
     	jlbNumWhite.setText(Integer.toString(p.getPile().getWhiteStack().getNumberOfChips()));
@@ -620,9 +707,13 @@ public class App{
     	frame.revalidate();
     }
     
+    //This method updates multiple labels of the window.
+    //The labels with the numbers of the corresponding hand and also the value of the corresponding hand are updated.
+    //The number of labels printed depends on the the number of playable hands.
+    //The window is then refreshed.
     public void handsLabels(){
 		int vertical = 0;
-    	if(/*p.numbHands==1*/g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()==0&&g.handPlayer3.countCards()==0&&g.handPlayer4.countCards()==0){
+    	if(g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()==0&&g.handPlayer3.countCards()==0&&g.handPlayer4.countCards()==0){
     		JPanel panel = new JPanel();
     		panel.setBackground(newColor);
 			panel.setBounds(70, 555, 100, 30);
@@ -630,7 +721,7 @@ public class App{
 			panel.add(createLabel("("+String.valueOf(g.handPlayer.genTotal())+")", Color.WHITE, "ARIAL", 16, 70, 555, 100, 20));
 			frame.getContentPane().add(panel);
     	}
-		if(/*p.numbHands==2*/g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()!=0&&g.handPlayer3.countCards()==0&&g.handPlayer4.countCards()==0){
+		if(g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()!=0&&g.handPlayer3.countCards()==0&&g.handPlayer4.countCards()==0){
     		JPanel panel = new JPanel();
     		panel.setBackground(newColor);
 			panel.setBounds(70, 555, 100, 30);
@@ -645,7 +736,7 @@ public class App{
 			panel.add(createLabel("("+String.valueOf(g.handPlayer2.genTotal())+")", Color.WHITE, "ARIAL", 16, 70, 555, 100, 20));
 			frame.getContentPane().add(panel);
     	}
-    	if(/*p.numbHands==3*/g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()!=0&&g.handPlayer3.countCards()!=0&&g.handPlayer4.countCards()==0){
+    	if(g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()!=0&&g.handPlayer3.countCards()!=0&&g.handPlayer4.countCards()==0){
     		JPanel panel = new JPanel();
     		panel.setBackground(newColor);
 			panel.setBounds(70, 555, 100, 30);
@@ -667,7 +758,7 @@ public class App{
 			panel.add(createLabel("("+String.valueOf(g.handPlayer3.genTotal())+")", Color.WHITE, "ARIAL", 16, 70, 555, 100, 20));
 			frame.getContentPane().add(panel);
     	}
-    	if(/*p.numbHands==4*/g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()!=0&&g.handPlayer3.countCards()==0&&g.handPlayer4.countCards()!=0){
+    	if(g.handPlayer.countCards()!=0&&g.handPlayer2.countCards()!=0&&g.handPlayer3.countCards()!=0&&g.handPlayer4.countCards()!=0){
     		JPanel panel = new JPanel();
     		panel.setBackground(newColor);
 			panel.setBounds(70, 555, 100, 30);
@@ -699,6 +790,9 @@ public class App{
     	}
     }
     
+    //This method is used to help find the image of certain card.
+    //It receives a specific card and then checks its "num" and "suit".
+    //Given the two parameters it returns a specific int, let's call it "i", that will be later used to get the image from the position "i" of the vector that stores the images.
 	public int searchCard(Card card){
 		if(card.getNum().equals("2")){
 			if(card.getSuit().equals("C")) return 0;
@@ -781,6 +875,6 @@ public class App{
 		return -1;
 	
 	}
+}
 	
     
-}

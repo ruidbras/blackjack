@@ -11,11 +11,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 	public class Image extends JLabel{
+	
 		
+	//This serialVersionUID represents the class version, and it should be incremented if the current version of the class is not backwards compatible with its previous version.
+	//vector is a vector of BufferdImage that stores all the images needed to play the game.
 	private static final long serialVersionUID = 1L;
 	public BufferedImage[] vector;
 
-
+	//The constructor builds the vector of BufferedImage.
+	//It checks the current directory and then searches on a specific directory inside the current one for the wanted files.
+	//These files are stored along a vector of File used to then fill the vector of BufferedImage.
+	//The images are stored in this vector because of memory allocation
+	//since it is better to load the files just one time to the vector and then use them from there than load the files every time they are needed
 	public Image(){
 		String current = System.getProperty("user.dir");
 		
@@ -33,8 +40,10 @@ import javax.swing.JPanel;
 	}
 	
 	
+	//This method is used to associate a new ImageIcon to a new JLabel.
+	//Given a frame and a panel on it placed on (a, b) with size (b, c) and with background color "color", a new image is created on a label added to the panel.
+	//The image is chosen from the position "i" of the vector "vector" 
 	public JLabel addImg(JFrame frame, JPanel panel, int a,int b, int c, int d, Color color, int i){
-		
 		JLabel picLabel = new JLabel(new ImageIcon(vector[i]));
 		panel.setBackground(color);
 		panel.setBounds(a, b, c, d);
@@ -42,12 +51,5 @@ import javax.swing.JPanel;
 		panel.add(picLabel);
 		return picLabel;
 	}
-	
-	public void removeImg(JLabel picLabel){
-		picLabel.setIcon(null);
-	    // **IMPORTANT** to call revalidate() to cause JLabel to resize and be repainted.
-	    picLabel.revalidate();
-	}	
-	
 
 }
