@@ -1,5 +1,6 @@
 package blackjack;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class extends CollectionOfCards and it's used to store temporarily the used cards.
  * @author Pedro Esteves, Ricardo Cristino, Rui Brás
@@ -8,13 +9,17 @@ package blackjack;
  */
 public class Junk extends CollectionOfCards{
 
+	/**
+	 * Instantiates a new junk.
+	 */
 	public Junk(){
 	}
+	
 	/**
 	 * It has a method to calculate the total value of the cards. This was useful to store Cards that were already erased from the hands
 	 * in order to implement the graphical interface
-	 * 
-	 * @return
+	 *
+	 * @return the int
 	 */
 	public int genTotal(){
 		int r=0;

@@ -2,6 +2,7 @@ package blackjack;
 
 import java.util.LinkedList;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class represents a player of blackjack, that has Player has two lists: the list of Hands and the list of bets.
  * The hands and bets are related in a way that if a hand and a bet are in the same indexes in the corresponding Lists
@@ -15,17 +16,31 @@ import java.util.LinkedList;
  */
 public class Player {
 
+	/** The hands. */
 	LinkedList<Hand> hands;
+	
+	/** The pile. */
 	private PileOfChips pile;
+	
+	/** The bet. */
 	public LinkedList<Double> bet;
+	
+	/** The numb hands. */
 	int numbHands;
+	
+	/** The current hand. */
 	int currentHand;
+	
+	/** The insurance bet. */
 	double insuranceBet;
+	
+	/** The oldbet. */
 	double oldbet;
 	
-	/**This constructor receives i that is the balance of the player, to initialize the PileOfChips.
-	 * 
-	 * @param i
+	/**
+	 * This constructor receives i that is the balance of the player, to initialize the PileOfChips.
+	 *
+	 * @param i the i
 	 */
 	public Player(double i){
 		hands= new LinkedList<Hand>();
@@ -39,126 +54,156 @@ public class Player {
 		oldbet=0;
 	}
 	
-	/**Returns pile.
-	 * 
-	 * @return
+	/**
+	 * Returns pile.
+	 *
+	 * @return the pile
 	 */
 	public PileOfChips getPile() {
 		return pile;
 	}
 	
-	/**Returns the hand in index i from the list hands.
-	 * 
-	 * @param i
-	 * @return
+	/**
+	 * Returns the hand in index i from the list hands.
+	 *
+	 * @param i the i
+	 * @return the hand
 	 */
 	public Hand getHand(int i){
 		return hands.get(i);
 	}
-	/**Empties list of cards from hand in position i in the list hands, calling method emptyCards() from the abstract class CollectionOfCards.
-	 * 
-	 * @param i
+	
+	/**
+	 * Empties list of cards from hand in position i in the list hands, calling method emptyCards() from the abstract class CollectionOfCards.
+	 *
+	 * @param i the i
 	 */
 	protected void emptyHand(int i){
 		hands.get(i).emptyCards();
 	}
-	/**Removes the double value in index i of the list bet.
-	 * 
-	 * @param i
+	
+	/**
+	 * Removes the double value in index i of the list bet.
+	 *
+	 * @param i the i
 	 */
 	protected void removeBet(int i){
 		getBets().remove(i);
 	}
-	/**Removes the Hand in index i of the list hands.
-	 * 
-	 * @param i
+	
+	/**
+	 * Removes the Hand in index i of the list hands.
+	 *
+	 * @param i the i
 	 */
 	protected void removeHand(int i){
 		getHands().remove(i);
 	}
 	
-	/**Gets the list LinkedList<Card> of the hand in position i from hands list.
-	 * 
-	 * @param i
-	 * @return
+	/**
+	 * Gets the list LinkedList<Card> of the hand in position i from hands list.
+	 *
+	 * @param i the i
+	 * @return the cards
 	 */
 	public LinkedList<Card> getCards(int i){
 		return hands.get(i).getCards();
 	}
-	/**Returns bet.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns bet.
+	 *
+	 * @return the bets
 	 */
 	public LinkedList<Double> getBets(){
 		return bet;
 	}
-	/**Returns hands.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns hands.
+	 *
+	 * @return the hands
 	 */
 	public LinkedList<Hand> getHands(){
 		return hands;
 	}
-	/**Returns oldbet.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns oldbet.
+	 *
+	 * @return the oldbet
 	 */
 	public double getOldbet(){
 		return oldbet;
 	}
-	/**Returns insuranceBet.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns insuranceBet.
+	 *
+	 * @return the insurance bet
 	 */
 	public double getInsuranceBet(){
 		return insuranceBet;
 	}
-	/**Returns numbHands.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns numbHands.
+	 *
+	 * @return the num hands
 	 */
 	public int getNumHands(){
 		return numbHands;
 	}
-	/**Returns currentHand.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns currentHand.
+	 *
+	 * @return the current hand
 	 */
 	public int getCurrentHand(){
 		return currentHand;
 	}
-	/**Returns the Hand that is currently in play.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns the Hand that is currently in play.
+	 *
+	 * @return the hand
 	 */
 	public Hand getHand() {
 		return hands.get(getCurrentHand());
 	}
-	/**Gets the balance from players pile.
-	 * 
-	 * @return
+	
+	/**
+	 * Gets the balance from players pile.
+	 *
+	 * @return the balance
 	 */
 	public double getBalance() {
 		return getPile().getBalance();
 	}
-	/**Returns the bet associated to the hand currently in play.
-	 * 
-	 * @return
+	
+	/**
+	 * Returns the bet associated to the hand currently in play.
+	 *
+	 * @return the bet
 	 */
 	public double getBet() {
 		return bet.get(getCurrentHand());
 	}
-	/**Updates the pile adding the value d if it is positive, or removing if it is negative.
-	 * 
-	 * @param d
+	
+	/**
+	 * Updates the pile adding the value d if it is positive, or removing if it is negative.
+	 *
+	 * @param d the new balance
 	 */
 	protected void setBalance(double d) {
 		getPile().updatePile(d);
 	}
 	
-	/**Associates PileOfChips pile.
-	 * 
-	 * @param pile
+	/**
+	 * Associates PileOfChips pile.
+	 *
+	 * @param pile the new pile
 	 */
 	private void setPile(PileOfChips pile) {
 		this.pile = pile;
@@ -172,10 +217,11 @@ public class Player {
 	}
 	
 	 /**
-	  * When player hits insurance, it's set insuranceBet to the current bet value, than it's verified
-	  * if balance is enough to do this play before updating balance.
-	  * @return
-	  */
+ 	 * When player hits insurance, it's set insuranceBet to the current bet value, than it's verified
+ 	 * if balance is enough to do this play before updating balance.
+ 	 *
+ 	 * @return true, if successful
+ 	 */
 	protected boolean setInsuranceBet(){
 		insuranceBet=getBet();
 		if(getBalance()<insuranceBet){
@@ -194,27 +240,31 @@ public class Player {
 	}
 	
 
-	/**Updates current hand.
-	 * 
-	 * @param n
+	/**
+	 * Updates current hand.
+	 *
+	 * @param n the new current hand
 	 */
 	protected void setCurrentHand(int n){
 		currentHand=n;
 	}
 	
-	/**Adds a card c to the current hand.
-	 * 
-	 * @param c
+	/**
+	 * Adds a card c to the current hand.
+	 *
+	 * @param c the c
 	 */
 	protected void hit(Card c){
 		getHand().addCard(c);
 		
 	}
 	
-	/**This function verifies if the player already made the bet (if typed b command). Returns false if that condition wasn't verified and
+	/**
+	 * This function verifies if the player already made the bet (if typed b command). Returns false if that condition wasn't verified and
 	 * true if it was verified. When it returns true, it also sets the oldbet to the value of the new bet.
 	 *  
-	 * @return
+	 *
+	 * @return true, if successful
 	 */
 	public boolean deal(){
 		if(getBet()==0){
@@ -225,10 +275,11 @@ public class Player {
 	}
 	
 	
-	/**This function gets the value of the actual bet of associated to the current hand in play, than debits it in players balance,
+	/**
+	 * This function gets the value of the actual bet of associated to the current hand in play, than debits it in players balance,
 	 * doubles the value of the bet and adds a card to the hand in play from the list of hands.
-	 * 
-	 * @param c
+	 *
+	 * @param c the c
 	 */
 	protected void doubleDown(Card c){
 		double b=bet.get(getCurrentHand());
@@ -245,10 +296,10 @@ public class Player {
 	 * If the played typed "b value" than it bets the specified value
 	 * In the end the new value of the bet is discounted in the player's balance and the bet value is updated
 	 * If this function returns false it's because the player didn't have enough credits to conclude the action.
-	 * 
-	 * @param b
-	 * @param min_bet
-	 * @return
+	 *
+	 * @param b the b
+	 * @param min_bet the min_bet
+	 * @return true, if successful
 	 */
 	protected boolean reBet(double b, double min_bet){
 		if(b==0){
@@ -280,16 +331,17 @@ public class Player {
 	}
 	
 
-	/**This function checks the b command and sets a value to the bet. If the player types "b" the bet value is set to the value of the bet
+	/**
+	 * This function checks the b command and sets a value to the bet. If the player types "b" the bet value is set to the value of the bet
 	 * from the previous hand played, if there was no previous hand the value is set to the minimum bet.
 	 * If it was typed "b value" it bets value.
 	 * All this operations are only allowed if the player have a balance greater or equal than the bet value.
 	 * In the end balance and bet values are updated.
 	 * If this function returns false it's because the player didn't have enough credits to perform the action.
-	 * 
-	 * @param b
-	 * @param min_bet
-	 * @return
+	 *
+	 * @param b the b
+	 * @param min_bet the min_bet
+	 * @return true, if successful
 	 */
 	protected boolean bet(double b, double min_bet){
 		if(b==0){
@@ -318,15 +370,16 @@ public class Player {
 		return true;
 	}
 
-	/**This function receives two arguments from type Card.
+	/**
+	 * This function receives two arguments from type Card.
 	 * When the function is called, a new empty Hand is created and added to the list hands, in the index after the position of the splitting hand.
 	 * A new bet is also added in bet list, in the same index as the new Hand, and it's set to the value of the bet of the splitting hand.
 	 * The card in index 1 from the splitting hand is added to the new hand, card a is added to the splitted hand, and card b is added to the new hand.
 	 * If the splitting hand is a pair of aces, the hand state handCanBeHit is set to false in both new hands to prevent any further hit or double.
 	 * The only allowed actions after the split of two aces is standing of splitting if there is another pair of aces.
-	 * 
-	 * @param a
-	 * @param b
+	 *
+	 * @param a the a
+	 * @param b the b
 	 */
 	protected void split(Card a, Card b){
 		int index=getCurrentHand();
@@ -346,10 +399,11 @@ public class Player {
 	}
 	
 
-	/**This function returns true if all hands have busted or false if not all hands have busted. Values of the elements of the list bet are set to zero
+	/**
+	 * This function returns true if all hands have busted or false if not all hands have busted. Values of the elements of the list bet are set to zero
 	 * in game class when a hand busts.
-	 * 
-	 * @return
+	 *
+	 * @return true, if successful
 	 */
 	public boolean allHandsBusted(){
 		for(Double d: bet){
@@ -377,9 +431,11 @@ public class Player {
 			}
 		}
 	}
-	/**Makes the first prints after commands s, h, 2 and p. Function receives a string corresponding the action made ("2", "h", "2" or "p").
-	 * 
-	 * @param action
+	
+	/**
+	 * Makes the first prints after commands s, h, 2 and p. Function receives a string corresponding the action made ("2", "h", "2" or "p").
+	 *
+	 * @param action the action
 	 */
 	public void printStart(String action){
 		if(action=="s"){
@@ -421,17 +477,21 @@ public class Player {
 			System.out.println("player busts");
 		}
 	}
-	/**Prints the final result of the game, and indicates which hand won, pushed and lost.
-	 * 
-	 * @param str
+	
+	/**
+	 * Prints the final result of the game, and indicates which hand won, pushed and lost.
+	 *
+	 * @param str the str
 	 */
 	public void printWLP(String str){
 		if (numbHands!=1) System.out.println("player "+str+" ["+(getCurrentHand()+1)+"] and his current balance is "+getBalance());
 		else  System.out.println("player "+str+" and his current balance is "+getBalance());
 	}
 	
-	/**Returns a string with the hand currently in play.
-	 * 
+	/**
+	 * Returns a string with the hand currently in play.
+	 *
+	 * @return the string
 	 */
 	@Override
 	public String toString() {

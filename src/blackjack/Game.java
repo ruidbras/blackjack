@@ -1,5 +1,6 @@
 package blackjack;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class extends the abstract class GameType and implements the methods inherited from the super class, in order to provide information
  * in the terminal about the actions and everything related to the game.
@@ -7,32 +8,48 @@ package blackjack;
  * @version 1.0
  */
 public class Game extends GameType{
+	
+	/** The hand dealer. */
 	public Junk handDealer= new Junk();
+	
+	/** The hand player. */
 	public Junk handPlayer = new Junk();
+	
+	/** The hand player2. */
 	public Junk handPlayer2 = new Junk();
+	
+	/** The hand player3. */
 	public Junk handPlayer3 = new Junk();
+	
+	/** The hand player4. */
 	public Junk handPlayer4 = new Junk();
 	
-	/**The constructor associates a Shoe, a Junk, a Player, a Statistics and a Strategy to the game.
+	/**
+	 * The constructor associates a Shoe, a Junk, a Player, a Statistics and a Strategy to the game.
 	 * 	//wasASplit is initialized as false, ingame as false, insuranceMode as false, firstplay as true,
 	 *  alreadyBet as false and count_splits as 0.
-	 * @param shoe
-	 * @param junk
-	 * @param p
-	 * @param d
-	 * @param s
-	 * @param str
+	 *
+	 * @param shoe the shoe
+	 * @param junk the junk
+	 * @param p the p
+	 * @param d the d
+	 * @param s the s
+	 * @param str the str
 	 */
 	public Game(Shoe shoe, Junk junk, Player p, Dealer d, Statistics s, Strategy str){
 		super(shoe, junk, p, d, s, str);
 	}
 	
-	/**This method receives a value b that is the quantity to bet and a min_bet that is the minimum bet.
+	/**
+	 * This method receives a value b that is the quantity to bet and a min_bet that is the minimum bet.
 	 * If there was already a bet, it's called the reBet() method from Player class. If reBet() returns false than it's because
 	 * player doesn't have enough credits to bet b, min_bet or oldbet.
 	 * If this is the first time bet command is typed than alreadyBet is set to true and bet() method from Player class is called.
 	 * If this method returns false because player has not enough credits the action fails, if the method returns true, alreadyBet is
 	 * set to true
+	 *
+	 * @param b the b
+	 * @param min_bet the min_bet
 	 */
 	
 	@Override
@@ -53,6 +70,9 @@ public class Game extends GameType{
 		System.out.println("player is betting "+player.getBet());
 	}
 	
+	/**
+	 * Empty interface player.
+	 */
 	public void emptyInterfacePlayer(){
 		handPlayer.emptyCards();
 		handPlayer = new Junk();
@@ -64,6 +84,9 @@ public class Game extends GameType{
 		handPlayer4 = new Junk();
 	}
 	
+	/**
+	 * Adds the interface player.
+	 */
 	public void addInterfacePlayer(){
 		if(player.getNumHands()==1)
 			handPlayer.addCards(player.hands.get(0).getCards());
@@ -88,6 +111,9 @@ public class Game extends GameType{
 	//In method makeBet, the methods reBet() and bet() from Player class are called and if they don't return false, a value is different than 0
 	//is added to the bet list, in the index corresponding to the current hand of the player. This bet value is checked now when Player.deal()
 	//is called to determine if a bet was already made to perform the next actions. If the previous check succeeds, dealer draws the first four
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#deal(double)
+	 */
 	//cards to the game (two for him and two for player).
 	@Override
 	public void deal(double min_bet){
@@ -116,6 +142,9 @@ public class Game extends GameType{
 	
 	//Split is only allowed when ingame=true, the first hand has two equal cards, the player has a balance larger or equal to the bet of
 	//the splitting hand, and there were no more than 3 splits in the game. After this, the cards are splitted in two new hands and dealer delivers
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#split()
+	 */
 	//one new card for each hand. wasASplit is set to true and firstplay also set to true, because the new current hand has only two cards.
 	@Override
 	public void split(){
@@ -148,6 +177,9 @@ public class Game extends GameType{
 	
 	//Insurance is only allowed to do right after deal and before any other plays, and only if the shown card of the dealer is an ace.
 	//If all the conditions are verified, than a insuranceBet with the same value as the current bet is placed (only if player has enough
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#insurance()
+	 */
 	//credits to perform this action). The variable insuranceMode is set to true after a successfull insurance.
 	@Override
 	public void insurance(){
@@ -167,6 +199,9 @@ public class Game extends GameType{
 	//Hit is only possible if ingame = true. Player can hit a hand the times he want's but it can't pass a total value of 21.
 	//A new card, delivered by the dealer, is added to the current hand of the player, than it's checked if the final hand
 	//value is greater than 21. If it is, the bet is removed and set to zero and current hand is set to the next one in the list. If the 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#hit()
+	 */
 	//current hand was already the last one of the list, the game finishes.
 	@Override
 	public void hit(){
@@ -199,6 +234,9 @@ public class Game extends GameType{
 	}
 	
 	//Standing is only allowed when ingame=true. When player stands current hand is set to the next hand on players list of hands.
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#stand()
+	 */
 	//When current hand is in the end of the list, after standing the game is finalized.
 	@Override
 	public void stand(){
@@ -225,6 +263,9 @@ public class Game extends GameType{
 	
 	//This method hits dealer's hand until it reaches 17 or more. Hits are only made if player has some hand that didn't bust, otherwise
 	//dealer stands. If dealer busts, player wins all hands that haven't busted and loses all the others, than the game is finished.
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#dealerFinalizeCards()
+	 */
 	//Function returns false if dealers busts and true if dealer stands.
 	@Override
 	public boolean dealerFinalizeCards(){
@@ -273,6 +314,9 @@ public class Game extends GameType{
 	//if the value of player's hand is higher than the dealer's hand player wins;
 	//If the value of player's hand is equal to the dealer's hand, player can win or push. He wins if his hand has two cards and has a 
 	//value of 21 but dealer has a hand with more than two cards. In every other situations player pushes;
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#finalizeDealer()
+	 */
 	//In every other situations player loses his hand.
 	@Override
 	public void finalizeDealer(){
@@ -374,6 +418,9 @@ public class Game extends GameType{
 	//doubleDowns are only allowed when the player is in game, there are still two cards in current hand (even in splitting), if the
 	//hand value is 9, 10 or 11 and if the player has a balance greater or equal to that hand current bet.
 	//If all these conditions are verified than it's set a new bet, doubling the previous one and it's discounted the value in player's
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#doubleDown()
+	 */
 	//balance. A new card is delivered to the hand and hand automatically stands. 
 	public void doubleDown(){
 		if(!ingame() || !firstplay()||wasASplit()){
@@ -408,6 +455,9 @@ public class Game extends GameType{
 		stand();
 	}
 	
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#cleanTable()
+	 */
 	//Sets firstplay to true and wasASplit, ingame, and alreadyBet to false. Than dealer cleans his hand and player's hands.
 	@Override
 	public void cleanTable(){
@@ -426,6 +476,9 @@ public class Game extends GameType{
 	}
 	
 	//Surrender is only allowed if player didn't make any play already. Surrender is only allowed if it is the first move of the game,
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#surrender()
+	 */
 	//before hitting, doubling or splitting. Player receives half of his bet and loses the game.
 	@Override
 	public void surrender(){

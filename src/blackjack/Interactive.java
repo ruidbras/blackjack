@@ -1,6 +1,7 @@
 package blackjack;
 
 import java.util.Scanner;
+// TODO: Auto-generated Javadoc
 /**
  * This class extends an abstract class "Mode". Is is used when the program is
  * supposed to get the instructions through an input on the command line.
@@ -12,9 +13,16 @@ import java.util.Scanner;
  */
 public class Interactive extends Mode{
 
+	/** The shoe. */
 	private int shoe;
+	
+	/** The shuffle. */
 	private int shuffle;
+	
+	/** The sc. */
 	Scanner sc;
+	
+	/** The in. */
 	private String in;
 	/**
 	 * This constructor invokes the super constructor and it gives values to
@@ -44,7 +52,8 @@ public class Interactive extends Mode{
 	}
 	
 	/**
-	 * Simple get of the shoe value
+	 * Simple get of the shoe value.
+	 *
 	 * @return returns shoe (integer)
 	 */
 	public int getShoe() {
@@ -52,7 +61,8 @@ public class Interactive extends Mode{
 	}
 
 	/**
-	 * Simple get of the shuffle value
+	 * Simple get of the shuffle value.
+	 *
 	 * @return returns shuffle (integer)
 	 */
 	public int getShuffle() {

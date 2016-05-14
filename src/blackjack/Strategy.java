@@ -5,24 +5,36 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+// TODO: Auto-generated Javadoc
 /**
  * This class implements a a tool that through an algorithm is capable of 
  * giving an advice based on different strategies. 
  * It uses the Hi-Lo and a basic strategy for advices during the current play.
  * And it uses the Ace-Five and also a basic strategy for advices for the
  * bets between plays. 
- * @author Pedro Esteves, Ricardo Cristino, Rui Brás
+ * @author Pedro Esteves, Ricardo Cristino, Rui Bras
  * @version 1.0
  * 
  *
  */
 public class Strategy {
 	
+	/** The hard. */
 	char[][] hard;
+	
+	/** The pair. */
 	char[][] pair;
+	
+	/** The soft. */
 	char[][] soft;
+	
+	/** The count. */
 	int count;
+	
+	/** The shoe. */
 	int shoe;
+	
+	/** The afcount. */
 	int afcount;
 	
 	/**
@@ -116,14 +128,17 @@ public class Strategy {
 	}
 	
 	/**
-	 * Simple incrementor of the count value (Hi-lo strategy)
+	 * Simple incrementor of the count value (Hi-lo strategy).
+	 *
 	 * @param c value being incremented
 	 */
 	public void count(int c){
 		count+=c;
 	}
+	
 	/**
-	 * Simple incrementor of the afcount value (Ace-Five strategy)
+	 * Simple incrementor of the afcount value (Ace-Five strategy).
+	 *
 	 * @param c value being incremented
 	 */
 	public void afcount(int c){
@@ -131,14 +146,17 @@ public class Strategy {
 	}
 	
 	/**
-	 * Simple get of the afcount
+	 * Simple get of the afcount.
+	 *
 	 * @return returns afcount (integer)
 	 */
 	public int getAfcount(){
 		return afcount;
 	}
+	
 	/**
-	 * Simple get of the true count
+	 * Simple get of the true count.
+	 *
 	 * @return returns true count (integer)
 	 */
 	public int getCount(){
@@ -363,15 +381,16 @@ public class Strategy {
 	 * It gives an advice during a current play.
 	 * It knows which strategy to implement and it makes the proper adjustment
 	 * if it considers it might be an invalid command. 
+	 *
 	 * @param l the current value of the Player's hand
 	 * @param c the value of the visible Dealer's card
 	 * @param s is a boolean that indicates if the hand is Soft
 	 * @param p is a boolean that indicates if the hand is a Pair
-	 * @param firstplay is a boolean that indicates if the Player is in 
+	 * @param firstplay is a boolean that indicates if the Player is in
 	 * his first play
 	 * @param bs is a boolean that indicates the strategy used (true for basic
 	 * strategy and false for Hi-lo strategy)
-	 * @return
+	 * @return the char
 	 */
 	public char advice(int l, int c, boolean s, boolean p, boolean firstplay, boolean bs ){
 		char r;

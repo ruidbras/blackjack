@@ -1,5 +1,6 @@
 package blackjack;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class has ten parameters that contain informations about one game of blackjack. The parameters are:
  * plays - the total number of hands that player had during the game;
@@ -17,22 +18,43 @@ package blackjack;
  */
 
 public class Statistics {
+	
+	/** The plays. */
 	public int plays;
+	
+	/** The playerbj. */
 	public int playerbj;
+	
+	/** The dealerbj. */
 	public int dealerbj;
+	
+	/** The wins. */
 	public int wins;
+	
+	/** The loses. */
 	public int loses;
+	
+	/** The pushes. */
 	public int pushes;
+	
+	/** The balanceinit. */
 	public final double balanceinit;
+	
+	/** The bet. */
 	public int bet;
+	
+	/** The minbet. */
 	public int minbet;
+	
+	/** The maxbet. */
 	public int maxbet;
 	
 	/**
 	 * Constructor receives a value to set balanceinit, bet, minbet and maxbet, the rest of the parameters are set to zero.
-	 * @param i
-	 * @param min
-	 * @param max
+	 *
+	 * @param i the i
+	 * @param min the min
+	 * @param max the max
 	 */
 	public Statistics(double i, int min, int max){
 		balanceinit = i;
@@ -46,11 +68,13 @@ public class Statistics {
 		maxbet = max;
 		bet = min;
 	}
+	
 	/**
 	 * This method returns the value suggested by the basic strategy for the next bet. 
 	 * This value is based on the previous bet and on the result of the previous play (win, lose or push).
-	 * @param current
-	 * @return
+	 *
+	 * @param current the current
+	 * @return the bet
 	 */
 	public int getBet(double current){
 		int b;
@@ -102,11 +126,13 @@ public class Statistics {
 		pushes+=1;
 		bet = 0;
 	}
+	
 	/**
 	 * This method prints several statistics of the game. It prints the percentage of blackjacks done by the player and the dealer, 
 	 * the percentage of wins, loses and pushes, and lastly it prints the current balance and the percentage (positive or negative)
 	 * in comparison with the initial balance.
-	 * @param balance
+	 *
+	 * @param balance the balance
 	 */
 	public void printStats(double balance){
 		System.out.println("BJ P/D	:	"+(float)playerbj/plays+"/"+(float)dealerbj/plays);

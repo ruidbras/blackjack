@@ -2,6 +2,7 @@ package blackjack;
 
 import java.util.LinkedList;
 
+// TODO: Auto-generated Javadoc
 /**This class has a LinkedList storing objects of type Card.
  * @author Pedro Esteves, Ricardo Cristino, Rui Bras
  * @version 1.0
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 public abstract class CollectionOfCards {
 	
 	
+	/** The cards. */
 	private LinkedList<Card> cards;
 	
 	/**
@@ -18,17 +20,19 @@ public abstract class CollectionOfCards {
 		cards=new LinkedList<Card>();
 	}
 	
-	/**Returns the LinkedList<Card> cards.
-	 * 
-	 * @return
+	/**
+	 * Returns the LinkedList<Card> cards.
+	 *
+	 * @return the cards
 	 */
 	public LinkedList<Card> getCards(){
 		return cards;
 	}
 	
-	/**Appends all the elements from a LinkedList<Card> h in the end cards.
-	 * 
-	 * @param h
+	/**
+	 * Appends all the elements from a LinkedList<Card> h in the end cards.
+	 *
+	 * @param h the h
 	 */
 	public void addCards(LinkedList<Card> h){
 		cards.addAll(h);
@@ -36,7 +40,8 @@ public abstract class CollectionOfCards {
 	
 	/**
 	 * Returns a double corresponding to the size of cards.
-	 * @return
+	 *
+	 * @return the double
 	 */
 	public double countCards(){
 		return cards.size();

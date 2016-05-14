@@ -1,6 +1,7 @@
 package blackjack;
 
 
+// TODO: Auto-generated Javadoc
 /** This class extends an abstract class GameType. It has the same implementation that Class Game, also extended from GameType, but
  * has no System.out.println() methods and similar or any other methods that call them. It also does't have any methods or parameters
  * related to the package graphical, so in simulation there is no graphical interface launched.
@@ -9,10 +10,23 @@ package blackjack;
  * */
 public class GameSimulation extends GameType {
 
+	/**
+	 * Instantiates a new game simulation.
+	 *
+	 * @param shoe the shoe
+	 * @param junk the junk
+	 * @param p the p
+	 * @param d the d
+	 * @param s the s
+	 * @param str the str
+	 */
 	public GameSimulation(Shoe shoe, Junk junk, Player p, Dealer d, Statistics s, Strategy str) {
 		super(shoe, junk, p, d, s, str);
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#makeBet(double, double)
+	 */
 	@Override
 	public void makeBet(double b, double min_bet) {
 		if(alreadyBet()) {
@@ -27,6 +41,9 @@ public class GameSimulation extends GameType {
 		setAlreadyBet(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#deal(double)
+	 */
 	@Override
 	public void deal(double min_bet) {
 		if(ingame()){
@@ -45,6 +62,9 @@ public class GameSimulation extends GameType {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#split()
+	 */
 	@Override
 	public void split() {
 		if(!ingame() || !player.getHand().cardsSameValue()){
@@ -67,6 +87,9 @@ public class GameSimulation extends GameType {
 		setFirstplay(true);
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#insurance()
+	 */
 	@Override
 	public void insurance() {
 		if(wasASplit() || insuranceMode()|| !firstplay()|| !ingame() || !dealer.canHaveBlackjack()){
@@ -77,6 +100,9 @@ public class GameSimulation extends GameType {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#hit()
+	 */
 	@Override
 	public void hit() {
 		if(!ingame()){
@@ -98,6 +124,9 @@ public class GameSimulation extends GameType {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#stand()
+	 */
 	@Override
 	public void stand() {
 		if(!ingame()){
@@ -113,6 +142,9 @@ public class GameSimulation extends GameType {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#dealerFinalizeCards()
+	 */
 	@Override
 	public boolean dealerFinalizeCards() {
 		if(player.allHandsBusted()){
@@ -141,6 +173,9 @@ public class GameSimulation extends GameType {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#finalizeDealer()
+	 */
 	@Override
 	public void finalizeDealer() {
 		setFirstplay(true);
@@ -221,6 +256,9 @@ public class GameSimulation extends GameType {
 		cleanTable();
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#doubleDown()
+	 */
 	@Override
 	public void doubleDown() {
 		if(!ingame() || !firstplay()){
@@ -249,6 +287,9 @@ public class GameSimulation extends GameType {
 		stand();
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#cleanTable()
+	 */
 	@Override
 	public void cleanTable() {
 		setFirstplay(true);
@@ -260,6 +301,9 @@ public class GameSimulation extends GameType {
 		count_splits=0;
 	}
 
+	/* (non-Javadoc)
+	 * @see blackjack.GameType#surrender()
+	 */
 	@Override
 	public void surrender() {
 		if(!ingame()||insuranceMode()){

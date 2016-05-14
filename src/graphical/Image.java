@@ -10,19 +10,30 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+	// TODO: Auto-generated Javadoc
+/**
+	 * The Class Image.
+	 */
 	public class Image extends JLabel{
 	
 		
-	//This serialVersionUID represents the class version, and it should be incremented if the current version of the class is not backwards compatible with its previous version.
-	//vector is a vector of BufferdImage that stores all the images needed to play the game.
+		/** The Constant serialVersionUID. 
+		 * This serialVersionUID represents the class version, and it should be incremented if the current version of the class is not backwards compatible with its previous version.*/
 	private static final long serialVersionUID = 1L;
+	
+	/** The vector. 
+	 * vector is a vector of BufferdImage that stores all the images needed to play the game.*/
 	public BufferedImage[] vector;
 
-	//The constructor builds the vector of BufferedImage.
-	//It checks the current directory and then searches on a specific directory inside the current one for the wanted files.
-	//These files are stored along a vector of File used to then fill the vector of BufferedImage.
-	//The images are stored in this vector because of memory allocation
-	//since it is better to load the files just one time to the vector and then use them from there than load the files every time they are needed
+	/**
+	 * Instantiates a new image.
+	 * The constructor builds the vector of BufferedImage.
+	 * It checks the current directory and then searches on a specific directory inside the current one for the wanted files.
+	 * These files are stored along a vector of File used to then fill the vector of BufferedImage.
+	 * The images are stored in this vector because of memory allocation
+	 * Since it is better to load the files just one time to the vector and then use them from there than load the files every time they are needed
+	 */
+	
 	public Image(){
 		String current = System.getProperty("user.dir");
 		
@@ -42,7 +53,22 @@ import javax.swing.JPanel;
 	
 	//This method is used to associate a new ImageIcon to a new JLabel.
 	//Given a frame and a panel on it placed on (a, b) with size (b, c) and with background color "color", a new image is created on a label added to the panel.
-	//The image is chosen from the position "i" of the vector "vector" 
+	/**
+	 * Adds the img.
+	 * This method is used to associate a new ImageIcon to a new JLabel.
+	 * Given a frame and a panel on it placed on (a, b) with size (b, c) and with background color "color", a new image is created on a label added to the panel.
+	 * The image is chosen from the position "i" of the vector "vector" 
+	 * 
+	 * @param frame the frame
+	 * @param panel the panel
+	 * @param a the a
+	 * @param b the b
+	 * @param c the c
+	 * @param d the d
+	 * @param color the color
+	 * @param i the i
+	 * @return the j label
+	 */
 	public JLabel addImg(JFrame frame, JPanel panel, int a,int b, int c, int d, Color color, int i){
 		JLabel picLabel = new JLabel(new ImageIcon(vector[i]));
 		panel.setBackground(color);

@@ -17,6 +17,7 @@ import blackjack.Statistics;
 import blackjack.Strategy;
 import graphical.App;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class is the main and it associate all the classes and algorithms needed
  * to implement the blackjack game.
@@ -25,6 +26,12 @@ import graphical.App;
  */
 public class Main {
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static void main(String[] args)  throws IOException {
 		
 		boolean interactive = false;

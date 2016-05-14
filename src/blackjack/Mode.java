@@ -1,6 +1,7 @@
 package blackjack;
 
 import java.io.IOException;
+// TODO: Auto-generated Javadoc
 /**
  * This class implements an abstract class "Mode" that implements a common method
  * for all the "child" classes. It has three variables also common for all the
@@ -10,8 +11,14 @@ import java.io.IOException;
  *
  */
 public abstract class Mode {
+	
+	/** The min_bet. */
 	protected int min_bet;
+	
+	/** The max_bet. */
 	protected int max_bet;
+	
+	/** The balance. */
 	private int balance;
 	/**
 	 * This constructor gives a value to the three varibles. Their values are
@@ -32,21 +39,26 @@ public abstract class Mode {
 	public abstract String getInstruction() throws IOException;
 	
 	/**
-	 * Simple get of the minimum bet
+	 * Simple get of the minimum bet.
+	 *
 	 * @return returns min_bet (integer)
 	 */
 	public int getMin_bet(){
 		return min_bet;
 	}
+	
 	/**
-	 * Simple get of the maximum bet
+	 * Simple get of the maximum bet.
+	 *
 	 * @return returns max_bet (integer)
 	 */
 	public int getMax_bet(){
 		return max_bet;
 	}
+	
 	/**
-	 * Simple get of the balance
+	 * Simple get of the balance.
+	 *
 	 * @return returns balance (integer)
 	 */
 	public int getBalance(){

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+// TODO: Auto-generated Javadoc
 /**
  * This class extends an abstract class "Mode". Is is used when the program is
  * supposed to get the instructions through a file containing all the instructions.
@@ -13,9 +14,16 @@ import java.io.IOException;
  */
 public class Debug  extends Mode{
 	
+	/** The cmd. */
 	FileReader cmd = null;
+	
+	/** The r cmd. */
 	BufferedReader rCmd = null;
+	
+	/** The readshoepath. */
 	private String readshoepath = null;
+	
+	/** The in. */
 	private String in;
 	/**
 	 * This constructor invokes the super constructor and it gives values to
@@ -36,17 +44,22 @@ public class Debug  extends Mode{
 		}
 		rCmd =  new BufferedReader(cmd);
 	}
+	
 	/**
-	 * Simple get of the file for the read of the shoe
+	 * Simple get of the file for the read of the shoe.
+	 *
 	 * @return returns String with the shoe file path
 	 */
 	public String getReadshoepath(){
 		return readshoepath;
 	}
+	
 	/**
 	 * This method returns a String that results from the read of the instructions
 	 * file.
+	 *
 	 * @return returns String with the next instruction
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public String getInstruction() throws IOException {
 		int c;

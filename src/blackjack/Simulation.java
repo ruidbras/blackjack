@@ -2,6 +2,7 @@ package blackjack;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+// TODO: Auto-generated Javadoc
 /**
  * This class extends an abstract class "Mode". Is is used when the program is
  * supposed to get the instructions based only on the advices provided by the
@@ -15,17 +16,40 @@ import java.util.regex.Pattern;
  */
 public class Simulation extends Mode{
 	
+	/** The n_decks. */
 	int n_decks;
+	
+	/** The shuffle. */
 	int shuffle;
+	
+	/** The s_number. */
 	int s_number;
+	
+	/** The strat. */
 	boolean strat = false;
+	
+	/** The af. */
 	boolean af = false;
+	
+	/** The str. */
 	Strategy str;
+	
+	/** The shoe. */
 	Shoe shoe;
+	
+	/** The game. */
 	GameType game;
+	
+	/** The player. */
 	Player player;
+	
+	/** The dealer. */
 	Dealer dealer;
+	
+	/** The statistics. */
 	Statistics statistics;
+	
+	/** The in. */
 	String in;
 	
 	/**
@@ -155,22 +179,28 @@ public class Simulation extends Mode{
 		
 		return in;
 	}
+	
 	/**
-	 * Simple get of the shoe value
+	 * Simple get of the shoe value.
+	 *
 	 * @return returns n_decks (integer)
 	 */
 	public int getShoe(){
 		return n_decks;
 	}
+	
 	/**
-	 * Simple get of the shuffle value
+	 * Simple get of the shuffle value.
+	 *
 	 * @return returns shuffle (integer)
 	 */
 	public int getShuffle(){
 		return shuffle;
 	}
+	
 	/**
-	 * Simple get of the number of shuffles value
+	 * Simple get of the number of shuffles value.
+	 *
 	 * @return returns s_number (integer)
 	 */
 	public int getS_number(){

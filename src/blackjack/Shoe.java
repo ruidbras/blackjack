@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 
+// TODO: Auto-generated Javadoc
 /**This class inherits CollectionOfCards and has a parameter shufflecount that stores the number of shuffles performed to the list of cards
  * during the game.
  * 
@@ -14,11 +15,13 @@ import java.util.Collections;
  */
 public class Shoe extends CollectionOfCards{
 	
+	/** The shufflecount. */
 	private int shufflecount = -1;
 	
-	/**Creates a shoe with a number of n_decks decks.
-	 * 
-	 * @param n_decks
+	/**
+	 * Creates a shoe with a number of n_decks decks.
+	 *
+	 * @param n_decks the n_decks
 	 */
 	public Shoe(int n_decks){
 		int j=1,w=0;
@@ -111,10 +114,11 @@ public class Shoe extends CollectionOfCards{
 		
 	}
 	
-	/**Receives as input the path of the txt file, containing the number and suit of all the cards to store in the shoe.
-	 * 
-	 * @param path
-	 * @throws IOException
+	/**
+	 * Receives as input the path of the txt file, containing the number and suit of all the cards to store in the shoe.
+	 *
+	 * @param path the path
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public Shoe(String path) throws IOException{
 		int c=0;
@@ -152,9 +156,10 @@ public class Shoe extends CollectionOfCards{
 		rShoereader.close();
 	}
 	
-	/**Returns shufflecount.
-	 * 
-	 * @return
+	/**
+	 * Returns shufflecount.
+	 *
+	 * @return the shufflecount
 	 */
 	public int getShufflecount(){
 		return shufflecount;
@@ -168,10 +173,11 @@ public class Shoe extends CollectionOfCards{
 		++shufflecount;
 	}
 	
-	/**Returns the first card of the list of cards and removes it from the list, shifting all elements for the left.
+	/**
+	 * Returns the first card of the list of cards and removes it from the list, shifting all elements for the left.
 	 * If the list of cards is empty, the method returns null.
-	 * 
-	 * @return
+	 *
+	 * @return the card
 	 */
 	protected Card dealCard(){
 		Card temp;
