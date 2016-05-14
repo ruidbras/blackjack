@@ -29,21 +29,5 @@ public abstract class Chip {
 	public void setNumberOfChips(int numberOfChips) {
 		this.numberOfChips = numberOfChips;
 	}
-
-	
-	
-	/*public Chip(int i, String string){
-	this.value=i;
-	this.color=string;
-	}*/
-
-	/*
-	public void addChip(Chip c){
-		numberOfChips++;
-	}
-
-	public void removeChip(Chip c){
-		numberOfChips--;
-	}*/
 	
 }

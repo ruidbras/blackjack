@@ -1,5 +1,7 @@
 package blackjack;
 
+//This class counts the plays (every hand player had during all the game), player's and dealer's blackjacks, wins, losses and pushes
+
 public class Statistics {
 	public double plays;
 	public double playerbj;

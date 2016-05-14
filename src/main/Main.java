@@ -135,16 +135,16 @@ public class Main {
 					}
 				
 				}
-			}else if(in.equals("d")&&(!game.ingame())){
+			}else if(in.equals("d")){
 				game.deal(mode.getMin_bet());
 			}
-			else if(in.equals("h")&&game.ingame()){
+			else if(in.equals("h")){
 				game.hit();
 			}
-			else if(in.equals("s")&&game.ingame()){
+			else if(in.equals("s")){
 				game.stand();
 			}
-			else if(in.equals("2")&&game.ingame()&&game.firstplay()){
+			else if(in.equals("2")){
 				game.doubleDown();
 			}
 			else if(in.equals("st")){
@@ -169,13 +169,13 @@ public class Main {
 					System.out.println("Normal Strategy: b " +statistics.getBet(player.getOldbet()));
 				}
 			}
-			else if(in.equals("i")&&game.ingame()&&dealer.canHaveBlackjack()&&game.firstplay()&&(!game.insuranceMode())&&(!game.wasASplit())){
+			else if(in.equals("i")){
 				game.insurance();
 			}
-			else if(in.equals("u")&&game.ingame()){
+			else if(in.equals("u")){
 				game.surrender();
 			}
-			else if(in.equals("p")&&game.ingame()&&player.getHand().cardsSameValue()){
+			else if(in.equals("p")){
 				game.split();
 			}
 			else if(in.equals("q")){

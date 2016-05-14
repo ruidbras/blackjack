@@ -4,14 +4,26 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+/**
+ * This class extends an abstract class "Mode". Is is used when the program is
+ * supposed to get the instructions through a file containing all the instructions.
+ * It also receives a file path in order to create his costume shoe.
+ * @author Pedro Esteves, Ricardo Cristino, Rui Brás
+ * @version 1.0
+ */
 public class Debug  extends Mode{
 	
 	FileReader cmd = null;
 	BufferedReader rCmd = null;
-	String readshoepath = null;
-	String in;
-	
+	private String readshoepath = null;
+	private String in;
+	/**
+	 * This constructor invokes the super constructor and it gives values to
+	 * the Strings with the paths for the instructions and shoe files.
+	 * The paths received must come with the full path after the current path
+	 * where the jar was ran.
+	 * @param args arguments typed on the command line
+	 */
 	public Debug(String args[]){
 		super(args);
 		String current = System.getProperty("user.dir");
@@ -24,11 +36,18 @@ public class Debug  extends Mode{
 		}
 		rCmd =  new BufferedReader(cmd);
 	}
-	
+	/**
+	 * Simple get of the file for the read of the shoe
+	 * @return returns String with the shoe file path
+	 */
 	public String getReadshoepath(){
 		return readshoepath;
 	}
-
+	/**
+	 * This method returns a String that results from the read of the instructions
+	 * file.
+	 * @return returns String with the next instruction
+	 */
 	public String getInstruction() throws IOException {
 		int c;
 		String bet = "";
@@ -43,7 +62,7 @@ public class Debug  extends Mode{
 							if(!Character.isDigit((char)c)){
 								rCmd.reset();
 								return in="b";
-							} //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+							}
 							
 							bet+=(char)c;
 						}

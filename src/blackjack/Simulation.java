@@ -2,7 +2,17 @@ package blackjack;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/**
+ * This class extends an abstract class "Mode". Is is used when the program is
+ * supposed to get the instructions based only on the advices provided by the
+ * program.
+ * It receives a value n_decks that indicates the number of decks used, a value
+ * shuffle that indicates how much of the shoe is used (in %) until it adds the
+ * missing cards and shuffles and a s_number that indicates the number of shuffles
+ * the program should do when playing until the termination of the game.
+ * @author Pedro Esteves, Ricardo Cristino, Rui Brás
+ * @version 1.0
+ */
 public class Simulation extends Mode{
 	
 	int n_decks;
@@ -18,7 +28,12 @@ public class Simulation extends Mode{
 	Statistics statistics;
 	String in;
 	
-	
+	/**
+	 * This constructor invokes the super constructor and it gives values to
+	 * the n_decks, shuffle and s_number parameters. It also receives a String
+	 * which determine the strategies used by the simulation(booleans strat and af).
+	 * @param args arguments typed on the command line
+	 */
 	public Simulation(String[] args) {
 		super(args);
 		
@@ -49,7 +64,17 @@ public class Simulation extends Mode{
 		}
 		
 	}
-	
+	/**
+	 * This method is invoked to give value to parameters (objects) used by
+	 * this class. This method must be invoked before using the "getInstruction"
+	 * method for a proper used of the game.
+	 * @param str Strategy class used
+	 * @param shoea Shoe class used
+	 * @param gamea Game class used
+	 * @param playera Player class used
+	 * @param dealera Dealer class used
+	 * @param statistics Statistics class used
+	 */
 	public void setObj(Strategy str, Shoe shoea, Game gamea, Player playera, Dealer dealera, Statistics statistics){
 		this.str = str;
 		shoe = shoea;
@@ -58,7 +83,11 @@ public class Simulation extends Mode{
 		dealer = dealera;
 		this.statistics = statistics;
 	}
-	
+	/**
+	 * This method returns a String that results from the output generated
+	 * by the advice given by Strategy class.
+	 * @return returns String with the next instruction
+	 */
 	public String getInstruction(){
 		
 			if(game.ingame()){
@@ -125,15 +154,24 @@ public class Simulation extends Mode{
 		
 		return in;
 	}
-	
+	/**
+	 * Simple get of the shoe value
+	 * @return returns n_decks (integer)
+	 */
 	public int getShoe(){
 		return n_decks;
 	}
-	
+	/**
+	 * Simple get of the shuffle value
+	 * @return returns shuffle (integer)
+	 */
 	public int getShuffle(){
 		return shuffle;
 	}
-	
+	/**
+	 * Simple get of the number of shuffles value
+	 * @return returns s_number (integer)
+	 */
 	public int getS_number(){
 		return s_number;
 	}
