@@ -22,7 +22,7 @@ public class Simulation extends Mode{
 	boolean af = false;
 	Strategy str;
 	Shoe shoe;
-	Game game;
+	GameType game;
 	Player player;
 	Dealer dealer;
 	Statistics statistics;
@@ -59,6 +59,7 @@ public class Simulation extends Mode{
 		}else if(st.equals("HL")){
 			strat = false;
 		}else{
+			
 			System.out.println("Error in strategy argument");
 			return;
 		}
@@ -70,15 +71,15 @@ public class Simulation extends Mode{
 	 * method for a proper used of the game.
 	 * @param str Strategy class used
 	 * @param shoea Shoe class used
-	 * @param gamea Game class used
+	 * @param game2 Game class used
 	 * @param playera Player class used
 	 * @param dealera Dealer class used
 	 * @param statistics Statistics class used
 	 */
-	public void setObj(Strategy str, Shoe shoea, Game gamea, Player playera, Dealer dealera, Statistics statistics){
+	public void setObj(Strategy str, Shoe shoea, GameType game2, Player playera, Dealer dealera, Statistics statistics){
 		this.str = str;
 		shoe = shoea;
-		game = gamea;
+		game = game2;
 		player = playera;
 		dealer = dealera;
 		this.statistics = statistics;
