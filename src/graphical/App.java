@@ -15,14 +15,14 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 
-import blackjack.BS;
+import blackjack.Strategy;
 import blackjack.Card;
 import blackjack.Dealer;
 import blackjack.Game;
 import blackjack.Junk;
 import blackjack.Player;
 import blackjack.Shoe;
-import blackjack.Strategy;
+import blackjack.Statistics;
 
 public class App{
 
@@ -34,8 +34,8 @@ public class App{
 	public int min_bet, max_bet;
 	public Game g;
 	public Junk j;
+	public Statistics statistics;
 	public Strategy str;
-	public BS bs;
 	public Dealer d;
 	public Player p;
 	public Boolean af, strat;
@@ -47,12 +47,12 @@ public class App{
 	public Container layeredPane;
 	
 	//Create the application.
-	public App(Player player, Dealer dealer, Shoe deck, Junk junk, Game game, Strategy strategy, BS bs, int min_bet, int max_bet, double b) throws IOException {
-		initialize(player, dealer, deck, junk, game, strategy, bs, min_bet, max_bet, b);
+	public App(Player player, Dealer dealer, Shoe deck, Junk junk, Game game, Statistics statistics, Strategy str, int min_bet, int max_bet, double b) throws IOException {
+		initialize(player, dealer, deck, junk, game, statistics, str, min_bet, max_bet, b);
 	}
 
 	//Initialize the contents of the frame.
-	private void initialize(Player player, Dealer dealer, Shoe deck,Junk junk, Game game, Strategy strategy, BS bs, int bet_min, int bet_max, double b) throws IOException {
+	private void initialize(Player player, Dealer dealer, Shoe deck,Junk junk, Game game, Statistics statistics, Strategy str, int bet_min, int bet_max, double b) throws IOException {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//MAIN WINDOW	
 		
@@ -68,10 +68,10 @@ public class App{
 		balance = b;
 		g = game;
 		j = junk;
-		str = strategy;
+		this.statistics = statistics;
 		d = dealer;
 		p = player;
-		this.bs = bs;
+		this.str = str;
 		///////////////////////////////////////////////////////////////////////////////////////
 		//BALANCE LABELS
 		jlbNumWhite = new JLabel(Integer.toString(p.getPile().getWhiteStack().getNumberOfChips()));
@@ -171,14 +171,14 @@ public class App{
                 	if(p.deal()){
 			    		handsLabels();
 						int space = 0;
-		        		for(Card card: g.handPlayer.cards){
+		        		for(Card card: g.handPlayer.getCards()){
 		        			int k = searchCard(card);
 		        			makeImg(170+space, 555, 73, 110, newColor, k);
 		        			space += 73;
 		        		}
 		
 			    		space = 0;
-			    		int k = searchCard(g.handDealer.cards.getFirst());
+			    		int k = searchCard(g.handDealer.getCards().getFirst());
 			    		makeImg(230+space, 155, 73, 110, newColor, k);
 			    		space += 73;
 			    		makeImg(230+space, 155, 73, 110, newColor, 52);
@@ -221,28 +221,28 @@ public class App{
     			int space = 0;
     			int vertical = 0;
 	        	handsLabels();
-        		for(Card card: g.handPlayer.cards){
+        		for(Card card: g.handPlayer.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555, 73, 110, newColor, k);
         			space += 73;
         		}
         		space = 0;
         		vertical-=100;
-        		for(Card card: g.handPlayer2.cards){
+        		for(Card card: g.handPlayer2.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
         			space += 73;
         		}
         		space = 0;
         		vertical-=100;
-        		for(Card card: g.handPlayer3.cards){
+        		for(Card card: g.handPlayer3.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
         			space += 73;
         		}
         		space = 0;
         		vertical-=100;
-        		for(Card card: g.handPlayer4.cards){
+        		for(Card card: g.handPlayer4.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
         			space += 73;
@@ -251,14 +251,14 @@ public class App{
 
     		space = 0;
     
-    			if(d.hand.countCards()==2){
+    			if(d.getDealerHand().countCards()==2){
     				int k = searchCard(d.getDealerHand().getFirst());
 		    		makeImg(230+space, 155, 73, 110, newColor, k);
 		    		space += 73;
 		    		makeImg(230+space, 155, 73, 110, newColor, 52);
 		    		//frame.revalidate();
     			}else{
-    				for(Card card: g.handDealer.cards){
+    				for(Card card: g.handDealer.getCards()){
     				int k = searchCard(card);
     				makeImg(230+space, 155, 73, 110, newColor, k);
     				space += 73;
@@ -290,28 +290,28 @@ public class App{
         		int vertical = 0;
         		
 	        	
-        		for(Card card: g.handPlayer.cards){
+        		for(Card card: g.handPlayer.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555, 73, 110, newColor, k);
         			space += 73;
         		}
         		space = 0;
         		vertical-=100;
-        		for(Card card: g.handPlayer2.cards){
+        		for(Card card: g.handPlayer2.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
         			space += 73;
         		}
         		space = 0;
         		vertical-=100;
-        		for(Card card: g.handPlayer3.cards){
+        		for(Card card: g.handPlayer3.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
         			space += 73;
         		}
         		space = 0;
         		vertical-=100;
-        		for(Card card: g.handPlayer4.cards){
+        		for(Card card: g.handPlayer4.getCards()){
         			int k = searchCard(card);
         			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
         			space += 73;
@@ -332,14 +332,14 @@ public class App{
 				frame.getContentPane().add(panel);
 				frame.revalidate();*/
         		handsLabels();
-				if((g.handPlayer.genTotal()<22&&g.handPlayer2.genTotal()<22&&g.handPlayer3.genTotal()<22&&g.handPlayer4.genTotal()<22)&&d.hand.countCards()==2){
+				if((g.handPlayer.genTotal()<22&&g.handPlayer2.genTotal()<22&&g.handPlayer3.genTotal()<22&&g.handPlayer4.genTotal()<22)&&d.getDealerHand().countCards()==2){
     				int k = searchCard(d.getDealerHand().getFirst());
 		    		makeImg(230+space, 155, 73, 110, newColor, k);
 		    		space += 73;
 		    		makeImg(230+space, 155, 73, 110, newColor, 52);
 		    		//frame.revalidate();
     			}else{
-    				for(Card card: g.handDealer.cards){
+    				for(Card card: g.handDealer.getCards()){
     				int k = searchCard(card);
     				makeImg(230+space, 155, 73, 110, newColor, k);
     				space += 73;
@@ -373,35 +373,35 @@ public class App{
         			int space = 0;
 	        		int vertical = 0;
 	        		
-	        		for(Card card: g.handPlayer.cards){
+	        		for(Card card: g.handPlayer.getCards()){
 	        			int k = searchCard(card);
 	        			makeImg(170+space, 555, 73, 110, newColor, k);
 	        			space += 73;
 	        		}
 	        		space = 0;
 	        		vertical-=100;
-	        		for(Card card: g.handPlayer2.cards){
+	        		for(Card card: g.handPlayer2.getCards()){
 	        			int k = searchCard(card);
 	        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
 	        			space += 73;
 	        		}
 	        		space = 0;
 	        		vertical-=100;
-	        		for(Card card: g.handPlayer3.cards){
+	        		for(Card card: g.handPlayer3.getCards()){
 	        			int k = searchCard(card);
 	        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
 	        			space += 73;
 	        		}
 	        		space = 0;
 	        		vertical-=100;
-	        		for(Card card: g.handPlayer4.cards){
+	        		for(Card card: g.handPlayer4.getCards()){
 	        			int k = searchCard(card);
 	        			makeImg(170+space, 555+vertical, 73, 110, newColor, k);
 	        			space += 73;
 	        		}
 	        	
 		    		space = 0;
-		    		int k = searchCard(g.handDealer.cards.getFirst());
+		    		int k = searchCard(g.handDealer.getCards().getFirst());
 		    		makeImg(230+space, 155, 73, 110, newColor, k);
 		    		space += 73;
 		   			makeImg(230+space, 155, 73, 110, newColor, 52);			
@@ -423,7 +423,7 @@ public class App{
         			g.doubleDown();
         	}
         	int space = 0;
-    		for(Card card: g.handPlayer.cards){
+    		for(Card card: g.handPlayer.getCards()){
     			int k = searchCard(card);
     			makeImg(170+space, 555, 73, 110, newColor, k);
     			space += 73;
@@ -431,7 +431,7 @@ public class App{
     		updateBalance();
 
     		space = 0;
-    		for(Card card: g.handDealer.cards){
+    		for(Card card: g.handDealer.getCards()){
     			int k = searchCard(card);
     			makeImg(230+space, 155, 73, 110, newColor, k);
     			space += 73;
@@ -447,7 +447,7 @@ public class App{
 				g.insurance();
         	}
         	int space = 0;
-    		for(Card card: g.handPlayer.cards){
+    		for(Card card: g.handPlayer.getCards()){
     			int k = searchCard(card);
     			makeImg(170+space, 555, 73, 110, newColor, k);
     			space += 20;
@@ -455,7 +455,7 @@ public class App{
     		updateBalance();
 
     		space = 0;
-    		for(Card card: g.handDealer.cards){
+    		for(Card card: g.handDealer.getCards()){
     			int k = searchCard(card);
     			makeImg(230+space, 155, 73, 110, newColor, k);
     			space += 20;
@@ -482,20 +482,20 @@ public class App{
         	StringBuilder ps = new StringBuilder();
         	if(g.ingame()){
 				/* Give advice on the next play */
-				char a=bs.advice(p.getHand().getTotal(), d.getDealerHand().getFirst().getHardValue(), p.getHand().isSoft(), p.getHand().cardsSameValue(), g.firstplay(), true);
+				char a=str.advice(p.getHand().getTotal(), d.getDealerHand().getFirst().getHardValue(), p.getHand().isSoft(), p.getHand().cardsSameValue(), g.firstplay(), true);
 				ps.append("Basic Strategy: "+ a + "\n");
-				a=bs.advice(p.getHand().getTotal(), d.getDealerHand().getFirst().getHardValue(), p.getHand().isSoft(), p.getHand().cardsSameValue(), g.firstplay(), false);
-				if(bs.getCount()>=3&&g.firstplay()&&(!g.insuranceMode()))a='i';
+				a=str.advice(p.getHand().getTotal(), d.getDealerHand().getFirst().getHardValue(), p.getHand().isSoft(), p.getHand().cardsSameValue(), g.firstplay(), false);
+				if(str.getCount()>=3&&g.firstplay()&&(!g.insuranceMode()))a='i';
 				ps.append("Hi-lo Strategy: "+ a + "\n");
 			}else{
 				/* Give advice on the next bet */
 				//System.out.println("Ilustrativo.. oldbet = "+player.getOldbet());
-				if(bs.getAfcount()>=2){
+				if(str.getAfcount()>=2){
 					ps.append("Ace-Five Strategy: b "+p.getOldbet()*2 + "\n");
 				}else{
 					ps.append("Ace-Five Strategy: b "+min_bet + "\n");
 				}
-				ps.append("Normal Strategy: b " +str.getBet(p.getOldbet()) + "\n");
+				ps.append("Normal Strategy: b " +statistics.getBet(p.getOldbet()) + "\n");
 			}
         	printStringScreen(screen, ps.toString());
 			frame.revalidate();
@@ -505,19 +505,19 @@ public class App{
     private class ActionStatistics implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	//What we want the button to do
-        	System.out.println("BJ P/D	:	"+str.playerbj/str.plays+"/"+str.dealerbj/str.plays);
-        	System.out.println("Win		:	"+str.wins/str.plays);
-        	System.out.println("Lose		:	"+str.loses/str.plays);
-        	System.out.println("Push		:	"+str.pushes/str.plays);
-        	System.out.println("Balance		:	"+p.getBalance()+"("+(p.getBalance()-str.balanceinit)*100/str.balanceinit+"%)");
+        	System.out.println("BJ P/D	:	"+statistics.playerbj/statistics.plays+"/"+statistics.dealerbj/statistics.plays);
+        	System.out.println("Win		:	"+statistics.wins/statistics.plays);
+        	System.out.println("Lose		:	"+statistics.loses/statistics.plays);
+        	System.out.println("Push		:	"+statistics.pushes/statistics.plays);
+        	System.out.println("Balance		:	"+p.getBalance()+"("+(p.getBalance()-statistics.balanceinit)*100/statistics.balanceinit+"%)");
             
         	
     		StringBuilder s = new StringBuilder();
-    		s.append("BJ P/D		:	"+str.playerbj/str.plays+"/"+str.dealerbj/str.plays+"\n"); 
-    		s.append("Win		:	"+str.wins/str.plays+"\n");
-    		s.append("Lose		:	"+str.loses/str.plays+"\n");
-    		s.append("Push		:	"+str.pushes/str.plays+"\n");
-    		s.append("Balance		:	"+p.getBalance()+"("+(p.getBalance()-str.balanceinit)*100/str.balanceinit+"%)\n");
+    		s.append("BJ P/D		:	"+statistics.playerbj/statistics.plays+"/"+statistics.dealerbj/statistics.plays+"\n"); 
+    		s.append("Win		:	"+statistics.wins/statistics.plays+"\n");
+    		s.append("Lose		:	"+statistics.loses/statistics.plays+"\n");
+    		s.append("Push		:	"+statistics.pushes/statistics.plays+"\n");
+    		s.append("Balance		:	"+p.getBalance()+"("+(p.getBalance()-statistics.balanceinit)*100/statistics.balanceinit+"%)\n");
     		s.append("-------------------------------------------------------------------------------------------------------------------\n");
     		printStringScreen(screen, s.toString());
         }
