@@ -37,7 +37,7 @@ import javax.swing.JPanel;
 	public Image(){
 		String current = System.getProperty("user.dir");
 		
-		File dir = new File(current + "/src/cards");
+		File dir = new File(current + "/poo/cards");
 		File[] files = dir.listFiles();
 		BufferedImage[] vec = new BufferedImage[files.length];
 		for (int i = 0; i < files.length; i++)

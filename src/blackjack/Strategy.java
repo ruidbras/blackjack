@@ -47,7 +47,7 @@ public class Strategy {
 		int c, i = 0 , j = 0;
 		this.shoe = shoe;
 		String current = System.getProperty("user.dir");
-		File h = new File(current + "/src/Hard.txt.txt");
+		File h = new File(current + "/poo/Hard.txt.txt");
 		try {
 			FileReader rh = new FileReader(h);
 			hard = new char[17][10];
@@ -66,7 +66,7 @@ public class Strategy {
 			e.printStackTrace();
 		}
 		/* Pair Table */
-		File p = new File(current + "/src/Pair.txt.txt");
+		File p = new File(current + "/poo/Pair.txt.txt");
 		try {
 			FileReader rp = new FileReader(p);
 			i = 0;
@@ -87,7 +87,7 @@ public class Strategy {
 			e.printStackTrace();
 		}
 		/* Soft Table */
-		File s = new File(current + "/src/Soft.txt.txt");
+		File s = new File(current + "/poo/Soft.txt.txt");
 		try {
 			FileReader rs = new FileReader(s);
 			i = 0;
